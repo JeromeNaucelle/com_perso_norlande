@@ -36,6 +36,18 @@ class Perso_NorlandeController extends JControllerLegacy
 	public function userSelect()
 	{
 		$mainframe = JFactory::getApplication();
+		$jinput = JFactory::getApplication()->input;
+		$result = array("result" => "competence ID invalide");
+		$competence_id = $jinput->get('competence', '0', 'INT');
+		if($competence_id == 0)
+		{
+			echo json_encode($result);
+			$mainframe->close();
+			return;
+		}
+		
+		
+		/*
 		$session = JFactory::getSession();
 		$session->get( 'perso', 'empty' );
 		
@@ -53,6 +65,9 @@ class Perso_NorlandeController extends JControllerLegacy
 		$arbre_maitrise = $model->getArbreMaitrise($maitrise);
 		
 		echo json_encode($arbre_maitrise);  
+		*/
+		$test = array("result"=> $competence_id);
+		echo json_encode($test);
 		$mainframe->close();
 	}
 }

@@ -34,18 +34,20 @@ $js = <<<JS
     });
     }
     
-    function user_selection(){
-		var url = document.getElementById('ajax_url').value;
+    function user_selection(competence_id){
+		var url = 'index.php?format=raw&option=com_perso_norlande&task=userSelect';
+		//var data_post = {"competence":competence_id};
 		$.ajax(
     	{
         // Post select to url.
         type : 'post',
         url : url,
+        data: {"competence":competence_id},
+       // contentType: "application/json",
         dataType : 'json', // expected returned data format.
         success : function(data)
         {
-		      //alert(data);
-        		drawChart(data);
+		      alert(data["result"]);
         },
         complete : function(data)
         {
@@ -78,36 +80,39 @@ $js = <<<JS
 
       google.charts.load('current', {packages:["orgchart"]});
       google.charts.setOnLoadCallback(launch_ajax);
+      
 
       function drawChart(arbre_maitrise_json) {
-        var dataArtGuerre = new google.visualization.DataTable();
-        dataArtGuerre.addColumn('string', 'Maitrise');
-        dataArtGuerre.addColumn('string', 'Maitrise requise');
+        var dataMaitrise = new google.visualization.DataTable();
+        dataMaitrise.addColumn('string', 'Maitrise');
+        dataMaitrise.addColumn('string', 'Maitrise requise');
 
         // For each orgchart box, provide the name, manager, and tooltip to show.
-        dataArtGuerre.addRows(arbre_maitrise_json);
+        dataMaitrise.addRows(arbre_maitrise_json);
         
         
         // Create the chart.
-        var chartArtGuerre = new google.visualization.OrgChart(document.getElementById('chart_p'));
-        chartArtGuerre.draw(dataArtGuerre, {allowHtml:true, nodeClass:'myNodeClass'});
+        var chartMaitrise = new google.visualization.OrgChart(document.getElementById('chart_p'));
+        chartMaitrise.draw(dataMaitrise, {allowHtml:true, nodeClass:'myNodeClass'});
         
-        google.visualization.events.addListener(chartArtGuerre, 'select', selectHandler);
+        google.visualization.events.addListener(chartMaitrise, 'select', selectHandler);
         
-        function selectParents(row_id) {
+       function selectParents(row_id) {
         	var arraySelection = [{row: row_id}];
          while(row_id != 0) {
-         	var parentValue = dataArtGuerre.getValue(row_id, 1);
-         	var potentialParents = dataArtGuerre.getFilteredRows([{column: 0, value: parentValue}]);
+         	var parentValue = dataMaitrise.getValue(row_id, 1);
+         	var potentialParents = dataMaitrise.getFilteredRows([{column: 0, value: parentValue}]);
          	arraySelection.push({row: potentialParents[0]});
-         	chartArtGuerre.setSelection(arraySelection);
+         	chartMaitrise.setSelection(arraySelection);
          	row_id = potentialParents[0];
          }
         }
         
         
         function selectHandler() {
-        	var selection = chartArtGuerre.getSelection();
+        	var selection = chartMaitrise.getSelection();
+        	var competence_id = dataMaitrise.getValue(selection[0].row, 0);
+        	user_selection(competence_id);
 			selectParents(selection[0].row);
         }
 
