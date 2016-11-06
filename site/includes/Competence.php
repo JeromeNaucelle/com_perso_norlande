@@ -10,7 +10,6 @@ class Competence {
 	private $parent_id;
 	private $famille;
 	private $niveau;
-	
 	//boolean
 	private $entraineur;
 
@@ -26,11 +25,12 @@ class Competence {
    {
    	$competence = new Competence();
 		$competence->nom = $query_result['competence_nom'];
-   	$competence->id = $query_result['competence_id'];
+   	$competence->id = (int)$query_result['competence_id'];
    	$competence->famille = $query_result['famille'];
    	$competence->maitrise = $query_result['maitrise'];
-   	$competence->parent_id = $query_result['parent_id'];
-   	$competence->niveau = $query_result['niveau'];
+   	$competence->parent_id = (int)$query_result['parent_id'];
+   	$competence->niveau = (int)$query_result['niveau'];
+   	$competence->entraineur = $query_result['entraineur'];
    	return $competence;
    }
 

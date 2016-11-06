@@ -41,65 +41,70 @@ class Perso {
     public function can_develop($competence_id, $arbre)
     {
     	$result = ""; 
+    	if(isset($this->competences[$competence_id])) {
+    		return "Compétences déjà acquise";
+    	}
     	
     	error_log("can_develop(". $competence_id .")");
     	$competenceFromMaitrise = array();
     	foreach($this->competences as $key => $competence) {
     		if($competence->getMaitrise() === $arbre->getMaitrise())
     		{
-    			error_log("can_develop 1 : key = ".$key);
     			$competenceFromMaitrise[$key] = $competence;
     		}
     	}
-    	error_log("can_develop 2");
     	if(count($competenceFromMaitrise) == 0)
     	{
-    		error_log("can_develop 3");
     		//aucune competence actuellement dans cette maitrise
     		$result = $this->checkCompetencesRequises($arbre, $competence_id);
     		return $result;
     	}
     	
-    	// TODO : boucler au cas où plusieurs compétences entraineurs
-    	error_log("can_develop 4");
+    	$path = array();
     	foreach($competenceFromMaitrise as $key => $competence) {
+    		error_log("testing competence ".$competence->getNom());
     		if( $competence->isEntraineur() )
     		{
-    			$path = $arbre->getPathForCompetence($key);
-    			break;
+    			error_log("C'est un entraineur key = ".$key);
+    			array_push($path, $key);
+    			$path = array_merge($path, $arbre->getPathForCompetence($key));
     		}
     	}
-    	error_log("can_develop 5");
-    	$path = $arbre->getPathForCompetence($competence_id);
-    	error_log("can_develop 5. Path = ".json_encode($path));
-    	error_log("can_develop 5. competenceFromMaitrise = ".json_encode($competenceFromMaitrise));
+    	
+    	// on supprime de la liste les compétences appartenant à une branche complétée (entraineur atteint)
     	foreach($path as $key)
     	{
     		unset($competenceFromMaitrise[$key]);
     	}
-    	error_log("can_develop 5. competenceFromMaitrise = ".json_encode($competenceFromMaitrise));
+    	
+    	$pre_requis = $arbre->getPathForCompetence($competence_id);
+    	
+		// On vérifie si les compétences restantes font parties des pré-requis
+		foreach($pre_requis as $key)
+    	{
+    		unset($competenceFromMaitrise[$key]);
+    	}
+    	
     	if(count($competenceFromMaitrise) === 0)
     	{
-    		error_log("can_develop 6");
     		//pas de contre_indication à l'aprentissage
-    		//vérification des pré requis
-    		$result = $this->checkCompetencesRequises($arbre, $competence_id);
-    		if(count($result) === 0)
+    		//On retire de la liste des pré-requis les compétences déjà acquises
+    		$to_learn =  array_diff($pre_requis , array_keys($this->competences) );
+    		if(count($to_learn) === 0)
     		{
     			error_log("Tous les prérequis sont remplis");
+    			$result = "Tous les prérequis sont remplis";
     		} else {
+    			$result = $to_learn;
     			error_log("Les competences pre-requises sont : " . json_encode($result));
 			}    	
     	}
     	else {
-    		error_log("can_develop 7");
     		$result = "Une autre branche de cette maitrise est en cours d'apprentissage, ";
     		$result = $result . "vous ne pouvez pas apprendre cette compétence";
     		error_log($result);
-    	}
-		// fin TODO    	
+    	}  	
 		return $result;
-    	
     }
     
     
