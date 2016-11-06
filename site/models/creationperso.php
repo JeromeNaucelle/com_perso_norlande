@@ -63,6 +63,44 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 		
 		return $perso;
 	}
+	
+	public function initEntraineurs()
+	{
+		error_log('initEntraineurs');
+		$db = JFactory::getDbo();
+		
+		$query_max = "SELECT MAX(competence_id) FROM competences";
+		$db->setQuery($query_max);
+		$id_max = $db->loadResult();
+		error_log('initEntraineurs id_max = '.$id_max);
+ 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		//Select * From competences Where competence_id not in (Select parent_id from competences where 1)
+		// on récupère toutes les compétences n'ayant pas "d'enfant"
+		$query = "Select * From competences Where competence_id not in (Select parent_id from competences where 1)";
+		$db->setQuery($query);
+		$result_maitrises = $db->loadAssocList();
+		
+		foreach($result_maitrises as $maitrise)
+		{
+			error_log("ajout de l'entraineur ".$maitrise['competence_nom']);
+			// Insert columns.
+			$id_max += 1;
+			$columns = array('competence_id', 'famille', 'maitrise', 'competence_nom', 'niveau','parent_id','entraineur');
+ 
+			// Insert values.
+			$values = array($id_max, $db->quote($maitrise['famille']), $db->quote($maitrise['maitrise']), $db->quote('Entraineur : '.$maitrise['competence_nom']), $maitrise['niveau']+1,$maitrise['competence_id'],1);
+			$query_insert = $db->getQuery(true);
+			$query_insert
+    			->insert($db->quoteName('competences'))
+    			->columns($db->quoteName($columns))
+    			->values(implode(',', $values));
+			
+			$db->setQuery($query_insert);
+			$db->execute();
+		}
+	}
  
 
 	public function getArbreMaitrise($competence_id)

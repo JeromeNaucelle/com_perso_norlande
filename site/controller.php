@@ -34,6 +34,15 @@ class Perso_NorlandeController extends JControllerLegacy
 	}
 	
 	
+	public function initEntraineurs() {
+		error_log("test init");
+		$mainframe = JFactory::getApplication();
+		$model = null;
+		$model = $this->getModel('creationperso');
+		$model->initEntraineurs();
+		echo "Creation des entraineurs effectue";
+		$mainframe->close();
+	}
 	
 	public function userSelect()
 	{
