@@ -46,6 +46,7 @@ class Perso {
     	}
     	
     	error_log("can_develop(". $competence_id .")");
+    	// On récupère toutes les compétences acquises dans cette maitrise
     	$competenceFromMaitrise = array();
     	foreach($this->competences as $key => $competence) {
     		if($competence->getMaitrise() === $arbre->getMaitrise())
@@ -125,6 +126,11 @@ class Perso {
 
   public function getNom(){
 		return $this->nom;
+  }
+  
+  public function getCompetences()
+  {
+  		return $this->competences;
   }
 }
 ?>

@@ -29,7 +29,16 @@ class Perso_NorlandeController extends JControllerLegacy
 		$competence_id = $jinput->get('competence', '0', 'INT');
 		$arbre_maitrise = $model->getArbreMaitrise($competence_id);
 		
-		echo json_encode($arbre_maitrise);  
+		//TODO : enlever ça, ici seulement pour les tests
+		$perso = $model->getPerso('firstPerso');
+		if($perso == null) {
+			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
+		}
+		// fin TODO
+		
+		$data = array("arbre" => $arbre_maitrise, "competences_acquises" => array_keys($perso->getCompetences()) );
+		
+		echo json_encode($data);  
 		$mainframe->close();
 	}
 	

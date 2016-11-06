@@ -14,6 +14,10 @@ $doc = JFactory::getDocument();
 
 $js = <<<JS
 
+
+	var dataMaitrise = null;
+	var chartMaitrise = null;
+	
 	function launch_ajax(){
 		var url = document.getElementById('ajax_url').value;
 		$.ajax(
@@ -25,7 +29,8 @@ $js = <<<JS
         success : function(data)
         {
 		      //alert(data);
-        		drawChart(data);
+        		drawChart(data['arbre']);
+        		selectCompetencesAcquises(data['competences_acquises']);
         },
         complete : function(data)
         {
@@ -55,11 +60,19 @@ $js = <<<JS
         }
     });
     }
-		
-		
-		var perso = new Object();
+    
+    function selectCompetencesAcquises(competences)
+    {
+    	var arraySelection = [];
+    	for(var i=0; i<competences.length; i++) {
+    		node_id = dataMaitrise.getFilteredRows([{'column': 0, 'value': competences[i].toString()}]);
+         arraySelection.push({'row': node_id[0]});
+    	}
+    	chartMaitrise.setSelection(arraySelection);
+    }
 		
 		/*
+		var perso = new Object();
 		function printPerso() {
 				var textPerso = perso['nbCoups'] + " Coups<br>";
 				textPerso += "+" + perso['forcePhysique'] + " force physique<br>";
@@ -77,13 +90,11 @@ $js = <<<JS
 				div.innerHTML = textPerso;
 		}*/
 		
-
       google.charts.load('current', {packages:["orgchart"]});
       google.charts.setOnLoadCallback(launch_ajax);
-      
 
       function drawChart(arbre_maitrise_json) {
-        var dataMaitrise = new google.visualization.DataTable();
+        dataMaitrise = new google.visualization.DataTable();
         dataMaitrise.addColumn('string', 'Maitrise');
         dataMaitrise.addColumn('string', 'Maitrise requise');
 
@@ -92,7 +103,7 @@ $js = <<<JS
         
         
         // Create the chart.
-        var chartMaitrise = new google.visualization.OrgChart(document.getElementById('chart_p'));
+        chartMaitrise = new google.visualization.OrgChart(document.getElementById('chart_p'));
         chartMaitrise.draw(dataMaitrise, {allowHtml:true, nodeClass:'myNodeClass'});
         
         google.visualization.events.addListener(chartMaitrise, 'select', selectHandler);
