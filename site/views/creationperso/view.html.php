@@ -41,11 +41,13 @@ class Perso_NorlandeViewCreationPerso extends JViewLegacy
 			JLog::add(JText::_('Model creationperso non trouvé'), JLog::WARNING, 'jerror');		
 		}
 		
-		/*$perso = $model->getPerso('firstPerso');
+		$perso = $model->getPerso('firstPerso');
 		if($perso == null) {
 			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
-		}*/
+		}
 		
+		$session = JFactory::getSession();
+		$session->set( 'perso', serialize($perso));
 		$this->list_maitrise = $model->getMaitrisesFromFamille();
 		$this->competence = $jinput->get('competence', '1', 'INT');
 		

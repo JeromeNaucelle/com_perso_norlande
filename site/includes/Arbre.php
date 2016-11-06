@@ -72,37 +72,69 @@ class Noeud {
 
 class Arbre {
 	
-	private $root;
-	private $table;
+	protected $root;
+	protected $table;
 	
 	public function __construct($query_result)
 	{
+		error_log("Construction de l'arbre");
 		for($i=0; $i<count($query_result); $i++)
 		{
-			$competence = new Competence($query_result[$i]);
+			$competence = Competence::create($query_result[$i]);
+			//error_log("Arbre() : ajout competence ".$competence->getNom());
 			
 			$noeud = new Noeud($competence);
-			$this->table[$competence->getNomFormat()] = $noeud;
+			$this->table[$competence->getId()] = $noeud;
 		}
 		
 		// Creation des liens parent/enfants
-		for($i=0; $i<count($table); $i++)
+		foreach($this->table as $competence_id => $competence)
 		{
-			$cur_node = $this->table[$i];
-			$competence_requise = $cur_node->data()->getRequis();
-			if(!is_empty($competence_requise)) {
+			$cur_node = $this->table[$competence_id];
+			$competence_requise = $cur_node->data()->getParentId();
+			if($competence_requise != 0) 
+			{
 				$parent_node = $this->table[$competence_requise];
 				$cur_node->setParent($parent_node);
 				$parent_node->setFils($cur_node);
 			}
 			else 
 			{
-				$root = $cur_node;
+				error_log("Arbre() racine trouvee : ".$competence->data()->getNom());
+				$this->root = $cur_node;
 			}
 		}
 		
 	}
 	
+}
+
+class ArbreMaitrise extends Arbre
+{
+	public function getMaitrise()
+	{
+		return $this->root->data()->getMaitrise();
+	}
+	
+	public function getCompetence($competence_id)
+	{
+		return $this->table[$competence_id]->data();;
+	}
+	
+	public function getPathForCompetence($competenceId)
+	{
+		error_log("getPathForCompetence");
+		$result = array();
+		$i = 0;
+		$node = $this->table[$competenceId];
+		while($node->parent() != NULL)
+		{
+			$node = $node->parent();
+			$result[$i] = $node->data()->getId();
+			$i++;
+		}
+		return $result;
+	}
 }
 
 ?>

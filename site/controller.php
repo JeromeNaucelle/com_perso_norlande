@@ -8,6 +8,8 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+require_once JPATH_COMPONENT . '/includes/Perso.php';
 /**
  * Hello World Component Controller
  *
@@ -47,27 +49,20 @@ class Perso_NorlandeController extends JControllerLegacy
 		}
 		
 		
-		/*
+		
 		$session = JFactory::getSession();
-		$session->get( 'perso', 'empty' );
+		$perso = unserialize($session->get( 'perso', 'empty' ));
+		if($perso === 'empty')
+		{
+			$result["result"] = "Personnage non trouvé dans la session";
+		}
 		
 		$model = null;
 		$model = $this->getModel('creationperso');
+		$arbre = $model->getArbreMaitrisePhp($competence_id);
+		$result["result"] = $perso->can_develop($competence_id, $arbre);
 		
-		$jinput = JFactory::getApplication()->input;
-		$json = json_decode($jinput, true); 
-		
-		$maitrise = $json['maitrise'];
-		if($maitrise == null)
-		{
-			//TODO
-		}
-		$arbre_maitrise = $model->getArbreMaitrise($maitrise);
-		
-		echo json_encode($arbre_maitrise);  
-		*/
-		$test = array("result"=> $competence_id);
-		echo json_encode($test);
+		echo json_encode($result);
 		$mainframe->close();
 	}
 }

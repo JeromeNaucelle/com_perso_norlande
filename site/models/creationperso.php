@@ -15,6 +15,7 @@ jimport('joomla.log.log');
 
 //require(JPATH_ROOT."/components/com_perso_norlande/includes/Perso.inc");
 require_once JPATH_COMPONENT . '/includes/Perso.php';
+require_once JPATH_COMPONENT . '/includes/Arbre.php';
  
 /**
  * HelloWorld Model
@@ -37,26 +38,29 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
  
 		// Select all records from the user profile table where key begins with "custom.".
 		// Order it by the ordering field.
-		$query->select($db->quoteName(array('id', 'nom', 'lignee', 'maitrises')));
+		$query->select($db->quoteName(array('id', 'nom', 'lignee')));
 		$query->from($db->quoteName('persos'));
 		$query->where($db->quoteName('nom') . ' = '. $db->quote($nom));
-		
-		
-		 //SELECT * FROM `persos` p INNER JOIN `perso_maitrises` mp ON mp.id_perso = p.id
-		//WHERE nom='firstPerso'
-		
-		
-		
 		
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);
 		 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
-		$results = $db->loadAssocList();
-		print_r($results);
-		$perso = Perso::create($results);
+		$results = $db->loadAssoc();
+		//print_r("function getPerso() : ".var_dump($results));
 		
-		JLog::add(JText::_($perso->getNom()), JLog::WARNING, 'jerror');
+		$query_competences = $db->getQuery(true);
+		$query_competences
+			->select('a.*')
+			->from($db->quoteName('competences', 'a'))
+			->join('INNER', $db->quoteName('persos_competences', 'b') . ' ON (' . $db->quoteName('a.competence_id') . ' = ' . $db->quoteName('b.competence_id') . ')')
+			->where($db->quoteName('b.id_perso') . ' = ' . $results['id']);
+			
+		$db->setQuery($query_competences);
+		$result_competences = $db->loadAssocList();
+			
+		$perso = Perso::create($results, $result_competences);
+		
 		return $perso;
 	}
  
@@ -91,6 +95,28 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 		}
 		
 		return $return;
+	}
+	
+	
+	public function getArbreMaitrisePhp($competence_id)
+	{
+		$return = array();
+		
+		$db = JFactory::getDbo();
+ 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('a.*'));
+		$query->from($db->quoteName('competences', 'a'));
+		$query->join('INNER', $db->quoteName('competences', 'b') . ' ON (' . $db->quoteName('a.maitrise') . ' = ' . $db->quoteName('b.maitrise') . ')');
+		$query->where($db->quoteName('b.competence_id') . ' = ' . $competence_id);
+		 
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+		$results = $db->loadAssocList();
+		$arbre = new ArbreMaitrise($results);
+		
+		return $arbre;
 	}
 	
 	public function getMaitrisesFromFamille()

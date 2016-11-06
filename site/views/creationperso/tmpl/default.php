@@ -127,7 +127,7 @@ $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/jquery-3.
 $doc->addScript("https://www.gstatic.com/charts/loader.js");
 $doc->addScriptDeclaration($js, 'text/javascript');
 
-echo "<input type='hidden' id='ajax_url' value='index.php?format=raw&option=com_perso_norlande&task=getArbreMaitrise&competence=".$_GET["competence"]."'>"; ?>
+echo "<input type='hidden' id='ajax_url' value='index.php?format=raw&option=com_perso_norlande&task=getArbreMaitrise&competence=".$this->competence."'>"; ?>
 
 
 <h1>Test</h1>
