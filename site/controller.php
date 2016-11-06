@@ -35,7 +35,6 @@ class Perso_NorlandeController extends JControllerLegacy
 	
 	
 	public function initEntraineurs() {
-		error_log("test init");
 		$mainframe = JFactory::getApplication();
 		$model = null;
 		$model = $this->getModel('creationperso');
@@ -56,7 +55,6 @@ class Perso_NorlandeController extends JControllerLegacy
 			$mainframe->close();
 			return;
 		}
-		
 		
 		
 		$session = JFactory::getSession();

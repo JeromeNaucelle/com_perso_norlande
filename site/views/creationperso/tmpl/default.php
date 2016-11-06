@@ -135,13 +135,13 @@ echo "<input type='hidden' id='ajax_url' value='index.php?format=raw&option=com_
   
   <div id="content">
   		<ul id="menu-cat-maitrises">
-   		<li><a href="#">Occultisme</a>
+   		<li><a href="index.php?famille=Occultisme">Occultisme</a>
    		</li>
-    		<li><a href="#">Belligerance</a>
+    		<li><a href="index.php?famille=Belligerance">Belligerance</a>
    		</li>
-   		<li><a href="#">Societe</a>
+   		<li><a href="index.php?famille=Societe">Societe</a>
    		</li>
-   		<li><a href="#">Intrigue</a>
+   		<li><a href="index.php?famille=Intrigue">Intrigue</a>
    		</li>
 		</ul>
 	<div>

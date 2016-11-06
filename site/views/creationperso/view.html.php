@@ -26,10 +26,7 @@ class Perso_NorlandeViewCreationPerso extends JViewLegacy
 	 * @return  void
 	 */
 	function display($tpl = null)
-	{
-		
-		$jinput = JFactory::getApplication()->input;
-		$this->famille = $jinput->get('famille', 'Belligerance', 'STR');
+	{		
 		// Assign data to the view
 		//$this->setModel( $this->getModel( 'perso_norlande' ), true );
 		$model = null;
@@ -41,17 +38,26 @@ class Perso_NorlandeViewCreationPerso extends JViewLegacy
 			JLog::add(JText::_('Model creationperso non trouvé'), JLog::WARNING, 'jerror');		
 		}
 		
-		$perso = $model->getPerso('firstPerso');
-		if($perso == null) {
-			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
+		$jinput = JFactory::getApplication()->input;
+		$this->famille = $jinput->get('famille', 'Belligerance', 'STR');
+		$this->competence = $jinput->get('competence', '0', 'INT');
+		if($this->competence == 0)
+		{
+			$this->competence = $model->getDefaultMaitrise($this->famille);
 		}
 		
 		$session = JFactory::getSession();
-		$session->set( 'perso', serialize($perso));
-		$this->list_maitrise = $model->getMaitrisesFromFamille();
-		$this->competence = $jinput->get('competence', '1', 'INT');
+		if($session->get('perso',NULL) == NULL)
+		{
+			$perso = $model->getPerso('firstPerso');
+			if($perso == null) {
+				JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
+			}
+			$session->set( 'perso', serialize($perso));
+		}
 		
-		
+		$this->list_maitrise = $model->getMaitrisesFromFamille($this->famille);
+
 		// Display the view
 		parent::display($tpl);
 	}

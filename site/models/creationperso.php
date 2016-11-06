@@ -66,13 +66,11 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 	
 	public function initEntraineurs()
 	{
-		error_log('initEntraineurs');
 		$db = JFactory::getDbo();
 		
 		$query_max = "SELECT MAX(competence_id) FROM competences";
 		$db->setQuery($query_max);
 		$id_max = $db->loadResult();
-		error_log('initEntraineurs id_max = '.$id_max);
  
 		// Create a new query object.
 		$query = $db->getQuery(true);
@@ -157,10 +155,8 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 		return $arbre;
 	}
 	
-	public function getMaitrisesFromFamille()
+	public function getMaitrisesFromFamille($famille)
 	{
-		$jinput = JFactory::getApplication()->input;
-		$famille = $jinput->get('famille', 'Belligerance', 'STR');
 		$db = JFactory::getDbo();
  
 		// Create a new query object.
@@ -176,17 +172,21 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 		return $db->loadAssocList();
 	}
 	
-	public function getCompetencesPerso($perso_id)
-	{
+	public function getDefaultMaitrise($famille) {
 		$db = JFactory::getDbo();
  
 		// Create a new query object.
 		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from($db->quoteName('competences'));
-		$query->where($db->quoteName('parent_id') . " = 0", 'OR' );
-		$query->where('famille = '. $db->quote($famille));
-		JLog::add(JText::_($query), JLog::WARNING, 'jerror');
+		$query
+			->select($db->quoteName('competence_id'))
+			->from($db->quoteName('competences'))
+			->where($db->quoteName('parent_id') . " = 0", 'AND' )
+			->where('famille = '. $db->quote($famille))
+			->limit(1);
+		 
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+		return $db->loadResult();
 	}
 	
 	public function getMaitrise($nom_maitrise)
