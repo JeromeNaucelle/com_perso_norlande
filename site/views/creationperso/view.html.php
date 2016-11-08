@@ -56,6 +56,14 @@ class Perso_NorlandeViewCreationPerso extends JViewLegacy
 			$session->set( 'perso', serialize($perso));
 		}
 		
+		//TODO : enlever ça, ici seulement pour les tests
+		$perso = $model->getPerso('firstPerso');
+		if($perso == null) {
+			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
+		}
+		$session->set( 'perso', serialize($perso));
+		// fin TODO
+		
 		$this->list_maitrise = $model->getMaitrisesFromFamille($this->famille);
 
 		// Display the view

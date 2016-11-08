@@ -56,11 +56,11 @@ class Perso_NorlandeController extends JControllerLegacy
 	{
 		$mainframe = JFactory::getApplication();
 		$jinput = JFactory::getApplication()->input;
-		$result = array("result" => "competence ID invalide");
+		$data = array("result" => "competence ID invalide");
 		$competence_id = $jinput->get('competence', '0', 'INT');
 		if($competence_id == 0)
 		{
-			echo json_encode($result);
+			echo json_encode($data);
 			$mainframe->close();
 			return;
 		}
@@ -70,15 +70,16 @@ class Perso_NorlandeController extends JControllerLegacy
 		$perso = unserialize($session->get( 'perso', 'empty' ));
 		if($perso === 'empty')
 		{
-			$result["result"] = "Personnage non trouvé dans la session";
+			$data["result"] = "Personnage non trouvé dans la session";
 		}
 		
 		$model = null;
 		$model = $this->getModel('creationperso');
 		$arbre = $model->getArbreMaitrisePhp($competence_id);
-		$result["result"] = $perso->can_develop($competence_id, $arbre);
+		$data = $perso->can_develop($competence_id, $arbre);
+		$data["competences"] = array_merge($data['competences'], array_keys($perso->getCompetences()));
 		
-		echo json_encode($result);
+		echo json_encode($data);
 		$mainframe->close();
 	}
 }

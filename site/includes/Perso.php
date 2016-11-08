@@ -40,9 +40,11 @@ class Perso {
     	
     public function can_develop($competence_id, $arbre)
     {
-    	$result = ""; 
+    	$result = array("result" => 0, "msg" =>"", "competences" => array());
     	if(isset($this->competences[$competence_id])) {
-    		return "Compétences déjà acquise";
+    		
+    		//Compétences déjà acquise
+    		return $result;
     	}
     	
     	error_log("can_develop(". $competence_id .")");
@@ -57,7 +59,7 @@ class Perso {
     	if(count($competenceFromMaitrise) == 0)
     	{
     		//aucune competence actuellement dans cette maitrise
-    		$result = $this->checkCompetencesRequises($arbre, $competence_id);
+    		array_push($result['competences'], $competence_id);
     		return $result;
     	}
     	
@@ -94,16 +96,19 @@ class Perso {
     		if(count($to_learn) === 0)
     		{
     			error_log("Tous les prérequis sont remplis");
-    			$result = "Tous les prérequis sont remplis";
+    			array_push($result['competences'], $competence_id);
     		} else {
-    			$result = $to_learn;
-    			error_log("Les competences pre-requises sont : " . json_encode($result));
+    			$result['competences'] = $to_learn;
+    			array_push($result['competences'], $competence_id);
+    			error_log("Les competences pre-requises sont : " . json_encode($to_learn));
 			}    	
     	}
     	else {
-    		$result = "Une autre branche de cette maitrise est en cours d'apprentissage, ";
-    		$result = $result . "vous ne pouvez pas apprendre cette compétence";
-    		error_log($result);
+    		$msg = "Une autre branche de cette maitrise est en cours d'apprentissage, ";
+    		$msg = $msg . "vous ne pouvez pas apprendre cette compétence";
+    		$result['result'] = 1;
+    		$result['msg'] = $msg;
+    		error_log($msg);
     	}  	
 		return $result;
     }

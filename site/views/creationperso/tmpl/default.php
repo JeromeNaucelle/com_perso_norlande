@@ -52,7 +52,14 @@ $js = <<<JS
         dataType : 'json', // expected returned data format.
         success : function(data)
         {
-		      alert(data["result"]);
+        		
+		      if(data['result'] == 1) {
+		      	// Affichage d'un message d'info (erreur)
+		      	alert(data['msg']);
+		      } else if(data['result'] == 2) {
+		      	// Question à l'utilisateur
+		      }
+		      selectCompetencesAcquises(data['competences']);
         },
         complete : function(data)
         {
@@ -124,7 +131,7 @@ $js = <<<JS
         	var selection = chartMaitrise.getSelection();
         	var competence_id = dataMaitrise.getValue(selection[0].row, 0);
         	user_selection(competence_id);
-			selectParents(selection[0].row);
+			//selectParents(selection[0].row);
         }
 
       }
