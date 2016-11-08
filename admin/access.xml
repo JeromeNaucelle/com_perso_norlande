@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<access component="com_perso_norlande">
+	<section name="component">
+		<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
+		<action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
+		<action name="core.edit_orga" title="Edition Orga" description="Edition de n'importe quel personnage avec les droit administrateur" />
+	</section>
+</access>

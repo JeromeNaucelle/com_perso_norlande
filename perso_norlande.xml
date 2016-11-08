@@ -45,6 +45,8 @@
 			<!-- Admin Main File Copy Section -->
 			<filename>index.html</filename>
 			<filename>perso_norlande.php</filename>
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
 			<!-- SQL files section -->
 			<folder>sql</folder>
 		</files>
