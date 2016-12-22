@@ -135,6 +135,22 @@ class ArbreMaitrise extends Arbre
 		}
 		return $result;
 	}
+	
+	public function isEntrainementFor($entrainementId, $competenceId)
+	{
+		if(!array_key_exists ( $entrainementId , $this->table )) {
+			return false;
+		}
+		$node = $this->table[$entrainementId];
+		while($node->parent() != NULL)
+		{
+			if($node->data()->getId() == $competenceId) {
+				return true;
+			}
+			$node = $node->parent();
+		}	
+		return false;
+	}
 }
 
 ?>
