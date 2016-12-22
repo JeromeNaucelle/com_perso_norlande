@@ -28,7 +28,6 @@ $js = <<<JS
         dataType : 'json', // expected returned data format.
         success : function(data)
         {
-		      //alert(data);
         		drawChart(data['arbre']);
         		selectCompetencesAcquises(data['competences_acquises']);
         },
@@ -53,11 +52,19 @@ $js = <<<JS
         success : function(data)
         {
         		
-		      if(data['result'] == 1) {
+		      if(data['result'] == 4 || data['result'] == -1) {
 		      	// Affichage d'un message d'info (erreur)
-		      	alert(data['msg']);
+		      	$( "#alert_msg" ).text( data['msg'] );
+		      	$.blockUI({ message: $('#alert'), css: { width: '275px' } }); 
+		      	//alert(data['msg']);
 		      } else if(data['result'] == 2) {
 		      	// Question à l'utilisateur
+		      	var test = {"Choix 1":"choix1", "Choix 2":"choix2"};
+		      	$("#question_options").empty();
+		      	for(var choix in test) {
+		      		$("#question_options").append( '<input type="radio" name="radioOption" value="'+test[choix]+'"/> '+choix+' <br />' );
+		      	}
+		      	$.blockUI({ message: $('#question'), css: { width: '275px' } }); 
 		      }
 		      selectCompetencesAcquises(data['competences']);
         },
@@ -135,6 +142,35 @@ $js = <<<JS
         }
 
       }
+      
+    $(document).ready(function() { 
+ 
+        $('#test').click(function() { 
+            
+        }); 
+ 
+ 
+        $('#alert_ok').click(function() { 
+            $.unblockUI(); 
+            return false; 
+        }); 
+        
+        $('#question_ok').click(function() { 
+        		var url = 'index.php?format=raw&option=com_perso_norlande&task=userChoiceDepenseXP';
+            // update the block message 
+            $.blockUI({ message: "<h1>Remote call in progress...</h1>" }); 
+ 
+            $.ajax({ 
+                url: 'wait.php', 
+                cache: false, 
+                complete: function() { 
+                    // unblock when remote call returns 
+                    $.unblockUI(); 
+                } 
+            }); 
+        }); 
+ 
+    }); 
 JS;
 
 
@@ -142,6 +178,7 @@ JS;
 // Add Javascript
 $doc->addStyleSheet("components/com_perso_norlande/media/perso_norlande/css/style.css",'text/css',"screen");
 $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/jquery-3.1.1.min.js");
+$doc->addScript("components/com_perso_norlande/media/perso_norlande/js/jquery.blockUI.js");
 $doc->addScript("https://www.gstatic.com/charts/loader.js");
 $doc->addScriptDeclaration($js, 'text/javascript');
 
@@ -177,4 +214,16 @@ for($i=0; $i < count($menu_list); $i++)
 	<div id="affichage_perso"></div>
     <p id="chart_p"></p>
 	</div>
+	
+	<div id="alert" style="display:none; cursor: default"> 
+        <p id="alert_msg">Would you like to contine?.</p>
+        <input type="button" id="alert_ok" value="OK" />
+	</div> 
+	
+	<div id="question" style="display:none; cursor: default"> 
+        <p id="question_msg">Would you like to contine?.</p>
+        <div id="question_options"></div>
+        <input type="button" id="question_ok" value="Valider" />
+        <input type="button" id="question_cancel" value="Annuler" />
+	</div> 
 
