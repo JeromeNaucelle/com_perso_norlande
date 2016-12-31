@@ -188,18 +188,7 @@ echo "<input type='hidden' id='ajax_url' value='index.php?format=raw&option=com_
 <h1>Test</h1>
 
   
-  <div id="content">
-  		<ul id="menu-cat-maitrises">
-   		<li><a href="index.php?famille=Occultisme">Occultisme</a>
-   		</li>
-    		<li><a href="index.php?famille=Belligerance">Belligerance</a>
-   		</li>
-   		<li><a href="index.php?famille=Societe">Societe</a>
-   		</li>
-   		<li><a href="index.php?famille=Intrigue">Intrigue</a>
-   		</li>
-		</ul>
-	<div>
+<?php include(JPATH_COMPONENT . '/includes/menu.php'); ?>
 	  		<ul id="submenu">
 <?php
 $menu_list = $this->list_maitrise;
