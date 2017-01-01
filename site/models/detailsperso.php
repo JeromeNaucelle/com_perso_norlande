@@ -38,7 +38,7 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
  
 		// Select all records from the user profile table where key begins with "custom.".
 		// Order it by the ordering field.
-		$query->select($db->quoteName(array('id', 'nom', 'lignee')));
+		$query->select('*');
 		$query->from($db->quoteName('persos'));
 		$query->where($db->quoteName('nom') . ' = '. $db->quote($nom));
 		
@@ -62,6 +62,27 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 		$perso = Perso::create($results, $result_competences);
 		
 		return $perso;
+	}
+	
+	public function setCristaux($tab_cristaux, $perso) {
+		JLog::add(JText::_('test 1'), JLog::WARNING, 'jerror');
+		$db = JFactory::getDbo();
+ 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		
+		$fields = array();
+		foreach($tab_cristaux as $type => $val) {
+			array_push($fields, $db->quoteName($type) . ' = ' . $val);
+		}
+
+		
+		$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
+		$query->update($db->quoteName('persos'))->set($fields)->where($conditions);
+		
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+		$result = $db->execute();
 	}
 	
 }

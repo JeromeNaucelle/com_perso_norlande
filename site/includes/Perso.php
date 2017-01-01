@@ -3,18 +3,29 @@
 defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT . '/includes/Competence.php';
+require_once JPATH_COMPONENT . '/includes/ClasseXP.php';
+require_once JPATH_COMPONENT . '/includes/define.php';
 
 class Perso {
 
 	private $id;
-	private $nom = "nom base";
+	private $nom;
 	private $lignee;
 	private $competences;
+	
+	// array sous la forme '$competence_id' => 'nom_comptence'
+	private $entrainements;
+	
+	//
+	private $xp;
+	private $derniere_session;
 
     function __construct() {
     	JLog::add(JText::_('In BaseClass constructor'), JLog::WARNING, 'jerror');
     	$this->nom = "nom base";
     	$competences = array();
+    	$entrainements = array();
+    	$this->xp = new ClasseXP();
     }
     
     private function checkCompetencesRequises($arbre, $competence_id)
@@ -119,15 +130,25 @@ class Perso {
 		$perso = new Perso();
 		$perso->nom = $query_result['nom'];
 		$perso->lignee = $query_result['lignee'];
+		//$perso->derniere_session = $query_result['derniere_session'];
+		$perso->id = $query_result['id'];
 		for($i=0; $i<count($competences_result); $i++)
 		{
 			$competence = Competence::create($competences_result[$i]);
 			$perso->competences[$competence->getId()] = $competence;
 		}
-		//TODO
-		//$perso->competences = $query_result['maitrises'];
+		
+		foreach(ClasseXP::get_types_cristaux() as $famille) {
+			$perso->xp->set_cristaux($famille, $query_result['cristaux_'.$famille]);
+		}
+		//TODO : remplir les entrainements
+		//$perso->entrainements = unserialize($query_result['entrainements']);
 		return $perso;
 	}
+	
+	public function getId(){
+		return $this->id;
+  }
 
   public function getNom(){
 		return $this->nom;

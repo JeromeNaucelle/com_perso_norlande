@@ -131,3 +131,11 @@ color:#fff;
 font-family:arial;
 }
 
+
+label
+{
+    display: block;
+    width: 150px;
+    float: left;
+}
+

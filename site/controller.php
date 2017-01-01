@@ -10,6 +10,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 require_once JPATH_COMPONENT . '/includes/Perso.php';
+require_once JPATH_COMPONENT . '/includes/ClasseXP.php';
 /**
  * Hello World Component Controller
  *
@@ -72,14 +73,28 @@ class Perso_NorlandeController extends JControllerLegacy
 		{
 			$data["result"] = "Personnage non trouvé dans la session";
 		}
+	public function updateDetailsPerso() {
+		$mainframe = JFactory::getApplication();
 		
 		$model = null;
-		$model = $this->getModel('creationperso');
-		$arbre = $model->getArbreMaitrisePhp($competence_id);
-		$data = $perso->can_develop($competence_id, $arbre);
-		$data["competences"] = array_merge($data['competences'], array_keys($perso->getCompetences()));
+		$model = $this->getModel('detailsperso');
 		
-		echo json_encode($data);
+		$jinput = JFactory::getApplication()->input;
+		
+		$cristaux = array();
+		foreach(ClasseXP::get_types_cristaux() as $type) {
+			$cristaux['cristaux_'.$type] = $jinput->get('cristaux_'.$type, '0', 'INT');
+		}
+		error_log(var_dump($cristaux));
+		//TODO : enlever ça, ici seulement pour les tests
+		$perso = $model->getPerso('firstPerso');
+		if($perso == null) {
+			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
+		}
+		// fin TODO
+		$model->setCristaux($cristaux, $perso);
+		
+		//echo json_encode($data);  
 		$mainframe->close();
 	}
 }

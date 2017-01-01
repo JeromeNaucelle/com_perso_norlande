@@ -16,11 +16,33 @@ $doc = JFactory::getDocument();
 // Add Javascript
 $doc->addStyleSheet("components/com_perso_norlande/media/perso_norlande/css/style.css",'text/css',"screen");
 $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/jquery-3.1.1.min.js");
+
 ?>
-
-
-<h1>Test</h1>
 
   
 <?php include(JPATH_COMPONENT . '/includes/menu.php'); ?>
-	  	Bla
+
+<h1>Informations</h1>
+
+<form action="index.php?view=detailsperso&format=raw&option=com_perso_norlande&task=updateDetailsPerso" method="post">
+
+
+<?php 
+$xp = $this->perso->getXp();
+
+//<label for="cristaux_incolores">Cristaux Incolores</label>
+// <input type="text" id="cristaux_incolores" name="cristaux_incolores" size="3" maxlength="3" value="0"/><br>
+foreach(ClasseXP::get_types_cristaux() as $famille) {
+	$val = $xp->get_cristaux($famille);
+	echo '<label for="cristaux_'.$famille.'">Cristaux '.$famille.'</label>';
+	echo '<input type="text" id="cristaux_'.$famille.'" name="cristaux_'.$famille.'" size="3" maxlength="3" value="'.$val.'"/><br>';
+}
+?>
+
+
+<label for="histoire">Histoire :</label>
+<textarea id="histoire" name="histoire" rows="12"></textarea>
+<br>
+
+<input type="submit" name="button_submit" value="Valider" />
+</form>

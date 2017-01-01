@@ -38,7 +38,7 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
  
 		// Select all records from the user profile table where key begins with "custom.".
 		// Order it by the ordering field.
-		$query->select($db->quoteName(array('id', 'nom', 'lignee')));
+		$query->select('*');
 		$query->from($db->quoteName('persos'));
 		$query->where($db->quoteName('nom') . ' = '. $db->quote($nom));
 		

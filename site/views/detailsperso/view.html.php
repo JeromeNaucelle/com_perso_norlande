@@ -56,6 +56,7 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
 		}
 		$session->set( 'perso', serialize($perso));
+		$this->perso = $perso;
 		// fin TODO
 		
 

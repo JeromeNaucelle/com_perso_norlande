@@ -50,6 +50,10 @@ class Competence {
 		return $this->parent_id;
 	}
 	
+	public function getFamille() {
+		return $this->famille;
+	}
+	
 	public function getNiveau(){
 		return $this->niveau;
 	}
