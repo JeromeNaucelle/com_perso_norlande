@@ -158,9 +158,34 @@ class Perso_NorlandeController extends JControllerLegacy
 		}
 		// fin TODO
 
-		 
-		echo json_encode($model->addEntrainement($perso, $competence_id));
+		$result = $model->addEntrainement($perso, $competence_id);
+		error_log("addEntrainement model result : ".json_encode($result));
+		echo json_encode($result);
 		$mainframe->close();
 	}
+	
+	public function deleteEntrainement() {
+		error_log("controller deleteEntrainement");
+		$mainframe = JFactory::getApplication();
+		$model = null;
+		$model = $this->getModel('detailsperso');		
 		
+		$jinput = JFactory::getApplication()->input;
+ 
+		//recherche des résultats dans la base de données
+
+		$competence_id = $jinput->get('competence_id', '0', 'STR');
+		error_log("competence_id : ".$competence_id);
+		
+		//TODO : enlever ça, ici seulement pour les tests
+		$perso = $model->getPerso('firstPerso');
+		if($perso == null) {
+			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
+		}
+		// fin TODO
+
+		 
+		echo json_encode($model->deleteEntrainement($perso, $competence_id));
+		$mainframe->close();
+	}	
 }

@@ -36,6 +36,10 @@ class ClasseXP {
 		$this->entrainements[$id_competence] = $nom_competence;
 	}
 	
+	public function get_entrainements() {
+		return $this->entrainements;
+	}
+	
 	public function to_array() {
 		$result["cristaux"] = $this->cristaux;
     	$result["entrainements"] = $this->entrainements;

@@ -95,17 +95,38 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 		$db->setQuery($query);
 		 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
-		$results = $db->loadAssoc();
+		$tmp = $db->loadAssoc();
+		$perso->addEntrainement($tmp['competence_id'], $tmp['competence_nom']);
+		$result = $perso->getXp()->get_entrainements();
 		
 		$query = $db->getQuery(true);
-		$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($results));
+		$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($result));
 		
 		$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
 		$query->update($db->quoteName('persos'))->set($field)->where($conditions);
 		$db->setQuery($query);
-		$result = $db->execute();
+		$db->execute();
 		
-		return json_encode($results);
+		return $result;
 	}
 	
+		public function deleteEntrainement($perso, $competence_id) {
+		$db = JFactory::getDbo();
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data)
+		$result = $perso->getXp()->get_entrainements();
+		unset($result[$competence_id]);
+		
+		$query = $db->getQuery(true);
+		$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($result));
+		
+		$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
+		$query->update($db->quoteName('persos'))->set($field)->where($conditions);
+		error_log($query->__toString);	
+		$db->setQuery($query);
+		$result = $db->execute();
+			
+		
+		return json_encode($result);
+	}
 }
