@@ -65,7 +65,6 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 	}
 	
 	public function setCristaux($tab_cristaux, $perso) {
-		JLog::add(JText::_('test 1'), JLog::WARNING, 'jerror');
 		$db = JFactory::getDbo();
  
 		// Create a new query object.
@@ -75,7 +74,6 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 		foreach($tab_cristaux as $type => $val) {
 			array_push($fields, $db->quoteName($type) . ' = ' . $val);
 		}
-
 		
 		$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
 		$query->update($db->quoteName('persos'))->set($fields)->where($conditions);
@@ -83,6 +81,31 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);
 		$result = $db->execute();
+	}
+	
+	public function addEntrainement($perso, $competence_id) {
+		$db = JFactory::getDbo();
+ 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$query->select('competence_id, competence_nom')
+		->from($db->quoteName('competences'))
+		->where($db->quoteName('competence_id').' = '.$competence_id);
+		
+		$db->setQuery($query);
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$results = $db->loadAssoc();
+		
+		$query = $db->getQuery(true);
+		$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($results));
+		
+		$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
+		$query->update($db->quoteName('persos'))->set($field)->where($conditions);
+		$db->setQuery($query);
+		$result = $db->execute();
+		
+		return json_encode($results);
 	}
 	
 }

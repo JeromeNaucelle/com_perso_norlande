@@ -39,12 +39,41 @@ foreach(ClasseXP::get_types_cristaux() as $famille) {
 	echo '<input type="text" id="cristaux_'.$famille.'" name="cristaux_'.$famille.'" size="3" maxlength="3" value="'.$val.'"/><br>';
 }
 ?>
-<input type="text" name="recherche_entrainement" id="recherche_entrainement"/>
+<label for="recherche_entrainement">Ajouter un entrainement</label>
+<input type="text" name="recherche_entrainement" id="recherche_entrainement"/><br>
 
 <script type="text/javascript" >
+	
+function add_entrainement(competence_id){
+	var url = "index.php?option=com_perso_norlande&task=addEntrainement&competence_id="+competence_id;
+	$.ajax(
+ 	{
+     // Post select to url.
+     type : 'get',
+     url : url,
+     dataType : 'json', // expected returned data format.
+     success : function(data)
+     {
+     		alert("ajout OK");
+     },
+     complete : function(data)
+     {
+         // do something, not critical.
+     }
+	});
+}
+
 $(function() {
 	$('#recherche_entrainement').autocomplete({
-		source : 'index.php?option=com_perso_norlande&task=searchEntrainement'
+		source : 'index.php?option=com_perso_norlande&task=searchEntrainement',
+		focus: function( event, ui ) {
+                  $( "#recherche_entrainement" ).val( ui.item.label );
+                     return false;
+               },
+		select: function(event, ui) {
+			add_entrainement(ui.item.value);
+			return false;
+		},
 	});
 });
 

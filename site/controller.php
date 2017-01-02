@@ -95,6 +95,72 @@ class Perso_NorlandeController extends JControllerLegacy
 		$model->setCristaux($cristaux, $perso);
 		
 		//echo json_encode($data);  
+	
+	public function searchEntrainement() {
+		$mainframe = JFactory::getApplication();
+		$jinput = JFactory::getApplication()->input;
+		$db = JFactory::getDbo();
+ 
+		//recherche des résultats dans la base de données
+
+		$term = $jinput->get('term', '0', 'STR');
+		$query = $db->getQuery(true);
+		 
+		// Select all records from the user profile table where key begins with "custom.".
+		// Order it by the ordering field.
+		
+		$query
+		->select('a.*')
+		->from($db->quoteName('competences', 'a'))
+		->join('INNER', $db->quoteName('competences', 'b') . ' ON (' . $db->quoteName('a.competence_id') . ' = ' . $db->quoteName('b.parent_id') . ')')
+		->where($db->quoteName('b.entraineur') . ' = 1')
+		->setLimit(10);
+				
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+				 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$results = $db->loadAssocList();
+		$array = array();
+		 
+		// affichage d'un message "pas de résultats"
+		if( count( $results ) == 0 )
+		{
+				array_push($array, "Pas de r&eacute;sultats pour cette recherche");
+		}
+		else
+		{
+			foreach($results as $key => $item) {
+				array_push($array, array('label' => $item['competence_nom'], 'value'=> $item['competence_id']));
+			}
+		}
+		echo json_encode($array);
 		$mainframe->close();
 	}
+	
+	public function addEntrainement() {
+		error_log("controller addEntrainement");
+		$mainframe = JFactory::getApplication();
+		$model = null;
+		$model = $this->getModel('detailsperso');		
+		
+		$jinput = JFactory::getApplication()->input;
+ 
+		//recherche des résultats dans la base de données
+
+		$competence_id = $jinput->get('competence_id', '0', 'STR');
+		error_log("competence_id : ".$competence_id);
+		
+		//TODO : enlever ça, ici seulement pour les tests
+		$perso = $model->getPerso('firstPerso');
+		if($perso == null) {
+			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
+		}
+		// fin TODO
+
+		 
+		echo json_encode($model->addEntrainement($perso, $competence_id));
+		$mainframe->close();
+	}
+		
 }
