@@ -24,11 +24,8 @@ $js = <<<JS
 	     dataType : 'json', // expected returned data format.
 	     success : function(data)
 	     {
-	     		alert("ajout OK");
-	     		alert('<label id="label_entrainement_'+competence_id+'" for="entrainement_'+competence_id+'">'+data['competence_id']+'</label>');
-	     		$( "#entrainements_acquis" ).append( '<label id="label_entrainement_'+competence_id+'" for="entrainement_'+competence_id+'">'+data[competence_id]+'</label>' );
-				$( "#entrainements_acquis" ).append( '<input type="button" id="entrainement_'+competence_id+'" name="button_submit" value="Supprimer" onclick="deleteEntrainement('+competence_id+')"/>' );
-				$( "#entrainements_acquis" ).append('<br>');
+	     		$( "#tbl_entrainements" ).append( '<tr id="row_entrainement_'+competence_id+'"><td>'+data[competence_id]+'</td>' );
+				$( "#row_entrainement_"+competence_id ).append( '<td><input type="button" id="entrainement_'+competence_id+'" name="button_submit" value="Supprimer" onclick="deleteEntrainement('+competence_id+')"/></td>' );
 	     },
 	     complete : function(data)
 	     {
@@ -48,8 +45,7 @@ $js = <<<JS
         success : function(data)
         {
         		alert("suppression de la competence "+competence_id);
-        		$( "#label_entrainement_"+competence_id).remove();
-        		$( "#entrainement_"+competence_id).remove();
+        		$( "#row_entrainement_"+competence_id).remove();
         },
         complete : function(data)
         {
@@ -61,6 +57,7 @@ JS;
 
 // Add Javascript
 $doc->addStyleSheet("components/com_perso_norlande/media/perso_norlande/css/style.css",'text/css',"screen");
+$doc->addStyleSheet("components/com_perso_norlande/media/perso_norlande/css/jquery-ui.min.css",'text/css',"screen");
 $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/jquery-3.1.1.min.js");
 $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/jquery-ui-1.12.1.min.js");
 $doc->addScriptDeclaration($js);
@@ -92,12 +89,17 @@ foreach(ClasseXP::get_types_cristaux() as $famille) {
 <div id="entrainements_acquis">
 <h3>Entrainements acquis :</h3>
 <?php
-error_log('affichage des entrainements 1');
 $entrainements = $xp->get_entrainements();
-//error_log('affichage des entrainements'.var_dump($entrainements));
-foreach($entrainements as $id_competence => $nom_competence) {
-	echo '<label id="label_entrainement_'.$id_competence.'" for="entrainement_'.$id_competence.'">'.$nom_competence.'</label>';
-	echo '<input type="button" id="entrainement_'.$id_competence.'" name="button_submit" value="Supprimer" onclick="deleteEntrainement('.$id_competence.')"/><br>';
+if(count($entrainements) == 0) {
+	echo "<p>Aucun entrainement </p>";
+}
+else {
+	echo "<table id=tbl_entrainements>";
+	foreach($entrainements as $id_competence => $nom_competence) {
+		echo '<tr id="row_entrainement_'.$id_competence.'"><td>'.$nom_competence.'</td>';
+		echo '<td><input type="button" id="entrainement_'.$id_competence.'" name="button_submit" value="Supprimer" onclick="deleteEntrainement('.$id_competence.')"/></td></tr>';
+	}
+	echo "</table>";
 }
 ?>
 </div>
