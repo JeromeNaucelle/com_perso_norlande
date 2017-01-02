@@ -113,7 +113,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		->select('a.*')
 		->from($db->quoteName('competences', 'a'))
 		->join('INNER', $db->quoteName('competences', 'b') . ' ON (' . $db->quoteName('a.competence_id') . ' = ' . $db->quoteName('b.parent_id') . ')')
-		->where($db->quoteName('b.entraineur') . ' = 1')
+		->where($db->quoteName('b.entraineur') . ' = 1 AND '.$db->quoteName('b.competence_nom').' LIKE '.$db->quote('%'.$term.'%'))
 		->setLimit(10);
 				
 		// Reset the query using our newly populated query object.
