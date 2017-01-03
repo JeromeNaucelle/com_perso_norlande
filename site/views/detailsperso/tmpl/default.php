@@ -24,6 +24,7 @@ $js = <<<JS
 	     dataType : 'json', // expected returned data format.
 	     success : function(data)
 	     {
+	     		$( "#row_empty").remove();
 	     		$( "#tbl_entrainements" ).append( '<tr id="row_entrainement_'+competence_id+'"><td>'+data[competence_id]+'</td>' );
 				$( "#row_entrainement_"+competence_id ).append( '<td><input type="button" id="entrainement_'+competence_id+'" name="button_submit" value="Supprimer" onclick="deleteEntrainement('+competence_id+')"/></td>' );
 	     },
@@ -46,6 +47,10 @@ $js = <<<JS
         {
         		alert("suppression de la competence "+competence_id);
         		$( "#row_entrainement_"+competence_id).remove();
+        		var rows = $( "#tbl_entrainements" ).find("tr");
+        		if(rows.length == 0) {
+        			$( "#tbl_entrainements" ).append( '<tr id="row_empty"><td>Aucun entrainement</td>' );
+        		}
         },
         complete : function(data)
         {
@@ -90,17 +95,17 @@ foreach(ClasseXP::get_types_cristaux() as $famille) {
 <h3>Entrainements acquis :</h3>
 <?php
 $entrainements = $xp->get_entrainements();
+echo "<table id=tbl_entrainements>";
 if(count($entrainements) == 0) {
-	echo "<p>Aucun entrainement </p>";
+	echo '<tr id="row_empty"><td>Aucun entrainement</td>';
 }
 else {
-	echo "<table id=tbl_entrainements>";
 	foreach($entrainements as $id_competence => $nom_competence) {
 		echo '<tr id="row_entrainement_'.$id_competence.'"><td>'.$nom_competence.'</td>';
 		echo '<td><input type="button" id="entrainement_'.$id_competence.'" name="button_submit" value="Supprimer" onclick="deleteEntrainement('.$id_competence.')"/></td></tr>';
 	}
-	echo "</table>";
 }
+echo "</table>";
 ?>
 </div>
 <br>
