@@ -90,9 +90,34 @@ $doc->addScriptDeclaration($js);
 
   
 <?php include(JPATH_COMPONENT . '/includes/menu.php'); ?>
+<?php require_once(JPATH_COMPONENT . '/includes/define.php'); ?>
 
-<h3>Personnage : <?php echo $this->perso->getNom() ?></h3>
+<h3>Personnage : <?php echo htmlspecialchars($this->perso->getNom().' ('.$this->perso->getLignee().')'); ?></h3>
 
+<form action="index.php?view=detailsperso&format=raw&option=com_perso_norlande&task=createPerso" method="post">
+<fieldset>  
+  <legend align="left">Cr&eacute;ation d&apos;un personnage</legend>
+  
+<label for="nom_perso">Nom : </label><input id="nom_perso" type="text" name="nom_perso" /><br>
+<label for="lignee_perso">Lignee : </label><select id="lignee_perso" name="lignee_perso">
+<?php
+foreach(Lignees::$lignees as $key=>$lignee) {
+	echo '<option value="'.$key.'">'.$lignee.'</option>';
+}
+?>
+</select><br>
+<input type="submit" name="button_submit" value="Créer" />
+</fieldset>
+</form>
+
+<form action="index.php?view=detailsperso&format=raw&option=com_perso_norlande&task=createPerso" method="post">
+<fieldset>  
+  <legend align="left">S&eacute;lection d&apos;un personnage</legend>
+  
+<label for="recherche_perso">Nom du personnage : </label><input id="recherche_perso" type="text" name="nom_perso" /><br>
+<input type="submit" name="button_submit" value="Créer" />
+</fieldset>
+</form>
 
 <form action="index.php?view=detailsperso&format=raw&option=com_perso_norlande&task=updateDetailsPerso" method="post">
 <fieldset>  
@@ -151,6 +176,20 @@ $(function() {
                },
 		select: function(event, ui) {
 			add_entrainement(ui.item.value);
+			return false;
+		},
+	});
+});
+
+$(function() {
+	$('#recherche_perso').autocomplete({
+		source : 'index.php?option=com_perso_norlande&task=searchPerso',
+		focus: function( event, ui ) {
+                  $( "#recherche_perso" ).val( ui.item.label );
+                     return false;
+               },
+		select: function(event, ui) {
+			document.location.href="index.php?option=com_perso_norlande&task=selectPerso&perso_id="+ui.item.value;
 			return false;
 		},
 	});

@@ -30,7 +30,6 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 	
 	public function getPerso($nom) 
 	{
-		JLog::add(JText::_('test 1'), JLog::WARNING, 'jerror');
 		$db = JFactory::getDbo();
  
 		// Create a new query object.
@@ -41,6 +40,41 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 		$query->select('*');
 		$query->from($db->quoteName('persos'));
 		$query->where($db->quoteName('nom') . ' = '. $db->quote($nom));
+		
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$results = $db->loadAssoc();
+		//print_r("function getPerso() : ".var_dump($results));
+		
+		$query_competences = $db->getQuery(true);
+		$query_competences
+			->select('a.*')
+			->from($db->quoteName('competences', 'a'))
+			->join('INNER', $db->quoteName('persos_competences', 'b') . ' ON (' . $db->quoteName('a.competence_id') . ' = ' . $db->quoteName('b.competence_id') . ')')
+			->where($db->quoteName('b.id_perso') . ' = ' . $results['id']);
+			
+		$db->setQuery($query_competences);
+		$result_competences = $db->loadAssocList();
+			
+		$perso = Perso::create($results, $result_competences);
+		
+		return $perso;
+	}
+	
+	public function getPersoById($id) 
+	{
+		$db = JFactory::getDbo();
+ 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+ 
+		// Select all records from the user profile table where key begins with "custom.".
+		// Order it by the ordering field.
+		$query->select('*');
+		$query->from($db->quoteName('persos'));
+		$query->where($db->quoteName('id') . ' = '.$id);
 		
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);
@@ -80,6 +114,7 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 		
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);
+		//TODO : mettre à jour le perso dans la session
 		$result = $db->execute();
 	}
 	

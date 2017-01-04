@@ -95,6 +95,8 @@ class Perso_NorlandeController extends JControllerLegacy
 		$model->setCristaux($cristaux, $perso);
 		
 		//echo json_encode($data);  
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+	}
 	
 	public function searchEntrainement() {
 		$mainframe = JFactory::getApplication();
@@ -136,6 +138,80 @@ class Perso_NorlandeController extends JControllerLegacy
 		}
 		echo json_encode($array);
 		$mainframe->close();
+	}
+	
+	public function searchPerso() {
+		$mainframe = JFactory::getApplication();
+		$jinput = JFactory::getApplication()->input;
+		$db = JFactory::getDbo();
+ 
+		//recherche des résultats dans la base de données
+
+		$term = $jinput->get('term', '0', 'STR');
+		$query = $db->getQuery(true);
+		 
+		// Select all records from the user profile table where key begins with "custom.".
+		// Order it by the ordering field.
+		$columns = array('id','nom','lignee');		
+		
+		$query
+		->select($db->quoteName($columns))
+		->from($db->quoteName('persos'))
+		->where($db->quoteName('nom').' LIKE '.$db->quote('%'.$term.'%'))
+		->setLimit(10);
+		
+		error_log($query->__toString());
+				
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+				 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$results = $db->loadAssocList();
+		$array = array();
+		 
+		// affichage d'un message "pas de résultats"
+		if( count( $results ) == 0 )
+		{
+				array_push($array, "Pas de r&eacute;sultats pour cette recherche");
+		}
+		else
+		{
+			foreach($results as $key => $item) {
+				array_push($array, array('label' => $item['nom'].' ('.$item['lignee'].')', 'value'=> $item['id']));
+			}
+		}
+		echo json_encode($array);
+		$mainframe->close();
+	}
+	
+	public function selectPerso() {
+		$mainframe = JFactory::getApplication();
+		$jinput = JFactory::getApplication()->input;
+ 		$perso_id = $jinput->get('perso_id', '0', 'STR');
+ 		
+ 		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		
+		$columns = array('id','nom','lignee');	
+		$query->select($db->quoteName($columns));
+		$query->from($db->quoteName('persos'));
+		$query->where($db->quoteName('id') . ' = '. $perso_id);
+		error_log("test : ".$query->__toString());
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$db->setQuery($query);
+		$results = $db->loadAssoc();
+		error_log("test : ".print_r($results, true));
+ 		
+ 		if(count($results) == 0) {
+ 			JLog::add(JText::_("Personnage non trouvé pour l'id ".$perso_id), JLog::WARNING, 'jerror');	
+ 		} else {
+ 			$session = JFactory::getSession();
+			$session->set( 'perso_id', $perso_id );
+			$session->set( 'perso_nom', $results['nom'] );
+		}
+		
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}
 	
 	public function addEntrainement() {
@@ -187,5 +263,62 @@ class Perso_NorlandeController extends JControllerLegacy
 		 
 		echo json_encode($model->deleteEntrainement($perso, $competence_id));
 		$mainframe->close();
+	}	
+	
+	public function createPerso() {
+		error_log("createPerso");
+		$error = 0;
+		$msg_error = "";
+		
+		$mainframe = JFactory::getApplication();
+		$model = null;
+		$model = $this->getModel('detailsperso');
+		
+		$jinput = JFactory::getApplication()->input;
+ 
+		//recherche des résultats dans la base de données
+
+		$lignee_id = $jinput->get('lignee_perso', -1, 'INT');
+		if(array_key_exists($lignee_id, Lignees::$lignees)) {
+			$lignee = Lignees::$lignees[$lignee_id];
+		} else {
+			$error = 1;
+			$msg_error = "Lignée inconnue";
+		}
+		
+		$nom = $jinput->get('nom_perso', "", 'STR');
+		if($nom === "") {
+			$error = 2;
+			$msg_error = "Il faut renseigner le nom du personnage";
+		}
+		
+		if($error === 0) {
+			try {
+				$db = JFactory::getDbo();
+				$query = $db->getQuery(true);
+				$columns = array('nom', 'lignee');
+				$values = array($db->quote($nom), $db->quote($lignee));
+				 
+				// Prepare the insert query.
+				$query
+				    ->insert($db->quoteName('persos'))
+				    ->columns($db->quoteName($columns))
+				    ->values(implode(',', $values));
+				    
+				$db->setQuery($query);
+				$db->execute();
+				$newId = $db->insertid();
+			} catch(Exception $e) {
+				$error = 3;
+				$msg_error = "Erreur lors de l'insertion d'un perso en BDD";
+				error_log("Erreur lors de l'insertion d'un perso en BDD : ".$e);
+			}
+		}
+		
+		if($error === 0) {
+			//TODO placer le $newId dans la session
+		}
+
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}	
 }

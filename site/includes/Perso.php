@@ -21,7 +21,6 @@ class Perso {
 	private $derniere_session;
 
     function __construct() {
-    	JLog::add(JText::_('In BaseClass constructor'), JLog::WARNING, 'jerror');
     	$this->nom = "nom base";
     	$competences = array();
     	$entrainements = array();
