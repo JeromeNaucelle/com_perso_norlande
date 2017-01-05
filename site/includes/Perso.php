@@ -90,9 +90,12 @@ class Perso {
     		unset($competenceFromMaitrise[$key]);
     	}
     	
+    	// On récupère la liste des compétences requise
+    	// avant l'aprentissage de celle demandée
     	$pre_requis = $arbre->getPathForCompetence($competence_id);
     	
-		// On vérifie si les compétences restantes font parties des pré-requis
+		// On vérifie si les compétences restantes (branche commencée
+		// mais pas achevée) font parties des pré-requis
 		foreach($pre_requis as $key)
     	{
     		unset($competenceFromMaitrise[$key]);
@@ -140,8 +143,11 @@ class Perso {
 		foreach(ClasseXP::get_types_cristaux() as $famille) {
 			$perso->xp->set_cristaux($famille, $query_result['cristaux_'.$famille]);
 		}
-		//TODO : remplir les entrainements
-		//$perso->entrainements = unserialize($query_result['entrainements']);
+		
+		$entrainements = json_decode($query_result['entrainements']);
+		foreach($entrainements as $id => $nom_competence) {
+			$perso->xp->add_entrainement($id, $nom_competence);
+		}
 		return $perso;
 	}
 	
@@ -153,9 +159,21 @@ class Perso {
 		return $this->nom;
   }
   
+  public function getLignee(){
+		return $this->lignee;
+  }
+  
   public function getCompetences()
   {
   		return $this->competences;
   }
+	
+	public function getXp() {
+		return $this->xp;
+	}
+	
+	public function addEntrainement($id_competence, $nom_competence) {
+		$this->xp->add_entrainement($id_competence, $nom_competence);
+	}
 }
 ?>

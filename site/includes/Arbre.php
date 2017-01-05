@@ -77,7 +77,6 @@ class Arbre {
 	
 	public function __construct($query_result)
 	{
-		error_log("Construction de l'arbre");
 		for($i=0; $i<count($query_result); $i++)
 		{
 			$competence = Competence::create($query_result[$i]);
@@ -100,7 +99,7 @@ class Arbre {
 			}
 			else 
 			{
-				error_log("Arbre() racine trouvee : ".$competence->data()->getNom());
+				// Arbre() racine trouvee : $competence->data()->getNom()
 				$this->root = $cur_node;
 			}
 		}
@@ -127,7 +126,6 @@ class ArbreMaitrise extends Arbre
 	
 	public function getPathForCompetence($competenceId)
 	{
-		error_log("getPathForCompetence");
 		$result = array();
 		$i = 0;
 		$node = $this->table[$competenceId];

@@ -11,6 +11,7 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once JPATH_COMPONENT . '/includes/Perso.php';
 require_once JPATH_COMPONENT . '/includes/ClasseXP.php';
+require_once JPATH_COMPONENT . '/helpers/PersoHelper.php';
 /**
  * Hello World Component Controller
  *
@@ -30,12 +31,9 @@ class Perso_NorlandeController extends JControllerLegacy
 		$competence_id = $jinput->get('competence', '0', 'INT');
 		$arbre_maitrise = $model->getArbreMaitrise($competence_id);
 		
-		//TODO : enlever ça, ici seulement pour les tests
-		$perso = $model->getPerso('firstPerso');
-		if($perso == null) {
-			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
-		}
-		// fin TODO
+		$perso = $this->getCurrentPerso();
+		error_log("test perso : ".print_r($perso,true));
+		error_log("test competences : ".print_r($perso->getCompetences(),true));
 		
 		$data = array("arbre" => $arbre_maitrise, "competences_acquises" => array_keys($perso->getCompetences()) );
 		
@@ -44,7 +42,12 @@ class Perso_NorlandeController extends JControllerLegacy
 	}
 	
 	
+	// Méthode à appeler une fois après le chargement des mairises
+	// dans la BDD pour créer les compétences d'entraineur
 	public function initEntraineurs() {
+		// TODO : vérifier si ce n'est pas déjà fait
+		// TODO : check autorisation		
+		
 		$mainframe = JFactory::getApplication();
 		$model = null;
 		$model = $this->getModel('creationperso');
@@ -73,7 +76,14 @@ class Perso_NorlandeController extends JControllerLegacy
 		{
 			$data["result"] = "Personnage non trouvé dans la session";
 		}
-	public function updateDetailsPerso() {
+		echo json_encode($data);
+		$mainframe->close();
+	}
+	
+	public function updateCristauxPerso() {
+		// TODO : check orga	
+		// TODO : check que les inputs soient bien des chiffres		
+		
 		$mainframe = JFactory::getApplication();
 		
 		$model = null;
@@ -87,11 +97,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		}
 		error_log(var_dump($cristaux));
 		//TODO : enlever ça, ici seulement pour les tests
-		$perso = $model->getPerso('firstPerso');
-		if($perso == null) {
-			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
-		}
-		// fin TODO
+		$perso = $this->getCurrentPerso();
 		$model->setCristaux($cristaux, $perso);
 		
 		//echo json_encode($data);  
@@ -143,30 +149,12 @@ class Perso_NorlandeController extends JControllerLegacy
 	public function searchPerso() {
 		$mainframe = JFactory::getApplication();
 		$jinput = JFactory::getApplication()->input;
-		$db = JFactory::getDbo();
  
 		//recherche des résultats dans la base de données
-
 		$term = $jinput->get('term', '0', 'STR');
-		$query = $db->getQuery(true);
-		 
-		// Select all records from the user profile table where key begins with "custom.".
-		// Order it by the ordering field.
-		$columns = array('id','nom','lignee');		
-		
-		$query
-		->select($db->quoteName($columns))
-		->from($db->quoteName('persos'))
-		->where($db->quoteName('nom').' LIKE '.$db->quote('%'.$term.'%'))
-		->setLimit(10);
-		
-		error_log($query->__toString());
-				
-		// Reset the query using our newly populated query object.
-		$db->setQuery($query);
 				 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
-		$results = $db->loadAssocList();
+		$results = PersoHelper::searchPersoByName($term);
 		$array = array();
 		 
 		// affichage d'un message "pas de résultats"
@@ -184,37 +172,44 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->close();
 	}
 	
-	public function selectPerso() {
-		$mainframe = JFactory::getApplication();
-		$jinput = JFactory::getApplication()->input;
- 		$perso_id = $jinput->get('perso_id', '0', 'STR');
+	private function setCurrentPerso($perso_id) {
+		// TODO : check orga	ou joueur autorisé
  		
- 		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		
-		$columns = array('id','nom','lignee');	
-		$query->select($db->quoteName($columns));
-		$query->from($db->quoteName('persos'));
-		$query->where($db->quoteName('id') . ' = '. $perso_id);
-		error_log("test : ".$query->__toString());
-		 
-		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
-		$db->setQuery($query);
-		$results = $db->loadAssoc();
-		error_log("test : ".print_r($results, true));
- 		
- 		if(count($results) == 0) {
+ 		if(!PersoHelper::persoExists($perso_id)) {
  			JLog::add(JText::_("Personnage non trouvé pour l'id ".$perso_id), JLog::WARNING, 'jerror');	
  		} else {
  			$session = JFactory::getSession();
 			$session->set( 'perso_id', $perso_id );
 			$session->set( 'perso_nom', $results['nom'] );
 		}
+	}
+	
+	private function getCurrentPerso() {
+		$perso = NULL;
+		$session = JFactory::getSession();
+		$id = $session->get( 'perso_id', NULL );
+		
+		if($id == NULL) {
+			JLog::add(JText::_("Aucun personnage sélectionné actuellement"), JLog::ERROR, 'jerror');
+		} else {
+			$perso = PersoHelper::getPersoById($id);
+		}
+		return $perso;
+	}
+	
+	public function selectPerso() {
+		$mainframe = JFactory::getApplication();
+		$jinput = JFactory::getApplication()->input;
+ 		$perso_id = $jinput->get('perso_id', '0', 'STR');
+ 		
+ 		$this->setCurrentPerso($perso_id);
 		
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}
 	
 	public function addEntrainement() {
+		// TODO : check orga	
+		
 		error_log("controller addEntrainement");
 		$mainframe = JFactory::getApplication();
 		$model = null;
@@ -227,12 +222,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		$competence_id = $jinput->get('competence_id', '0', 'STR');
 		error_log("competence_id : ".$competence_id);
 		
-		//TODO : enlever ça, ici seulement pour les tests
-		$perso = $model->getPerso('firstPerso');
-		if($perso == null) {
-			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
-		}
-		// fin TODO
+		$perso = $this->getCurrentPerso();
 
 		$result = $model->addEntrainement($perso, $competence_id);
 		error_log("addEntrainement model result : ".json_encode($result));
@@ -240,12 +230,16 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->close();
 	}
 	
+	
+	// Méthode appelée lorsqu'un orga supprime un entrainement
+	// de la liste des entrainements acquis d'un perso
+	// (AJAX)
 	public function deleteEntrainement() {
-		error_log("controller deleteEntrainement");
-		$mainframe = JFactory::getApplication();
-		$model = null;
-		$model = $this->getModel('detailsperso');		
+		// TODO : check orga		
 		
+		$model = null;
+		$model = $this->getModel('detailsperso');	
+		$mainframe = JFactory::getApplication();		
 		$jinput = JFactory::getApplication()->input;
  
 		//recherche des résultats dans la base de données
@@ -253,27 +247,17 @@ class Perso_NorlandeController extends JControllerLegacy
 		$competence_id = $jinput->get('competence_id', '0', 'STR');
 		error_log("competence_id : ".$competence_id);
 		
-		//TODO : enlever ça, ici seulement pour les tests
-		$perso = $model->getPerso('firstPerso');
-		if($perso == null) {
-			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
-		}
-		// fin TODO
-
+		$perso = $this->getCurrentPerso();
 		 
 		echo json_encode($model->deleteEntrainement($perso, $competence_id));
 		$mainframe->close();
 	}	
 	
 	public function createPerso() {
-		error_log("createPerso");
 		$error = 0;
 		$msg_error = "";
 		
-		$mainframe = JFactory::getApplication();
-		$model = null;
-		$model = $this->getModel('detailsperso');
-		
+		$mainframe = JFactory::getApplication();		
 		$jinput = JFactory::getApplication()->input;
  
 		//recherche des résultats dans la base de données
@@ -294,29 +278,13 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		if($error === 0) {
 			try {
-				$db = JFactory::getDbo();
-				$query = $db->getQuery(true);
-				$columns = array('nom', 'lignee');
-				$values = array($db->quote($nom), $db->quote($lignee));
-				 
-				// Prepare the insert query.
-				$query
-				    ->insert($db->quoteName('persos'))
-				    ->columns($db->quoteName($columns))
-				    ->values(implode(',', $values));
-				    
-				$db->setQuery($query);
-				$db->execute();
-				$newId = $db->insertid();
+				$newId = PersoHlper::insertPerso($nom, $lignee);
+				$this->setCurrentPerso($newId);
 			} catch(Exception $e) {
 				$error = 3;
 				$msg_error = "Erreur lors de l'insertion d'un perso en BDD";
 				error_log("Erreur lors de l'insertion d'un perso en BDD : ".$e);
 			}
-		}
-		
-		if($error === 0) {
-			//TODO placer le $newId dans la session
 		}
 
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');

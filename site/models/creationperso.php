@@ -16,6 +16,7 @@ jimport('joomla.log.log');
 //require(JPATH_ROOT."/components/com_perso_norlande/includes/Perso.inc");
 require_once JPATH_COMPONENT . '/includes/Perso.php';
 require_once JPATH_COMPONENT . '/includes/Arbre.php';
+require_once JPATH_COMPONENT . '/helpers/PersoHelper.php';
  
 /**
  * HelloWorld Model
@@ -27,42 +28,6 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 	/**
 	 * @var string message
 	 */	
-	
-	public function getPerso($nom) 
-	{
-		JLog::add(JText::_('test 1'), JLog::WARNING, 'jerror');
-		$db = JFactory::getDbo();
- 
-		// Create a new query object.
-		$query = $db->getQuery(true);
- 
-		// Select all records from the user profile table where key begins with "custom.".
-		// Order it by the ordering field.
-		$query->select('*');
-		$query->from($db->quoteName('persos'));
-		$query->where($db->quoteName('nom') . ' = '. $db->quote($nom));
-		
-		// Reset the query using our newly populated query object.
-		$db->setQuery($query);
-		 
-		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
-		$results = $db->loadAssoc();
-		//print_r("function getPerso() : ".var_dump($results));
-		
-		$query_competences = $db->getQuery(true);
-		$query_competences
-			->select('a.*')
-			->from($db->quoteName('competences', 'a'))
-			->join('INNER', $db->quoteName('persos_competences', 'b') . ' ON (' . $db->quoteName('a.competence_id') . ' = ' . $db->quoteName('b.competence_id') . ')')
-			->where($db->quoteName('b.id_perso') . ' = ' . $results['id']);
-			
-		$db->setQuery($query_competences);
-		$result_competences = $db->loadAssocList();
-			
-		$perso = Perso::create($results, $result_competences);
-		
-		return $perso;
-	}
 	
 	public function initEntraineurs()
 	{
@@ -165,7 +130,6 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 		$query->from($db->quoteName('competences'));
 		$query->where($db->quoteName('parent_id') . " = 0", 'AND' );
 		$query->where('famille = '. $db->quote($famille));
-		JLog::add(JText::_($query), JLog::WARNING, 'jerror');
 		 
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);

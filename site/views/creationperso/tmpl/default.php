@@ -189,6 +189,12 @@ echo "<input type='hidden' id='ajax_url' value='index.php?format=raw&option=com_
 
   
 <?php include(JPATH_COMPONENT . '/includes/menu.php'); ?>
+
+<?php if($this->perso == NULL) {
+	echo "Vous devez d&apos;abord cr&eacute;er ou s&eacute;lectionner un Personnage.";
+	}
+	else {
+?>
 	  		<ul id="submenu">
 <?php
 $menu_list = $this->list_maitrise;
@@ -216,3 +222,6 @@ for($i=0; $i < count($menu_list); $i++)
         <input type="button" id="question_cancel" value="Annuler" />
 	</div> 
 
+<?php 
+}
+?>

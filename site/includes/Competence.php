@@ -14,7 +14,6 @@ class Competence {
 	private $entraineur;
 
    function __construct() {
-   	JLog::add(JText::_('In BaseClass constructor'), JLog::WARNING, 'jerror');
    	$this->nom = "nom base";
    	$this->niveau = 1;
    	$this->parent_id = 0;

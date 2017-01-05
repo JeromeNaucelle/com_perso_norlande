@@ -40,30 +40,20 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 		}
 		
 		$session = JFactory::getSession();
+		$this->perso = NULL;
 		$perso_id = $session->get('perso_id',NULL);
 		if($perso_id == NULL)
 		{
 			JLog::add(JText::_('Pas de personnage actif'), JLog::WARNING, 'jerror');
 		} else {
-			$perso = $model->getPersoById($perso_id);
+			$perso = PersoHelper::getPersoById($perso_id);
 			if($perso == null) {
 				JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');
 			} else {	
 				$this->perso = $perso;
 				$session->set( 'perso', serialize($perso));
 			}
-		}
-		
-		//TODO : enlever ça, ici seulement pour les tests
-		/*
-		$perso = $model->getPerso('firstPerso');
-		if($perso == null) {
-			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
-		}
-		$session->set( 'perso', serialize($perso));
-		$this->perso = $perso;*/
-		// fin TODO
-		
+		}		
 
 		// Display the view
 		parent::display($tpl);

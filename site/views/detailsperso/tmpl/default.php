@@ -92,7 +92,6 @@ $doc->addScriptDeclaration($js);
 <?php include(JPATH_COMPONENT . '/includes/menu.php'); ?>
 <?php require_once(JPATH_COMPONENT . '/includes/define.php'); ?>
 
-<h3>Personnage : <?php echo htmlspecialchars($this->perso->getNom().' ('.$this->perso->getLignee().')'); ?></h3>
 
 <form action="index.php?view=detailsperso&format=raw&option=com_perso_norlande&task=createPerso" method="post">
 <fieldset>  
@@ -119,7 +118,41 @@ foreach(Lignees::$lignees as $key=>$lignee) {
 </fieldset>
 </form>
 
-<form action="index.php?view=detailsperso&format=raw&option=com_perso_norlande&task=updateDetailsPerso" method="post">
+
+
+<script type="text/javascript" >
+
+$(function() {
+	$('#recherche_perso').autocomplete({
+		source : 'index.php?option=com_perso_norlande&task=searchPerso',
+		focus: function( event, ui ) {
+                  $( "#recherche_perso" ).val( ui.item.label );
+                     return false;
+               },
+		select: function(event, ui) {
+			document.location.href="index.php?option=com_perso_norlande&task=selectPerso&perso_id="+ui.item.value;
+			return false;
+		},
+	});
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+<?php if($this->perso !=NULL) { ?>
+<br>
+<h3>Personnage : <?php echo htmlspecialchars($this->perso->getNom().' ('.$this->perso->getLignee().')'); ?></h3>
+
+<form action="index.php?view=detailsperso&format=raw&option=com_perso_norlande&task=updateCristauxPerso" method="post">
 <fieldset>  
   <legend align="left">Cristaux</legend>
 <?php 
@@ -181,19 +214,6 @@ $(function() {
 	});
 });
 
-$(function() {
-	$('#recherche_perso').autocomplete({
-		source : 'index.php?option=com_perso_norlande&task=searchPerso',
-		focus: function( event, ui ) {
-                  $( "#recherche_perso" ).val( ui.item.label );
-                     return false;
-               },
-		select: function(event, ui) {
-			document.location.href="index.php?option=com_perso_norlande&task=selectPerso&perso_id="+ui.item.value;
-			return false;
-		},
-	});
-});
 
 </script>
 
@@ -207,6 +227,7 @@ $(function() {
 </fieldset>
 </form>
 
+<?php } ?>
 
 	<div id="question" style="display:none; cursor: default"> 
         <p id="question_msg">Would you like to contine?.</p>

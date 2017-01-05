@@ -46,23 +46,20 @@ class Perso_NorlandeViewCreationPerso extends JViewLegacy
 			$this->competence = $model->getDefaultMaitrise($this->famille);
 		}
 		
+		$this->perso = NULL;
 		$session = JFactory::getSession();
-		if($session->get('perso',NULL) == NULL)
+		$perso_id = $session->get('perso_id',NULL);
+		
+		if($perso_id == NULL)
 		{
-			$perso = $model->getPerso('firstPerso');
-			if($perso == null) {
+			JLog::add(JText::_('Aucun personnage sélectionné'), JLog::WARNING, 'jerror');	
+		}
+		else {
+			$this->perso = PersoHelper::getPersoById($perso_id);
+			if($this->perso == null) {
 				JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
 			}
-			$session->set( 'perso', serialize($perso));
 		}
-		
-		//TODO : enlever ça, ici seulement pour les tests
-		$perso = $model->getPerso('firstPerso');
-		if($perso == null) {
-			JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');		
-		}
-		$session->set( 'perso', serialize($perso));
-		// fin TODO
 		
 		$this->list_maitrise = $model->getMaitrisesFromFamille($this->famille);
 
