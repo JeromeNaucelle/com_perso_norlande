@@ -32,7 +32,6 @@ class Perso_NorlandeController extends JControllerLegacy
 		$arbre_maitrise = $model->getArbreMaitrise($competence_id);
 		
 		$perso = $this->getCurrentPerso();
-		error_log("test perso : ".print_r($perso,true));
 		
 		$data = array("arbre" => $arbre_maitrise, "competences_acquises" => array_keys($perso->getCompetences()) );
 		
@@ -91,14 +90,14 @@ class Perso_NorlandeController extends JControllerLegacy
 			error_log("test3");
 			$model = $this->getModel('creationperso');
 			$arbre = $model->getArbreMaitrisePhp($competence_id);
-			$result = $perso->can_develop($competence_id, $arbre);
+			$result = $perso->canDevelop($competence_id, $arbre);
 			error_log("dump : ".print_r($result,true));
 			
 			if($result["result"] === 1)
 			{
 				error_log("test4");
 				$data["result"] = 2;
-				$data["xp"] = $perso->get_xp_for_competence($competence_id, $arbre);
+				$data["xp"] = $perso->getXpForCompetence($competence_id, $arbre);
 				$data["niveauCompetence"] = $arbre->getCompetence($competence_id)->getNiveau();
 				// On ajoute la nouvelle compétence au Perso
 				$data["competences"] = array_merge(array($competence_id), array_keys($perso->getCompetences()));
@@ -150,7 +149,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			$model = null;
 			$model = $this->getModel('creationperso');
 			$arbre = $model->getArbreMaitrisePhp($competence_id);
-			$data = $perso->can_develop($competence_id, $arbre);
+			$data = $perso->canDevelop($competence_id, $arbre);
 			
 			if($data['result'] == 2) {
 				// il y a des pré-requis. S'il s'agit d'un nouveau perso, ok
@@ -180,15 +179,12 @@ class Perso_NorlandeController extends JControllerLegacy
 		$jinput = JFactory::getApplication()->input;
 		
 		$cristaux = array();
-		foreach(ClasseXP::get_types_cristaux() as $type) {
+		foreach(ClasseXP::getTypesCristaux() as $type) {
 			$cristaux['cristaux_'.$type] = $jinput->get('cristaux_'.$type, '0', 'INT');
 		}
-		error_log(var_dump($cristaux));
-		//TODO : enlever ça, ici seulement pour les tests
 		$perso = $this->getCurrentPerso();
 		$model->setCristaux($cristaux, $perso);
 		
-		//echo json_encode($data);  
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}
 	
@@ -262,13 +258,13 @@ class Perso_NorlandeController extends JControllerLegacy
 	
 	private function setCurrentPerso($perso_id) {
 		// TODO : check orga	ou joueur autorisé
- 		
- 		if(!PersoHelper::persoExists($perso_id)) {
+ 		$test = PersoHelper::persoExists($perso_id);
+ 		if($test === false) {
  			JLog::add(JText::_("Personnage non trouvé pour l'id ".$perso_id), JLog::WARNING, 'jerror');	
  		} else {
  			$session = JFactory::getSession();
 			$session->set( 'perso_id', $perso_id );
-			$session->set( 'perso_nom', $results['nom'] );
+			$session->set( 'perso_nom', $test );
 		}
 	}
 	
@@ -308,12 +304,10 @@ class Perso_NorlandeController extends JControllerLegacy
 		//recherche des résultats dans la base de données
 
 		$competence_id = $jinput->get('competence_id', '0', 'STR');
-		error_log("competence_id : ".$competence_id);
 		
 		$perso = $this->getCurrentPerso();
 
 		$result = $model->addEntrainement($perso, $competence_id);
-		error_log("addEntrainement model result : ".json_encode($result));
 		echo json_encode($result);
 		$mainframe->close();
 	}
@@ -366,7 +360,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		if($error === 0) {
 			try {
-				$newId = PersoHlper::insertPerso($nom, $lignee);
+				$newId = PersoHelper::insertPerso($nom, $lignee);
 				$this->setCurrentPerso($newId);
 			} catch(Exception $e) {
 				$error = 3;

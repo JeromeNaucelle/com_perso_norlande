@@ -8,11 +8,12 @@ require_once JPATH_COMPONENT . '/includes/Perso.php';
 
 class PersoHelper {
 	
-	public static function insertPerso($id) {
+	public static function insertPerso($nom, $lignee) {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$columns = array('nom', 'lignee');
-		$values = array($db->quote($nom), $db->quote($lignee));
+		$columns = array('nom', 'lignee', 'entrainements');
+		$entrainements = json_encode(array());
+		$values = array($db->quote($nom), $db->quote($lignee), $db->quote($entrainements));
 		 
 		// Prepare the insert query.
 		$query
@@ -41,7 +42,7 @@ class PersoHelper {
  		if(count($results) == 0) {
  			return false;
  		}
- 		return true;
+ 		return $results['nom'];
 	}
 	
 	public static function searchPersoByName($term) {

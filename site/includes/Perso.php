@@ -19,8 +19,7 @@ class Perso {
 
     function __construct() {
     	$this->nom = "nom base";
-    	$competences = array();
-    	$entrainements = array();
+    	$this->competences = array();
     	$this->xp = new ClasseXP();
     }
     
@@ -52,7 +51,7 @@ class Perso {
     			avant la compétence demandée (return 2, pre-requis)
     		- compétence déjà acquise (return 3)
     */
-    public function can_develop($competence_id, $arbre)
+    public function canDevelop($competence_id, $arbre)
     {
     	$result = array("result" => 3, "msg" =>"", "competences" => array());
     	if(isset($this->competences[$competence_id])) {
@@ -150,13 +149,13 @@ class Perso {
 			$perso->competences[$competence->getId()] = $competence;
 		}
 		
-		foreach(ClasseXP::get_types_cristaux() as $famille) {
-			$perso->xp->set_cristaux($famille, $query_result['cristaux_'.$famille]);
+		foreach(ClasseXP::getTypesCristaux() as $famille) {
+			$perso->xp->setCristaux($famille, $query_result['cristaux_'.$famille]);
 		}
 		
 		$entrainements = json_decode($query_result['entrainements']);
 		foreach($entrainements as $id => $nom_competence) {
-			$perso->xp->add_entrainement($id, $nom_competence);
+			$perso->xp->addEntrainement($id, $nom_competence);
 		}
 		return $perso;
 	}
@@ -180,7 +179,7 @@ class Perso {
   
   public function isNewPerso()
   {
-  		if($this->derniere_session === NULL) {
+  		if($this->derniereSession === NULL) {
   			return true;
   		} 
   		return false;
@@ -188,7 +187,7 @@ class Perso {
   
   // retourne 0 si OK
   // retourne 1 sinon
-  public function apprendre_competence($competence_id, $arbre) {
+  public function apprendreCompetence($competence_id, $arbre) {
 		// si le perso a un entrainement pour cette maitrise, il l'utilise
 		foreach($this->entrainements as $id) {
 			if($arbre->isEntrainementFor($id, $competence_id)) {
@@ -215,12 +214,12 @@ class Perso {
 		return $result;	
 	}
 	
-	public function get_xp_for_competence($competence_id, $arbre) {
+	public function getXpForCompetence($competence_id, $arbre) {
 		$res = array();
-		$famille = strtolower($arbre->get_famille_maitrise());
+		$famille = strtolower($arbre->getFamilleMaitrise());
 		$cristaux = array();
 		foreach(array($famille, INCOLORE) as $type) {
-			$tmp = $this->xp->get_cristaux($type);
+			$tmp = $this->xp->getCristaux($type);
 			if($tmp > 0) {
 				$cristaux[$type] = $tmp;
 			}
@@ -230,7 +229,7 @@ class Perso {
 		}
 		
 		$entrainement = array();
-		foreach($this->xp->get_entrainements() as $id => $nom_competence) {
+		foreach($this->xp->getEntrainements() as $id => $nom_competence) {
 			if($arbre->isEntrainementFor($id, $competence_id)) {
 				$entrainement[$id] = $nom_competence;
 			}
@@ -242,7 +241,7 @@ class Perso {
 	}
 	
 	public function addEntrainement($id_competence, $nom_competence) {
-		$this->xp->add_entrainement($id_competence, $nom_competence);
+		$this->xp->addEntrainement($id_competence, $nom_competence);
 	}
 }
 ?>

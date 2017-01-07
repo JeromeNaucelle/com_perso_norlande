@@ -110,7 +110,7 @@ class Arbre {
 
 class ArbreMaitrise extends Arbre
 {
-	public function get_famille_maitrise() {	
+	public function getFamilleMaitrise() {	
 		return $this->root->data()->getFamille();
 	}
 	

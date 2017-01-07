@@ -14,35 +14,35 @@ class ClasseXP {
 	function __construct()
 	{
 		$this->cristaux = array();
-		foreach(ClasseXP::get_types_cristaux() as $type) {
+		foreach(ClasseXP::getTypesCristaux() as $type) {
 			$this->cristaux[$type] = 0;
 		}
 		
 		$this->entrainements = array();
 	}
 	
-	public static function get_types_cristaux() {
+	public static function getTypesCristaux() {
 		$res = array(OCCULTISME, SOCIETE, INTRIGUE, BELLIGERANCE, INCOLORE);
 		return $res;
 	}
 	
-	public function set_cristaux($famille, $val) {
+	public function setCristaux($famille, $val) {
 		$this->cristaux[$famille] = $val;
 	}
 	
-	public function get_cristaux($famille) {
+	public function getCristaux($famille) {
 		return $this->cristaux[$famille];
 	}
 	
-	public function add_entrainement($id_competence, $nom_competence) {
+	public function addEntrainement($id_competence, $nom_competence) {
 		$this->entrainements[$id_competence] = $nom_competence;
 	}
 	
-	public function get_entrainements() {
+	public function getEntrainements() {
 		return $this->entrainements;
 	}
 	
-	public function to_array() {
+	public function toArray() {
 		$result["cristaux"] = $this->cristaux;
     	$result["entrainements"] = $this->entrainements;
     	return $result;

@@ -59,7 +59,7 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
 		$tmp = $db->loadAssoc();
 		$perso->addEntrainement($tmp['competence_id'], $tmp['competence_nom']);
-		$result = $perso->getXp()->get_entrainements();
+		$result = $perso->getXp()->getEntrainements();
 		
 		$query = $db->getQuery(true);
 		$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($result));
@@ -76,7 +76,7 @@ class Perso_NorlandeModelDetailsPerso extends JModelItem
 		$db = JFactory::getDbo();
 		 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data)
-		$result = $perso->getXp()->get_entrainements();
+		$result = $perso->getXp()->getEntrainements();
 		unset($result[$competence_id]);
 		
 		$query = $db->getQuery(true);
