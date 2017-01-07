@@ -4,5 +4,6 @@
 		<action name="core.admin" title="JACTION_ADMIN" description="JACTION_ADMIN_COMPONENT_DESC" />
 		<action name="core.manage" title="JACTION_MANAGE" description="JACTION_MANAGE_COMPONENT_DESC" />
 		<action name="core.edit_orga" title="Edition Orga" description="Edition de n'importe quel personnage avec les droit administrateur" />
+		<action name="core.orga_general" title="Orga général" description="Peut attribuer les droits orga à quelqu'un" />
 	</section>
 </access>

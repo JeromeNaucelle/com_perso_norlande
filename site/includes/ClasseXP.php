@@ -7,6 +7,8 @@ require_once JPATH_COMPONENT . '/includes/define.php';
 //TODO : faire des vérification sur le type de cristal
 class ClasseXP {
 	private $cristaux;
+	
+	// array sous la forme '$competence_id' => 'nom_comptence'
 	private $entrainements;
 	
 	function __construct()

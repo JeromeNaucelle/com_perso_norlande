@@ -163,7 +163,7 @@ $xp = $this->perso->getXp();
 foreach(ClasseXP::get_types_cristaux() as $famille) {
 	$val = $xp->get_cristaux($famille);
 	echo '<label for="cristaux_'.$famille.'">Cristaux '.$famille.'</label>';
-	echo '<input type="text" id="cristaux_'.$famille.'" name="cristaux_'.$famille.'" size="3" maxlength="3" value="'.$val.'"/><br>';
+	echo '<input type="text" id="cristaux_'.$famille.'" name="cristaux_'.$famille.'" class="shortNb" value="'.$val.'"/><br>';
 }
 ?>
 <input type="submit" name="button_submit" value="Valider" />

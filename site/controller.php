@@ -33,7 +33,6 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		$perso = $this->getCurrentPerso();
 		error_log("test perso : ".print_r($perso,true));
-		error_log("test competences : ".print_r($perso->getCompetences(),true));
 		
 		$data = array("arbre" => $arbre_maitrise, "competences_acquises" => array_keys($perso->getCompetences()) );
 		
@@ -56,25 +55,114 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->close();
 	}
 	
+	// Méthode appelée lorsqu'un utilisateur sélectionne
+	// une compétence d'un arbre de maitrise
 	public function userSelect()
 	{
+		$error = 0;
+		$perso = null;
+		$mainframe = JFactory::getApplication();
+		$jinput = JFactory::getApplication()->input;
+		$data = array("result" => -1, "msg" => "erreur inconnue");
+		$competence_id = $jinput->get('competence', -1, 'INT');
+		if($competence_id == -1)
+		{
+			$error = 1;
+			$data["msg"] = "competence ID invalide (".$competence_id.")";
+		}
+		
+		if($error === 0)
+		{
+			error_log("test1");
+			$perso = $this->getCurrentPerso();
+			if($perso == NULL)
+			{
+				error_log("test2");
+				$data["result"] = -1;
+				$data["msg"] = "Personnage non trouvé dans la session";
+				$error = 1;
+			}
+		}
+		
+		$model = null;
+		$result = null;
+		if($error === 0)
+		{
+			error_log("test3");
+			$model = $this->getModel('creationperso');
+			$arbre = $model->getArbreMaitrisePhp($competence_id);
+			$result = $perso->can_develop($competence_id, $arbre);
+			error_log("dump : ".print_r($result,true));
+			
+			if($result["result"] === 1)
+			{
+				error_log("test4");
+				$data["result"] = 2;
+				$data["xp"] = $perso->get_xp_for_competence($competence_id, $arbre);
+				$data["niveauCompetence"] = $arbre->getCompetence($competence_id)->getNiveau();
+				// On ajoute la nouvelle compétence au Perso
+				$data["competences"] = array_merge(array($competence_id), array_keys($perso->getCompetences()));
+				// TODO : insérer la vérification des droits orga
+				// TODO : insérer dans la BDD
+				
+				$data["competences"] = array_merge($data['competences'], array_keys($perso->getCompetences()));
+			} else if($result["result"] === 2)
+			{
+				error_log("test5");
+				//pré-requis à vérifier
+				$data["result"] = -1;
+				$data["msg"] = "Il est nécessaire d'acquérir les compétences précédentes dans cette branche";
+			}
+		}
+		
+
+		echo json_encode($data);
+		$mainframe->close();
+	}
+	
+
+	
+	public function userChoiceDepenseXP($choice)
+	{
+		$error = 0;
 		$mainframe = JFactory::getApplication();
 		$jinput = JFactory::getApplication()->input;
 		$data = array("result" => "competence ID invalide");
 		$competence_id = $jinput->get('competence', '0', 'INT');
 		if($competence_id == 0)
 		{
-			echo json_encode($data);
-			$mainframe->close();
-			return;
+			$error = 1;
 		}
 		
-		
-		$session = JFactory::getSession();
-		$perso = unserialize($session->get( 'perso', 'empty' ));
-		if($perso === 'empty')
+		if($error === 0)
 		{
-			$data["result"] = "Personnage non trouvé dans la session";
+			$session = JFactory::getSession();
+			$perso = unserialize($session->get( 'perso', 'empty' ));
+			if($perso === 'empty')
+			{
+				$data["result"] = "Personnage non trouvé dans la session";
+				$error = 1;
+			}
+		}
+		
+		if($error === 0)
+		{
+			$model = null;
+			$model = $this->getModel('creationperso');
+			$arbre = $model->getArbreMaitrisePhp($competence_id);
+			$data = $perso->can_develop($competence_id, $arbre);
+			
+			if($data['result'] == 2) {
+				// il y a des pré-requis. S'il s'agit d'un nouveau perso, ok
+				// sinon sauf s'il est créé par un orga il ne peut apprendre
+				// qu'une nouvelle compétence
+				if($perso->isNewPerso()) {
+					
+				} else {
+					
+				}
+			}
+			$data["competences"] = array_merge($data['competences'], array_keys($perso->getCompetences()));
 		}
 		echo json_encode($data);
 		$mainframe->close();

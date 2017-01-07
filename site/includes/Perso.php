@@ -13,9 +13,6 @@ class Perso {
 	private $lignee;
 	private $competences;
 	
-	// array sous la forme '$competence_id' => 'nom_comptence'
-	private $entrainements;
-	
 	//
 	private $xp;
 	private $derniere_session;
@@ -47,10 +44,17 @@ class Perso {
     	return $competencesRequises;
     }
     
-    	
+    /* Les différents cas :
+    		- la compétence demandée peut être acquise (return 1)
+    		- une autre branche est en cours d'apprentissage
+    			dans cette maitise (return 4, msg)
+    		- une ou plusieurs compétences doivent être acquises
+    			avant la compétence demandée (return 2, pre-requis)
+    		- compétence déjà acquise (return 3)
+    */
     public function can_develop($competence_id, $arbre)
     {
-    	$result = array("result" => 0, "msg" =>"", "competences" => array());
+    	$result = array("result" => 3, "msg" =>"", "competences" => array());
     	if(isset($this->competences[$competence_id])) {
     		
     		//Compétences déjà acquise
@@ -73,12 +77,14 @@ class Perso {
     		return $result;
     	}
     	
+    	// On crée la liste des compétences dont le niveau "Entrainement"
+    	// a été atteint
     	$path = array();
     	foreach($competenceFromMaitrise as $key => $competence) {
-    		error_log("testing competence ".$competence->getNom());
+    		//error_log("testing competence ".$competence->getNom());
     		if( $competence->isEntraineur() )
     		{
-    			error_log("C'est un entraineur key = ".$key);
+    			//error_log("C'est un entraineur key = ".$key);
     			array_push($path, $key);
     			$path = array_merge($path, $arbre->getPathForCompetence($key));
     		}
@@ -108,10 +114,14 @@ class Perso {
     		$to_learn =  array_diff($pre_requis , array_keys($this->competences) );
     		if(count($to_learn) === 0)
     		{
+    			$result['result'] = 1;
     			error_log("Tous les prérequis sont remplis");
     			array_push($result['competences'], $competence_id);
     		} else {
+    			// Il faut également apprendre les pré-requis suivant
+    			$result['result'] = 2;
     			$result['competences'] = $to_learn;
+    			$result['pre-requis'] = $to_learn;
     			array_push($result['competences'], $competence_id);
     			error_log("Les competences pre-requises sont : " . json_encode($to_learn));
 			}    	
@@ -119,7 +129,7 @@ class Perso {
     	else {
     		$msg = "Une autre branche de cette maitrise est en cours d'apprentissage, ";
     		$msg = $msg . "vous ne pouvez pas apprendre cette compétence";
-    		$result['result'] = 1;
+    		$result['result'] = 4;
     		$result['msg'] = $msg;
     		error_log($msg);
     	}  	
@@ -167,9 +177,68 @@ class Perso {
   {
   		return $this->competences;
   }
+  
+  public function isNewPerso()
+  {
+  		if($this->derniere_session === NULL) {
+  			return true;
+  		} 
+  		return false;
+  }
+  
+  // retourne 0 si OK
+  // retourne 1 sinon
+  public function apprendre_competence($competence_id, $arbre) {
+		// si le perso a un entrainement pour cette maitrise, il l'utilise
+		foreach($this->entrainements as $id) {
+			if($arbre->isEntrainementFor($id, $competence_id)) {
+				return 0;
+			}
+		}
+		
+		// si le perso a assez de cristaux, il l'apprend
+		
+		return 0;
+		// sion, on retourn 1
+		return 1;
+	}
 	
 	public function getXp() {
 		return $this->xp;
+	}
+	
+	
+	// TODO : vérifier l'utilité
+	public function hasNeededXp($competenceId) {
+		$result = true;
+		
+		return $result;	
+	}
+	
+	public function get_xp_for_competence($competence_id, $arbre) {
+		$res = array();
+		$famille = strtolower($arbre->get_famille_maitrise());
+		$cristaux = array();
+		foreach(array($famille, INCOLORE) as $type) {
+			$tmp = $this->xp->get_cristaux($type);
+			if($tmp > 0) {
+				$cristaux[$type] = $tmp;
+			}
+		}
+		if(count($cristaux) > 0) {
+			$res['cristaux'] = $cristaux;
+		}
+		
+		$entrainement = array();
+		foreach($this->xp->get_entrainements() as $id => $nom_competence) {
+			if($arbre->isEntrainementFor($id, $competence_id)) {
+				$entrainement[$id] = $nom_competence;
+			}
+		}
+		if(count($entrainement) > 0) {
+			$res['entrainement'] = $entrainement;
+		}
+		return $res;
 	}
 	
 	public function addEntrainement($id_competence, $nom_competence) {
