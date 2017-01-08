@@ -116,7 +116,7 @@ function isNormalInteger(str) {
 }
 
 function checkNbCristaux() {
-	var nbNeeded = $("#depense_cristaux").find(":hidden")[0].value;
+	var nbNeeded = $("#niveauCompetence").val();
 	var el = $("#depense_cristaux").find(":text");
 	var nbCristauxUsed = 0;
 	for (var i=0; i < el.length; i++) {
@@ -152,6 +152,7 @@ function postChoixDepenseXP(form) {
      complete : function(data)
      {
          // do something, not critical.
+         $.unblockUI(); 
      }
  });
 }
@@ -167,10 +168,10 @@ function questionDepenseXp(xp, competenceLevel) {
 	//var xp = {cristaux:{incolore:2, occultisme:3}};
 	if (xp.cristaux) {
 		$("#depense_cristaux").show();
-		$("#submit_cristaux").before('<input type="hidden" value="'+competenceLevel+'">');
+		document.getElementById("niveauCompetence").value = competenceLevel;
 		$("#submit_cristaux").before("<p>Dépenser "+competenceLevel+" cristaux parmi les cristaux suivants :</p>");
 		for (var type in xp.cristaux) {
-			$("#submit_cristaux").before('<label for="dep_cristaux_"'+type+'>'+type+' : </label><input type="text" name="dep_cristaux_"'+type+' value="'+xp.cristaux[type]+'" class="shortNb"><br>');
+			$("#submit_cristaux").before('<label for="dep_cristaux_'+type+'">'+type+' : </label><input type="text" name="dep_cristaux_'+type+'" value="'+xp.cristaux[type]+'" class="shortNb"><br>');
 		}
 	}
 	

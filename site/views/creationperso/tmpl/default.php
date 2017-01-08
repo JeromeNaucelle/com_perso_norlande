@@ -65,6 +65,7 @@ for($i=0; $i < count($menu_list); $i++)
 		<fieldset>
 		<legend>Cristaux</legend>
 		<input type="hidden" name="typeXp" value="cristaux"></input>
+		<input type="hidden" name="niveauCompetence" id="niveauCompetence"></input>
 		
 		<input type="button" value="Valider" id="submit_cristaux" onclick="checkNbCristaux()">
 		</fieldset>

@@ -126,8 +126,8 @@ class Perso_NorlandeController extends JControllerLegacy
 					$data["xp"] = $xpForCompetence;
 					$data["niveauCompetence"] = $competence->getNiveau();
 					
-					$session->set( 'xpForCompetence', $xpForCompetence );
 					$session->set( 'competenceToLearn', $competence_id );
+					$session->set( 'niveauCompetence', $competence->getNiveau() );
 				}	else {
 					$data["result"] = -1;
 					$data["msg"] = "Vous n'avez pas acquis suffisament d'expérience pour pouvoir apprendre cette compétence";
@@ -185,6 +185,10 @@ class Perso_NorlandeController extends JControllerLegacy
 					$data = $this->depenseEntrainement($perso, $competenceId);
 					break;
 					
+				case 'cristaux':
+					$data = $this->depenseCristaux($perso, $competenceId);
+					break;
+					
 				default:
 					$data["msg"] = "Utilisation de l'XP inconnue";
 					$data["error"] = 1;
@@ -199,7 +203,6 @@ class Perso_NorlandeController extends JControllerLegacy
 		$db = JFactory::getDbo();
 		$jinput = JFactory::getApplication()->input;
 		$data = array("error" => 0, "msg" => "erreur inconnue");
-		error_log("depenseEntrainement 1");
 		 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data)
 		$entrainements = $perso->getXp()->getEntrainements();
@@ -212,7 +215,6 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		$choosenEntrainement = 0;
 		if($data["error"] == 0) {
-			error_log("depenseEntrainement 2");
 			if( !array_key_exists($entrainementId, $entrainements) ) {
 				$data["error"] = 1;
 				$data["msg"] = "L'entrainement sélectionné n'a pas été suivis par le personnage";
@@ -220,15 +222,47 @@ class Perso_NorlandeController extends JControllerLegacy
 		}
 		
 		if($data["error"] == 0) {
-			error_log("depenseEntrainement 3");
 			$data = PersoHelper::useEntrainement($entrainementId, $competenceId, $perso);	
 		}
 		
 		return $data;
 	}
 	
-	private function depenseCristaux($perso, $dataCristaux, $competenceId) {
+	private function depenseCristaux($perso, $competenceId) {
+		$db = JFactory::getDbo();
+		$jinput = JFactory::getApplication()->input;
+		$session = JFactory::getSession();
 		
+		$data = array("error" => 0, "msg" => "erreur inconnue");
+		$niveauCompetence = $session->get( 'niveauCompetence', -1 );
+		if($niveauCompetence == -1) {
+			$data["error"] = 1;
+			$data["msg"] = "Niveau de la compétence non stocké dans la session";
+		}
+		
+		if($data["error"] == 0) {
+			$cristauxDep = 0;
+			$xpUsed = new ClasseXP();
+			foreach(ClasseXP::getTypesCristaux() as $type) {
+				$tmp = $jinput->get('dep_cristaux_'.$type, -1, 'UINT');
+				if($tmp != -1 
+						&& $perso->getXp()->getCristaux($type) >= $tmp) {
+					$cristauxDep += $tmp;
+					$xpUsed->setCristaux($type, $tmp);
+				}
+			}
+			if($cristauxDep != $niveauCompetence) {
+				$data["error"] = 1;
+				$data["msg"] = "Le nombre de cristaux dépensés est incohérent avec le niveau de la compétence";
+			}
+		}
+		
+		
+		if( $data["error"] == 0 ) {
+			$data = PersoHelper::useCristaux($xpUsed, $competenceId, $perso);	
+		}
+		
+		return $data;
 	}
 	
 	public function updateCristauxPerso() {

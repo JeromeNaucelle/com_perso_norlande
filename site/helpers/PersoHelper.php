@@ -130,10 +130,65 @@ class PersoHelper {
 			
 			// ajout de la nouvelle compétence
 			$query = $db->getQuery(true);
-			$date = JFactory::getDate()->format('%Y-%m-%d');
+			$date = JFactory::getDate()->format('Y-m-d');
 			$columns = array('id_perso', 'competence_id', 'date_acquisition', 'xp_used');
 			$xp_used = json_encode(array("entrainement" => $entrainementId));
 			$values = array($perso->getId(), $competenceId, $db->quote($date), $db->quote($xp_used));
+			 
+			// Prepare the insert query.
+			$query
+			    ->insert($db->quoteName('persos_competences'))
+			    ->columns($db->quoteName($columns))
+			    ->values(implode(',', $values));
+			    
+			$db->setQuery($query);
+			$db->execute();
+			$db->transactionCommit();
+		}
+		catch (Exception $e)
+		{
+		   // catch any database errors.
+		   $db->transactionRollback();
+		   $error = 1;
+			$msg = "Erreur lors des changements en base de données lors de l'aprentissage de la compétence";
+		}
+		return array("error" => $error, "msg" => $msg);
+	}
+	
+	public static function useCristaux($xpUsed, $competenceId, $perso) {
+		$error = 0;
+		$msg = "";
+		$db = JFactory::getDbo();
+		 
+		$fields = array();
+		$descXpUsed = array('cristaux'=>array());
+		foreach(ClasseXP::getTypesCristaux() as $type) {
+			if($xpUsed->getCristaux($type) > 0) {
+				$newVal = $perso->getXp()->getCristaux($type) - $xpUsed->getCristaux($type);
+				array_push($fields, $db->quoteName('cristaux_'.$type). ' = ' .$newVal);
+				$descXpUsed['cristaux'][$type] = $xpUsed->getCristaux($type);
+			}
+		}
+		$descXpUsed = json_encode($descXpUsed);
+		
+		try
+		{
+			$db->transactionStart();
+			
+			// suppression de l'entrainement
+			$query = $db->getQuery(true);
+			
+			$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
+			$query->update($db->quoteName('persos'))->set($fields)->where($conditions);
+			$db->setQuery($query);
+			$result = $db->execute();
+			
+			// ajout de la nouvelle compétence
+			$query = $db->getQuery(true);
+			$date = JFactory::getDate()->format('Y-m-d');
+			$columns = array('id_perso', 'competence_id', 'date_acquisition', 'xp_used');
+			
+			$values = array($perso->getId(), $competenceId, $db->quote($date), $db->quote($descXpUsed));
 			 
 			// Prepare the insert query.
 			$query
