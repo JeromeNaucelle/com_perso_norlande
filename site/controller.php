@@ -54,6 +54,23 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->close();
 	}
 	
+	private function enoughXp($xpForCompetence, $niveau) {
+		
+		if( array_key_exists('entrainement', $xpForCompetence) ) {
+			return true;
+		}
+		if(array_key_exists('cristaux', $xpForCompetence)) {
+			$cristaux = 0;
+			foreach($xpForCompetence['cristaux'] as $type => $val) {
+				$cristaux += $val;
+			}
+			if($cristaux >= $niveau) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	// Méthode appelée lorsqu'un utilisateur sélectionne
 	// une compétence d'un arbre de maitrise
 	public function userSelect()
@@ -89,22 +106,32 @@ class Perso_NorlandeController extends JControllerLegacy
 		{
 			error_log("test3");
 			$model = $this->getModel('creationperso');
+			
+			// TODO check l'existance de competence_id
 			$arbre = $model->getArbreMaitrisePhp($competence_id);
-			$result = $perso->canDevelop($competence_id, $arbre);
+			$competence = $arbre->getCompetence($competence_id);
+			
+			$result = $perso->canLearn($competence_id, $arbre);
 			error_log("dump : ".print_r($result,true));
 			
 			if($result["result"] === 1)
 			{
 				error_log("test4");
 				$data["result"] = 2;
-				$data["xp"] = $perso->getXpForCompetence($competence_id, $arbre);
-				$data["niveauCompetence"] = $arbre->getCompetence($competence_id)->getNiveau();
-				// On ajoute la nouvelle compétence au Perso
-				$data["competences"] = array_merge(array($competence_id), array_keys($perso->getCompetences()));
-				// TODO : insérer la vérification des droits orga
-				// TODO : insérer dans la BDD
+				$xpForCompetence = $perso->getXpForCompetence($competence_id, $arbre);
 				
-				$data["competences"] = array_merge($data['competences'], array_keys($perso->getCompetences()));
+				if( $this->enoughXp($xpForCompetence, $competence->getNiveau()) ) {
+					$data["xp"] = $xpForCompetence;
+					$data["niveauCompetence"] = $competence->getNiveau();
+				}		 else {
+					$data["result"] = -1;
+					$data["msg"] = "Vous n'avez pas acquis suffisament d'expérience pour pouvoir apprendre cette compétence";
+				}
+				
+				// On ajoute la nouvelle compétence au Perso
+				// TODO : insérer la vérification des droits orga
+				
+				//$data["competences"] = array_merge($data['competences'], array_keys($perso->getCompetences()));
 			} else if($result["result"] === 2)
 			{
 				error_log("test5");
@@ -113,7 +140,6 @@ class Perso_NorlandeController extends JControllerLegacy
 				$data["msg"] = "Il est nécessaire d'acquérir les compétences précédentes dans cette branche";
 			}
 		}
-		
 
 		echo json_encode($data);
 		$mainframe->close();
@@ -125,8 +151,10 @@ class Perso_NorlandeController extends JControllerLegacy
 	{
 		$error = 0;
 		$mainframe = JFactory::getApplication();
+		$session = JFactory::getSession();
 		$jinput = JFactory::getApplication()->input;
 		$data = array("result" => "competence ID invalide");
+		
 		$competence_id = $jinput->get('competence', '0', 'INT');
 		if($competence_id == 0)
 		{
@@ -135,9 +163,8 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		if($error === 0)
 		{
-			$session = JFactory::getSession();
-			$perso = unserialize($session->get( 'perso', 'empty' ));
-			if($perso === 'empty')
+			$perso = $this->getCurrentPerso();
+			if($perso === NULL)
 			{
 				$data["result"] = "Personnage non trouvé dans la session";
 				$error = 1;
@@ -149,7 +176,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			$model = null;
 			$model = $this->getModel('creationperso');
 			$arbre = $model->getArbreMaitrisePhp($competence_id);
-			$data = $perso->canDevelop($competence_id, $arbre);
+			$data = $perso->canLearn($competence_id, $arbre);
 			
 			if($data['result'] == 2) {
 				// il y a des pré-requis. S'il s'agit d'un nouveau perso, ok

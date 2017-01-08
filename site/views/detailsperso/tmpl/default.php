@@ -48,7 +48,7 @@ foreach(Lignees::$lignees as $key=>$lignee) {
   <legend align="left">S&eacute;lection d&apos;un personnage</legend>
   
 <label for="recherche_perso">Nom du personnage : </label><input id="recherche_perso" type="text" name="nom_perso" /><br>
-<input type="submit" name="button_submit" value="Créer" />
+<input type="submit" name="button_submit" value="Sélectionner" />
 </fieldset>
 </form>
 

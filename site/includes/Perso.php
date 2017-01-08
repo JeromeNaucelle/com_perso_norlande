@@ -51,7 +51,7 @@ class Perso {
     			avant la compétence demandée (return 2, pre-requis)
     		- compétence déjà acquise (return 3)
     */
-    public function canDevelop($competence_id, $arbre)
+    public function canLearn($competence_id, $arbre)
     {
     	$result = array("result" => 3, "msg" =>"", "competences" => array());
     	if(isset($this->competences[$competence_id])) {
