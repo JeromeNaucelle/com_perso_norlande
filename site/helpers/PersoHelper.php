@@ -104,6 +104,57 @@ class PersoHelper {
 		return $perso;
 	}
 	
+	
+	
+	public static function useEntrainement($entrainementId, $competenceId, $perso) {
+		$error = 0;
+		$msg = "";
+		$db = JFactory::getDbo();
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data)
+		$result = $perso->getXp()->getEntrainements();
+		unset($result[$entrainementId]);
+		
+		try
+		{
+			$db->transactionStart();
+			
+			// suppression de l'entrainement
+			$query = $db->getQuery(true);
+			$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($result));
+			
+			$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
+			$query->update($db->quoteName('persos'))->set($field)->where($conditions);
+			$db->setQuery($query);
+			$result = $db->execute();
+			
+			// ajout de la nouvelle compétence
+			$query = $db->getQuery(true);
+			$date = JFactory::getDate()->format('%Y-%m-%d');
+			$columns = array('id_perso', 'competence_id', 'date_acquisition', 'xp_used');
+			$xp_used = json_encode(array("entrainement" => $entrainementId));
+			$values = array($perso->getId(), $competenceId, $db->quote($date), $db->quote($xp_used));
+			 
+			// Prepare the insert query.
+			$query
+			    ->insert($db->quoteName('persos_competences'))
+			    ->columns($db->quoteName($columns))
+			    ->values(implode(',', $values));
+			    
+			$db->setQuery($query);
+			$db->execute();
+			$db->transactionCommit();
+		}
+		catch (Exception $e)
+		{
+		   // catch any database errors.
+		   $db->transactionRollback();
+		   $error = 1;
+			$msg = "Erreur lors des changements en base de données lors de l'aprentissage de la compétence";
+		}
+		return array("error" => $error, "msg" => $msg);
+	}
+	
 }
 
 ?>

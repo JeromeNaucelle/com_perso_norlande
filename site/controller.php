@@ -78,8 +78,10 @@ class Perso_NorlandeController extends JControllerLegacy
 		$error = 0;
 		$perso = null;
 		$mainframe = JFactory::getApplication();
+		$session = JFactory::getSession();
 		$jinput = JFactory::getApplication()->input;
 		$data = array("result" => -1, "msg" => "erreur inconnue");
+		
 		$competence_id = $jinput->get('competence', -1, 'INT');
 		if($competence_id == -1)
 		{
@@ -123,7 +125,10 @@ class Perso_NorlandeController extends JControllerLegacy
 				if( $this->enoughXp($xpForCompetence, $competence->getNiveau()) ) {
 					$data["xp"] = $xpForCompetence;
 					$data["niveauCompetence"] = $competence->getNiveau();
-				}		 else {
+					
+					$session->set( 'xpForCompetence', $xpForCompetence );
+					$session->set( 'competenceToLearn', $competence_id );
+				}	else {
 					$data["result"] = -1;
 					$data["msg"] = "Vous n'avez pas acquis suffisament d'expérience pour pouvoir apprendre cette compétence";
 				}
@@ -147,51 +152,83 @@ class Perso_NorlandeController extends JControllerLegacy
 	
 
 	
-	public function userChoiceDepenseXP($choice)
+	public function userChoiceDepenseXP()
 	{
 		$error = 0;
 		$mainframe = JFactory::getApplication();
 		$session = JFactory::getSession();
 		$jinput = JFactory::getApplication()->input;
-		$data = array("result" => "competence ID invalide");
+		$data = array("error" => 0, "msg" => "erreur inconnue");
 		
-		$competence_id = $jinput->get('competence', '0', 'INT');
-		if($competence_id == 0)
+		$competenceId = $session->get('competenceToLearn');
+		$typeXp = $jinput->get('typeXp', 'err', 'STR');
+		if($competenceId == 0)
 		{
-			$error = 1;
+			$data["error"] = 1;
+			$data['msg'] = "Erreur : identifiant de compétence non trouvé";
 		}
 		
-		if($error === 0)
+		if($data["error"] === 0)
 		{
 			$perso = $this->getCurrentPerso();
 			if($perso === NULL)
 			{
-				$data["result"] = "Personnage non trouvé dans la session";
-				$error = 1;
+				$data["msg"] = "Personnage non trouvé dans la session";
+				$data["error"] = 1;
 			}
 		}
 		
-		if($error === 0)
+		if($data["error"] === 0)
 		{
-			$model = null;
-			$model = $this->getModel('creationperso');
-			$arbre = $model->getArbreMaitrisePhp($competence_id);
-			$data = $perso->canLearn($competence_id, $arbre);
-			
-			if($data['result'] == 2) {
-				// il y a des pré-requis. S'il s'agit d'un nouveau perso, ok
-				// sinon sauf s'il est créé par un orga il ne peut apprendre
-				// qu'une nouvelle compétence
-				if($perso->isNewPerso()) {
+			switch($typeXp) {
+				case 'entrainement':
+					$data = $this->depenseEntrainement($perso, $competenceId);
+					break;
 					
-				} else {
-					
-				}
+				default:
+					$data["msg"] = "Utilisation de l'XP inconnue";
+					$data["error"] = 1;
 			}
-			$data["competences"] = array_merge($data['competences'], array_keys($perso->getCompetences()));
 		}
+		
 		echo json_encode($data);
 		$mainframe->close();
+	}
+	
+	private function depenseEntrainement($perso, $competenceId) {
+		$db = JFactory::getDbo();
+		$jinput = JFactory::getApplication()->input;
+		$data = array("error" => 0, "msg" => "erreur inconnue");
+		error_log("depenseEntrainement 1");
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data)
+		$entrainements = $perso->getXp()->getEntrainements();
+		$entrainementId = $jinput->get('dep_entrainement_group', -1, 'INT');
+		
+		if( $entrainementId == -1 ) {
+			$data["error"] = 1;
+			$data["msg"] = "Aucun entrainement sélectionné";
+		}
+		
+		$choosenEntrainement = 0;
+		if($data["error"] == 0) {
+			error_log("depenseEntrainement 2");
+			if( !array_key_exists($entrainementId, $entrainements) ) {
+				$data["error"] = 1;
+				$data["msg"] = "L'entrainement sélectionné n'a pas été suivis par le personnage";
+			}
+		}
+		
+		if($data["error"] == 0) {
+			error_log("depenseEntrainement 3");
+			$data = PersoHelper::useEntrainement($entrainementId, $competenceId, $perso);	
+		}
+		
+		return $data;
+	}
+	
+	private function depenseCristaux($perso, $dataCristaux, $competenceId) {
+		
 	}
 	
 	public function updateCristauxPerso() {

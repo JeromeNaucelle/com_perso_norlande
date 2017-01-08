@@ -129,14 +129,31 @@ function checkNbCristaux() {
 		}
 	}
 	if (nbCristauxUsed == nbNeeded) {
-		return true;
+		postChoixDepenseXP('depense_cristaux');
+	} else {
+		alert("Vous devez utiliser exactement "+nbNeeded+ " cristaux");
 	}
-	alert("Vous devez utiliser exactement "+nbNeeded+ " cristaux");
-	return false;
 }
 
-function checkDepenseCristaux() {
-	
+function postChoixDepenseXP(form) {
+	var url = 'index.php?format=raw&option=com_perso_norlande&task=userChoiceDepenseXP';
+	$.ajax(
+ 	{
+     // Post select to url.
+     type : 'post',
+     url : url,
+     data: $('form#'+form).serialize(),
+    // contentType: "application/json",
+     dataType : 'json', // expected returned data format.
+     success : function(data)
+     {
+			alert("resultat : " + data["error"] + " " + data['msg']);
+     },
+     complete : function(data)
+     {
+         // do something, not critical.
+     }
+ });
 }
 
 function cancelDepenseCristaux() {

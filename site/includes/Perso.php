@@ -73,6 +73,7 @@ class Perso {
     	{
     		//aucune competence actuellement dans cette maitrise
     		array_push($result['competences'], $competence_id);
+    		$result['result'] = 1;
     		return $result;
     	}
     	

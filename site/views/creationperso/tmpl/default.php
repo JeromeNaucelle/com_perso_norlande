@@ -64,8 +64,9 @@ for($i=0; $i < count($menu_list); $i++)
 	<form id="depense_cristaux" style="display:none">
 		<fieldset>
 		<legend>Cristaux</legend>
+		<input type="hidden" name="typeXp" value="cristaux"></input>
 		
-		<input type="button" value="Valider" id="submit_cristaux" onclick="checkNbCristaux(3)">
+		<input type="button" value="Valider" id="submit_cristaux" onclick="checkNbCristaux()">
 		</fieldset>
 	</form>
 	
@@ -73,8 +74,9 @@ for($i=0; $i < count($menu_list); $i++)
 	<form method="post" id="depense_entrainement" style="display:none">
 		<fieldset>
 		<legend>Entrainements</legend>
+		<input type="hidden" name="typeXp" value="entrainement"></input>
 		<p>Utiliser un entrainement :</p>
-		<input type="submit" value="Valider" id="submit_entrainement">
+		<input type="button" value="Valider" id="submit_entrainement" onclick="postChoixDepenseXP('depense_entrainement')">
 		</fieldset>
 	</form>
 	<input type="button" value="Annuler" style="width:100%" onclick="cancelDepenseCristaux()">
