@@ -143,6 +143,12 @@ class Perso_NorlandeController extends JControllerLegacy
 				//pré-requis à vérifier
 				$data["result"] = -1;
 				$data["msg"] = "Il est nécessaire d'acquérir les compétences précédentes dans cette branche";
+			} else if($result["result"] === 3) {
+				error_log("test6");
+				// compétence déjà acquise, on la désapprend
+				$data["result"] = -1;
+				$data["msg"] = "Supression de la competence";
+				PersoHelper::forgetCompetence($competence_id, $perso);
 			}
 		}
 

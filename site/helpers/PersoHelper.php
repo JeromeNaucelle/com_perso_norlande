@@ -104,7 +104,33 @@ class PersoHelper {
 		return $perso;
 	}
 	
+	private static function updateEntrainements($persoId, $entrainements) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($entrainements));
+		
+		$conditions = $db->quoteName('id') . ' =  ' . $persoId;
+		$query->update($db->quoteName('persos'))->set($field)->where($conditions);
+		$db->setQuery($query);
+		$db->execute();
+	}
 	
+	private static function addCompetenceToPerso($perso, $competenceId, $xpUsed) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$date = JFactory::getDate()->format('Y-m-d');
+		$columns = array('id_perso', 'competence_id', 'date_acquisition', 'xp_used');
+		$values = array($perso->getId(), $competenceId, $db->quote($date), $db->quote($xpUsed));
+		 
+		// Prepare the insert query.
+		$query
+		    ->insert($db->quoteName('persos_competences'))
+		    ->columns($db->quoteName($columns))
+		    ->values(implode(',', $values));
+		    
+		$db->setQuery($query);
+		$db->execute();
+	}
 	
 	public static function useEntrainement($entrainementId, $competenceId, $perso) {
 		$error = 0;
@@ -112,37 +138,19 @@ class PersoHelper {
 		$db = JFactory::getDbo();
 		 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data)
-		$result = $perso->getXp()->getEntrainements();
-		unset($result[$entrainementId]);
+		$entrainements = $perso->getXp()->getEntrainements();
+		unset($entrainements[$entrainementId]);
+		$xpUsed = json_encode(array("entrainement" => $entrainementId));
 		
 		try
 		{
 			$db->transactionStart();
 			
 			// suppression de l'entrainement
-			$query = $db->getQuery(true);
-			$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($result));
-			
-			$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
-			$query->update($db->quoteName('persos'))->set($field)->where($conditions);
-			$db->setQuery($query);
-			$result = $db->execute();
+			PersoHelper::updateEntrainements($perso->getId(), $entrainements);
 			
 			// ajout de la nouvelle compétence
-			$query = $db->getQuery(true);
-			$date = JFactory::getDate()->format('Y-m-d');
-			$columns = array('id_perso', 'competence_id', 'date_acquisition', 'xp_used');
-			$xp_used = json_encode(array("entrainement" => $entrainementId));
-			$values = array($perso->getId(), $competenceId, $db->quote($date), $db->quote($xp_used));
-			 
-			// Prepare the insert query.
-			$query
-			    ->insert($db->quoteName('persos_competences'))
-			    ->columns($db->quoteName($columns))
-			    ->values(implode(',', $values));
-			    
-			$db->setQuery($query);
-			$db->execute();
+			PersoHelper::addCompetenceToPerso($perso, $competenceId, $xpUsed);
 			$db->transactionCommit();
 		}
 		catch (Exception $e)
@@ -155,6 +163,7 @@ class PersoHelper {
 		return array("error" => $error, "msg" => $msg);
 	}
 	
+	
 	public static function useCristaux($xpUsed, $competenceId, $perso) {
 		$error = 0;
 		$msg = "";
@@ -162,12 +171,13 @@ class PersoHelper {
 		 
 		$fields = array();
 		$descXpUsed = array('cristaux'=>array());
+		$xp = $perso->getXp();
 		foreach(ClasseXP::getTypesCristaux() as $type) {
 			if($xpUsed->getCristaux($type) > 0) {
-				$newVal = $perso->getXp()->getCristaux($type) - $xpUsed->getCristaux($type);
+				$newVal = $xp->getCristaux($type) - $xpUsed->getCristaux($type);
 				array_push($fields, $db->quoteName('cristaux_'.$type). ' = ' .$newVal);
 				$descXpUsed['cristaux'][$type] = $xpUsed->getCristaux($type);
-			}
+			} 
 		}
 		$descXpUsed = json_encode($descXpUsed);
 		
@@ -175,29 +185,14 @@ class PersoHelper {
 		{
 			$db->transactionStart();
 			
-			// suppression de l'entrainement
 			$query = $db->getQuery(true);
-			
 			$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
 			$query->update($db->quoteName('persos'))->set($fields)->where($conditions);
 			$db->setQuery($query);
 			$result = $db->execute();
 			
 			// ajout de la nouvelle compétence
-			$query = $db->getQuery(true);
-			$date = JFactory::getDate()->format('Y-m-d');
-			$columns = array('id_perso', 'competence_id', 'date_acquisition', 'xp_used');
-			
-			$values = array($perso->getId(), $competenceId, $db->quote($date), $db->quote($descXpUsed));
-			 
-			// Prepare the insert query.
-			$query
-			    ->insert($db->quoteName('persos_competences'))
-			    ->columns($db->quoteName($columns))
-			    ->values(implode(',', $values));
-			    
-			$db->setQuery($query);
-			$db->execute();
+			PersoHelper::addCompetenceToPerso($perso, $competenceId, $descXpUsed);
 			$db->transactionCommit();
 		}
 		catch (Exception $e)
@@ -206,6 +201,126 @@ class PersoHelper {
 		   $db->transactionRollback();
 		   $error = 1;
 			$msg = "Erreur lors des changements en base de données lors de l'aprentissage de la compétence";
+		}
+		return array("error" => $error, "msg" => $msg);
+	}
+	
+	private static function getXpUsedForCompetence($perso, $competenceId) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+			
+		$conditions = $db->quoteName('id_perso') . ' =  ' . $perso->getId();
+		$conditions = $conditions . ' AND ' . $db->quoteName('competence_id') . ' =  ' . $competenceId;
+		$query->select($db->quoteName('xp_used'));
+		$query->from($db->quoteName('persos_competences'));
+		$query->where($conditions);
+		$db->setQuery($query);
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		return $db->loadAssoc();
+	}
+	
+	private static function getNomCompetence($competenceId) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('competence_nom'));
+		$query->from($db->quoteName('competences'));
+		$query->where($db->quoteName('competence_id') . ' = '.$competenceId);
+		$db->setQuery($query);
+		
+		return $db->loadResult();
+	}
+	
+	private static function removeCompetence($persoId, $competenceId) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		 
+		// delete all custom keys for user 1001.
+		$conditions = array(
+		    $db->quoteName('id_perso') . ' = ' . $persoId, 
+		    $db->quoteName('competence_id') . ' = ' . $competenceId
+		);
+		 
+		$query->delete($db->quoteName('persos_competences'));
+		$query->where($conditions);
+		error_log($query->__toString());
+		 
+		$db->setQuery($query);
+		 
+		$result = $db->execute();		
+	}		
+	
+	public static function forgetCompetence($competenceId, $perso) {
+		$error = 0;
+		$msg = "";
+		$db = JFactory::getDbo();
+		$results = PersoHelper::getXpUsedForCompetence($perso, $competenceId);
+		$xp = $perso->getXp();
+ 		
+ 		if(count($results) == 0) {
+ 			$error = 1;
+			$msg = "Cette compétence n'a pas été trouvée associée au personnage";
+ 		}
+ 		error_log('forgetCompetence 1');
+		
+		try
+		{
+			$db->transactionStart();
+			
+			// récupération de l'xp dépensée lors de l'apprentissage
+			if($error == 0) {
+				if($results['xp_used'] == "" 
+					|| $results['xp_used'] == NULL) {
+						error_log('forgetCompetence 2');
+						// TODO : compétence donnée par un orga, pas d'XP à recréditer
+						PersoHelper::removeCompetence($perso->getId(), $competenceId);
+						$db->transactionCommit();
+						return array("error" => $error, "msg" => $msg);
+				}
+				$xpUsed = json_decode($results['xp_used'], true);
+				error_log('$xpUsed : ' . print_r($xpUsed, true));
+				switch( array_keys($xpUsed)[0] ) {
+					case 'entrainement':
+						error_log('forgetCompetence 3');
+						$entrainements = $xp->getEntrainements();
+						$entrainementId = $xpUsed['entrainement'];
+						$nomEntrainement = PersoHelper::getNomCompetence($entrainementId);
+						$xp->addEntrainement($entrainementId, $nomEntrainement);
+						PersoHelper::updateEntrainements($perso->getId(), $xp->getEntrainements());
+						PersoHelper::removeCompetence($perso->getId(), $competenceId);
+						break;
+						
+					case 'cristaux':
+						error_log('forgetCompetence 4');
+						$fields = array();
+						foreach($xpUsed['cristaux'] as $type => $val) {
+							$newVal = $xp->getCristaux($type) + $val;
+							array_push($fields, $db->quoteName('cristaux_'.$type). ' = ' .$newVal);
+						}						
+						
+						$query = $db->getQuery(true);
+						
+						$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
+						$query->update($db->quoteName('persos'))->set($fields)->where($conditions);
+						$db->setQuery($query);
+						$result = $db->execute();
+						PersoHelper::removeCompetence($perso->getId(), $competenceId);
+						break;
+						
+					default:
+						error_log("Méthode d'aquisition de compétence inconnue : ".print_r($xpUsed, true));
+				}
+			}
+			
+			$db->transactionCommit();
+		}
+		catch (Exception $e)
+		{
+		   // catch any database errors.
+		   error_log('forgetCompetence 5');
+		   $db->transactionRollback();
+		   $error = 1;
+			$msg = "Erreur lors des changements en base de données pour la suppression de la compétence";
 		}
 		return array("error" => $error, "msg" => $msg);
 	}
