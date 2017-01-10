@@ -151,6 +151,9 @@ class ArbreMaitrise extends Arbre
 			}
 			$node = $node->parent();
 		}	
+		if($node->data()->getId() == $competenceId) {
+				return true;
+		}
 		return false;
 	}
 }
