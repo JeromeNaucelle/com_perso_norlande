@@ -143,6 +143,9 @@ class Perso_NorlandeController extends JControllerLegacy
 				//pré-requis à vérifier
 				$data["result"] = -1;
 				$data["msg"] = "Il est nécessaire d'acquérir les compétences précédentes dans cette branche";
+			} else {
+				$data["result"] = -1;
+				$data["msg"] = $result['msg'];
 			}
 		}
 
@@ -195,6 +198,14 @@ class Perso_NorlandeController extends JControllerLegacy
 			}
 		}
 		
+		if($data["error"] === 0)
+		{
+			// On envoie la liste des compétences acquises dans cette
+			// branche pour le rendu graphique
+			$competencesAcquises = array_keys($perso->getCompetences());
+			array_push($competencesAcquises , $competenceId);
+			$data["competences"] = $competencesAcquises;
+		}
 		echo json_encode($data);
 		$mainframe->close();
 	}

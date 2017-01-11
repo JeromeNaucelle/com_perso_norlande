@@ -41,13 +41,11 @@ function launch_ajax(){
 	      	$( "#alert_msg" ).text( data['msg'] );
 	      	$.blockUI({ message: $('#alert'), css: { width: '275px' } }); 
 	      	selectCompetencesAcquises(competences_acquises);
-	      	//alert(data['msg']);
 	      } else if(data['result'] == 2) {
 	      	// Question à l'utilisateur
 	      	//var xp = {niveau_competence:3,cristaux:{incolore:2, occultisme:3}, entrainement:{12:"Maitre des poisons", 20:"Maitre des anges"}};
 	      	questionDepenseXp(data['xp'], data['niveauCompetence']);
 	      	$.blockUI({ message: $('#question_dep_xp'), css: { position: 'absolute', textAlign: 'left', heigth:'40em', width:'300px', overflow: 'auto!important' }}); 
-	      	selectCompetencesAcquises(data['competences']);
 	      }
 	      
      },
@@ -147,7 +145,13 @@ function postChoixDepenseXP(form) {
      dataType : 'json', // expected returned data format.
      success : function(data)
      {
-			alert("resultat : " + data["error"] + " " + data['msg']);
+			if(data["error"] == 0) {
+				selectCompetencesAcquises(data['competences']);
+			} else {
+				selectCompetencesAcquises(competences_acquises);
+				alert(data['msg']);
+			} 
+			
      },
      complete : function(data)
      {
@@ -158,6 +162,7 @@ function postChoixDepenseXP(form) {
 }
 
 function cancelDepenseCristaux() {
+	selectCompetencesAcquises(competences_acquises);
 	$.unblockUI(); 
 	return false; 
 }
@@ -171,7 +176,7 @@ function questionDepenseXp(xp, competenceLevel) {
 		document.getElementById("niveauCompetence").value = competenceLevel;
 		$("#submit_cristaux").before("<p>Dépenser "+competenceLevel+" cristaux parmi les cristaux suivants :</p>");
 		for (var type in xp.cristaux) {
-			$("#submit_cristaux").before('<label for="dep_cristaux_'+type+'">'+type+' : </label><input type="text" name="dep_cristaux_'+type+'" value="'+xp.cristaux[type]+'" class="shortNb"><br>');
+			$("#submit_cristaux").before('<label for="dep_cristaux_'+type+'">'+type+' : </label><input type="text" name="dep_cristaux_'+type+'" value="0" class="shortNb"> / '+xp.cristaux[type]+'<br>');
 		}
 	}
 	
