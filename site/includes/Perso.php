@@ -144,6 +144,7 @@ class Perso {
 		$perso->lignee = $query_result['lignee'];
 		//$perso->derniere_session = $query_result['derniere_session'];
 		$perso->id = $query_result['id'];
+		$perso->xp->setPointsCreation($query_result['points_creation']);
 		for($i=0; $i<count($competences_result); $i++)
 		{
 			$competence = Competence::create($competences_result[$i]);

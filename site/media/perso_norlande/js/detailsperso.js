@@ -19,6 +19,31 @@ function add_entrainement(competence_id){
 	});
 }
 
+function updatePointsCreationPerso() {
+	var url = 'index.php?format=raw&option=com_perso_norlande&task=updatePointsCreationPerso';
+	$.ajax(
+ 	{
+     // Post select to url.
+     type : 'post',
+     url : url,
+     data: $('#formPointsCreation').serialize(),
+    // contentType: "application/json",
+     dataType : 'json', // expected returned data format.
+     success : function(data)
+     {
+      	// Affichage d'un message d'info
+      	$( "#alert_msg" ).text( data['msg'] );
+      	$('#pointsCreation').val(data['pointsCreation']);
+      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+	      
+     },
+     complete : function(data)
+     {
+         // do something, not critical.
+     }
+ });
+}
+
 function deleteEntrainement(competence_id){
 	var nom_entrainement = $( "#row_entrainement_"+competence_id).text();
 	$("#del_entrainement_id").val(competence_id);
@@ -30,7 +55,7 @@ function deleteEntrainement(competence_id){
 
  $(document).ready(function() {
  
-  $('#question_cancel').click(function() { 
+  $('#alert_ok').click(function() { 
       $.unblockUI(); 
       return false; 
   }); 

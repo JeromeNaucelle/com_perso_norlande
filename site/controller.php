@@ -276,6 +276,60 @@ class Perso_NorlandeController extends JControllerLegacy
 		return $data;
 	}
 	
+	private function getInt($name, $default) {
+		$ret = $default;
+		$jinput = JFactory::getApplication()->input;
+		$tmp = $jinput->get('pointsCreation', NULL, 'STR');
+		if($tmp != NULL) {
+			if(preg_match('/^\d+$/',$tmp)) {
+			  $ret = (int)$tmp;
+			}
+		}
+		return $ret;
+	}
+	
+	public function updatePointsCreationPerso() {
+		$mainframe = JFactory::getApplication();
+		
+		$pointsCreation = $this->getInt('pointsCreation', -1);
+		$data = array("error"=>0, "msg"=>"");
+		
+		$perso = $this->getCurrentPerso();
+		if($perso === NULL)
+		{
+			$data["msg"] = "Personnage non trouvé dans la session";
+			$data["error"] = 1;
+		}
+		
+		if($data["error"] === 0)
+		{
+			$data['pointsCreation'] = $perso->getXp()->getPointsCreation();
+			if($pointsCreation == -1) {
+				$data['error'] = 1;
+				$data['msg'] =  "La valeur entrée n'est pas un chiffre valide";
+			}
+		}
+		
+		if($data["error"] === 0)
+		{
+			$model = $this->getModel('detailsperso');
+			if($model->setPointsCreation($pointsCreation, $perso) != 1) {
+				$data['error'] = 1;
+				$data['msg'] =  "Erreur lors du changement en BDD";
+			}
+		}
+		
+		if($data["error"] === 0)
+		{
+			$data['pointsCreation'] = $pointsCreation;
+			$data['msg'] =  "Données mises à jour";
+		}
+		
+		
+		echo json_encode($data);
+		$mainframe->close();
+	}
+	
 	public function updateCristauxPerso() {
 		// TODO : check orga	
 		// TODO : check que les inputs soient bien des chiffres		

@@ -11,9 +11,9 @@ class PersoHelper {
 	public static function insertPerso($nom, $lignee) {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$columns = array('nom', 'lignee', 'entrainements');
+		$columns = array('nom', 'lignee', 'pointsCreation', 'entrainements');
 		$entrainements = json_encode(array());
-		$values = array($db->quote($nom), $db->quote($lignee), $db->quote($entrainements));
+		$values = array($db->quote($nom), $db->quote($lignee), 6, $db->quote($entrainements));
 		 
 		// Prepare the insert query.
 		$query
@@ -60,8 +60,6 @@ class PersoHelper {
 		->from($db->quoteName('persos'))
 		->where($db->quoteName('nom').' LIKE '.$db->quote('%'.$term.'%'))
 		->setLimit(10);
-		
-		error_log($query->__toString());
 				
 		// Reset the query using our newly populated query object.
 		$db->setQuery($query);

@@ -86,11 +86,23 @@ $(function() {
 <br>
 <h3>Personnage : <?php echo htmlspecialchars($this->perso->getNom().' ('.$this->perso->getLignee().')'); ?></h3>
 
+<form id="formPointsCreation">
+<fieldset>  
+  <legend align="left">Points de Cr&eacute;ation</legend>
+<?php 
+$xp = $this->perso->getXp();
+
+echo '<label for="pointsCreation">Points de cr&eacute;ation</label>';
+echo '<input type="text" id="pointsCreation" name="pointsCreation" class="shortNb" value="'.$xp->getPointsCreation().'"/><br>';
+?>
+<input type="button" name="button_submit" value="Valider"onclick="updatePointsCreationPerso()" />
+</fieldset>
+</form>
+
 <form action="index.php?view=detailsperso&format=raw&option=com_perso_norlande&task=updateCristauxPerso" method="post">
 <fieldset>  
   <legend align="left">Cristaux</legend>
 <?php 
-$xp = $this->perso->getXp();
 
 //<label for="cristaux_incolores">Cristaux Incolores</label>
 // <input type="text" id="cristaux_incolores" name="cristaux_incolores" size="3" maxlength="3" value="0"/><br>
@@ -163,9 +175,7 @@ $(function() {
 
 <?php } ?>
 
-	<div id="question" style="display:none; cursor: default"> 
-        <p id="question_msg">Would you like to contine?.</p>
-        <input type="hidden" id="del_entrainement_id"/>
-        <input type="button" id="question_ok" value="Oui" />
-        <input type="button" id="question_cancel" value="Annuler" />
+	<div id="alert" style="display:none; cursor: default"> 
+     <p id="alert_msg">Would you like to contine?.</p>
+     <input type="button" id="alert_ok" value="OK" />
 	</div> 
