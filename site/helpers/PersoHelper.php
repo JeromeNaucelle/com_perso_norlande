@@ -11,7 +11,7 @@ class PersoHelper {
 	public static function insertPerso($nom, $lignee) {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$columns = array('nom', 'lignee', 'pointsCreation', 'entrainements');
+		$columns = array('nom', 'lignee', 'points_creation', 'entrainements');
 		$entrainements = json_encode(array());
 		$values = array($db->quote($nom), $db->quote($lignee), 6, $db->quote($entrainements));
 		 

@@ -32,8 +32,12 @@ class Perso_NorlandeController extends JControllerLegacy
 		$arbre_maitrise = $model->getArbreMaitrise($competence_id);
 		
 		$perso = $this->getCurrentPerso();
+		$competencesAcquises = array();
+		if($perso != NULL) {
+			$competencesAcquises = $perso->getCompetences();
+		}
 		
-		$data = array("arbre" => $arbre_maitrise, "competences_acquises" => array_keys($perso->getCompetences()) );
+		$data = array("arbre" => $arbre_maitrise, "competences_acquises" => array_keys($competencesAcquises) );
 		
 		echo json_encode($data);  
 		$mainframe->close();
