@@ -12,6 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 // import Joomla modelitem library
 jimport('joomla.application.component.modelitem');
 jimport('joomla.log.log');
+JTable::addIncludePath(JPATH_COMPONENT . '/tables');
 
 //require(JPATH_ROOT."/components/com_perso_norlande/includes/Perso.inc");
 require_once JPATH_COMPONENT . '/includes/Perso.php';
@@ -22,8 +23,32 @@ require_once JPATH_COMPONENT . '/includes/Arbre.php';
  *
  * @since  0.0.1
  */
-class Perso_NorlandeModelDetailsPerso extends JModelItem
+class Perso_NorlandeModelDetailsPerso extends JModelForm
 {
+	
+	/**
+	* Method to get the form.
+	*
+	* @access      public
+	* @return      mixed   JForm object on success, false on failure.
+	*/
+	public function getForm($data = array(), $loadData = true) 
+	{
+       $form = $this->loadForm(
+                         'com_perso_norlande.detailsperso',
+                         'detailsperso',
+                         array('control' => 'jform', 'load_data' => $loadData)
+                        );
+       return $form;
+	}
+     
+   public function getTable($type = 'Persos', 
+   									$prefix = 'Table', 
+   									$config = array())
+	{
+		return JTable::getInstance($type, $prefix, $config);
+	}
+	
 
 	public function setCristaux($tab_cristaux, $perso) {
 		$db = JFactory::getDbo();

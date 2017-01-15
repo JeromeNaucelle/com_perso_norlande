@@ -43,6 +43,59 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->close();
 	}
 	
+	private function getIntFromJForm($name, $default) {
+		$ret = $default;
+		$input = JFactory::getApplication()->input;
+		$formData = new JInput($input->get('jform', '', 'array')); 
+		$tmp = $formData->get($name, NULL, 'STR');
+		if($tmp != NULL) {
+			if(preg_match('/^\d+$/',$tmp)) {
+			  $ret = (int)$tmp;
+			}
+		}
+		return $ret;
+	}
+	
+	public function updateMonnaie() {
+		$data = array("error"=>0, "msg"=>"Données mises à jour");
+		$formResult = array();
+		$mainframe = JFactory::getApplication();
+		$session = JFactory::getSession();
+		
+		$persoId = $session->get( 'perso_id', NULL );
+		
+		if($persoId == NULL) {
+			$data["msg"] = "Personnage non trouvé dans la session";
+			$data["error"] = 1;
+		}
+		
+		if($data["error"] == 0) {
+			$model = $this->getModel('detailsperso');
+			$tablePerso = $model->getTable();
+			
+			$formResult['id'] = $persoId;
+			foreach ($model->getForm()->getFieldset('monnaie') as $field) {
+				$fieldName = $field->getAttribute('name');
+				$val = $this->getIntFromJForm($fieldName, -1);
+				if($val != -1) {
+					$formResult[$fieldName] = $val;
+				} else {
+					$data['msg'] = "Attention, certaine valeur sont invalides et 
+							n'ont donc pas été mises à jour";
+				}
+			}
+			
+			$tablePerso->bind($formResult);
+			if( !$tablePerso->store() ) {
+				$data["msg"] = "Erreur lors de la sauvegarde en base de données";
+				$data["error"] = 1;
+			}
+		}
+		
+		echo json_encode($data);
+		$mainframe->close();
+	}
+	
 	
 	// Méthode à appeler une fois après le chargement des mairises
 	// dans la BDD pour créer les compétences d'entraineur
@@ -283,7 +336,7 @@ class Perso_NorlandeController extends JControllerLegacy
 	private function getInt($name, $default) {
 		$ret = $default;
 		$jinput = JFactory::getApplication()->input;
-		$tmp = $jinput->get('pointsCreation', NULL, 'STR');
+		$tmp = $jinput->get($name, NULL, 'STR');
 		if($tmp != NULL) {
 			if(preg_match('/^\d+$/',$tmp)) {
 			  $ret = (int)$tmp;

@@ -18,6 +18,8 @@ defined('_JEXEC') or die('Restricted access');
  */
 class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 {
+	
+	protected $form = null;
 	/**
 	 * Display the Hello World view
 	 *
@@ -53,7 +55,22 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 				$this->perso = $perso;
 				$session->set( 'perso', serialize($perso));
 			}
-		}		
+		}
+		
+		$tablePerso = $model->getTable();
+		$data = $tablePerso->load($perso_id);
+		
+		// get the Form
+       $form = $this->getForm();
+       $form->bind(get_object_vars($tablePerso));
+       // get the Data
+       if (count($errors = $this->get('Errors'))) 
+       {
+               JError::raiseError(500, implode("<br />", $errors));
+               return;
+       }
+       // Assign the form
+       $this->form = $form;	
 
 		// Display the view
 		parent::display($tpl);

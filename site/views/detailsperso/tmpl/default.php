@@ -95,7 +95,7 @@ $xp = $this->perso->getXp();
 echo '<label for="pointsCreation">Points de cr&eacute;ation</label>';
 echo '<input type="text" id="pointsCreation" name="pointsCreation" class="shortNb" value="'.$xp->getPointsCreation().'"/><br>';
 ?>
-<input type="button" name="button_submit" value="Valider"onclick="updatePointsCreationPerso()" />
+<input type="button" name="button_submit" value="Valider" onclick="updatePointsCreationPerso()"/>
 </fieldset>
 </form>
 
@@ -162,6 +162,19 @@ $(function() {
 
 
 </script>
+
+<div class="first-fieldset">
+    <form name="formname" id="formMonnaie">
+        <fieldset class="adminform">
+            <legend>Monnaie</legend>
+            <?php foreach ($this->form->getFieldset('monnaie') as $field): ?>
+                <?php echo $field->label; ?>
+                <?php echo $field->input.'<br>'; ?>
+            <?php endforeach; ?>
+            <input type="button" name="button_submit" value="Enregistrer" onclick="updateMonnaie()"/>
+        </fieldset>
+    </form>
+</div>
 
 <form>
 <fieldset>

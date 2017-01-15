@@ -36,10 +36,26 @@ function updatePointsCreationPerso() {
       	$('#pointsCreation').val(data['pointsCreation']);
       	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
 	      
-     },
-     complete : function(data)
+     }
+ });
+}
+
+function updateMonnaie() {
+	var url = 'index.php?format=raw&option=com_perso_norlande&task=updateMonnaie';
+	$.ajax(
+ 	{
+     // Post select to url.
+     type : 'post',
+     url : url,
+     data: $('#formMonnaie').serialize(),
+    // contentType: "application/json",
+     dataType : 'json', // expected returned data format.
+     success : function(data)
      {
-         // do something, not critical.
+      	// Affichage d'un message d'info
+      	$( "#alert_msg" ).text( data['msg'] );
+      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+	      
      }
  });
 }

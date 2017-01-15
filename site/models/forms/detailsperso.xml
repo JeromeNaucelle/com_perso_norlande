@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset name="monnaie">
+	    <field
+	    	id="pieces_or"
+	            name="pieces_or"
+	            type="number"
+	            label="Pièces d'or"
+	            class="shortNb"
+	            default="0">
+	    </field>
+	    <field
+	    	id="pieces_argent"
+	            name="pieces_argent"
+	            type="number"
+	            label="Pièces d'argent"
+	            class="shortNb"
+	            default="0">
+	    </field>
+	    <field
+	    	id="pieces_cuivre"
+	            name="pieces_cuivre"
+	            type="number"
+	            label="Pièces de cuivre"
+	            class="shortNb"
+	            default="0">
+	    </field>
+  </fieldset>
+</form>
