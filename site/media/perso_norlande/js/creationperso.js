@@ -45,7 +45,7 @@ function launch_ajax(){
 	      	// Question à l'utilisateur
 	      	//var xp = {niveau_competence:3,cristaux:{incolore:2, occultisme:3}, entrainement:{12:"Maitre des poisons", 20:"Maitre des anges"}};
 	      	questionDepenseXp(data['xp'], data['niveauCompetence']);
-	      	$.blockUI({ message: $('#question_dep_xp'), css: { position: 'absolute', textAlign: 'left', heigth:'40em', width:'300px', overflow: 'auto!important' }}); 
+	      	$.blockUI({ message: $('#question_dep_xp'), onUnblock: resetQuestionXp(),css: { position: 'absolute', textAlign: 'left', heigth:'40em', width:'300px', overflow: 'auto!important' }}); 
 	      }
 	      
      },
@@ -104,8 +104,9 @@ function drawChart(arbre_maitrise_json) {
 
 
 function resetQuestionXp() {
-	$(document).data("initialDepXpClone").replaceAll("#question_dep_xp");
-	$(document).data("initialDepXpClone", $("#question_dep_xp").clone(true));
+	var initialDiv = $(document).data("initialDepXpClone");
+	$("#question_dep_xp").replaceWith(initialDiv);
+	$(document).data("initialDepXpClone", initialDiv.clone(true));
 }
 
 function isNormalInteger(str) {
@@ -133,6 +134,24 @@ function checkNbCristaux() {
 	}
 }
 
+function checkNbPointsCreation() {
+	var nbNeeded = $("#niveauCompetence").val();
+	var el = $("#depense_points_creation").find(":text");
+	var nbPcUsed = 0;
+	var item = $(":text")[0];
+	if (isNormalInteger(el[0].value)) {
+		nbPcUsed += parseInt(el[0].value);
+		$("#depense_cristaux").find(item).css( "background-color", "" );
+	} else {
+		$("#depense_cristaux").find(item).css( "background-color", "red" );
+	}
+	if (nbPcUsed == nbNeeded) {
+		postChoixDepenseXP('depense_points_creation');
+	} else {
+		alert("Vous devez utiliser exactement "+nbNeeded+ " points");
+	}
+}
+
 function postChoixDepenseXP(form) {
 	var url = 'index.php?format=raw&option=com_perso_norlande&task=userChoiceDepenseXP';
 	$.ajax(
@@ -156,7 +175,7 @@ function postChoixDepenseXP(form) {
      complete : function(data)
      {
          // do something, not critical.
-         $.unblockUI(); 
+         $.unblockUI();
      }
  });
 }
@@ -171,6 +190,17 @@ function questionDepenseXp(xp, competenceLevel) {
 	//var xp = {niveau_competence:3,cristaux:{incolore:2, occultisme:3}, entrainement:{12:"Maitre des poisons", 20:"Maitre des anges"}};
 	//var xp = {entrainement:{12:"Maitre des poisons", 20:"Maitre des anges"}};
 	//var xp = {cristaux:{incolore:2, occultisme:3}};
+	
+	if (xp.points_creation) {
+		$("#depense_points_creation").show();
+		
+		// TODO : faire l'affectation avec JQuery
+		document.getElementById("niveauCompetence").value = competenceLevel;
+		$("#submit_points_creation").before("<p>Dépenser "+competenceLevel+" points de création parmi vos points suivants :</p>");
+		$("#submit_points_creation").before('<label for="dep_points_creation">Points de création : </label><input type="text" name="dep_points_creation" value="0" class="shortNb"> / '+xp.points_creation+'<br>');
+		return;
+	}
+	
 	if (xp.cristaux) {
 		$("#depense_cristaux").show();
 		document.getElementById("niveauCompetence").value = competenceLevel;
@@ -193,7 +223,8 @@ function questionDepenseXp(xp, competenceLevel) {
    
 $(document).ready(function() {
  
-	$(document).data("initialDepXpClone", $("#question_dep_xp").clone(true));
+ 	var initialDiv = $("#question_dep_xp").clone(true);
+	$(document).data("initialDepXpClone", initialDiv);
 	$('#alert_ok').click(function() { 
 		$.unblockUI(); 
 		return false; 

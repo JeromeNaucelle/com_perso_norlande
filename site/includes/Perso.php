@@ -186,47 +186,24 @@ class Perso {
   		} 
   		return false;
   }
-  
-  // retourne 0 si OK
-  // retourne 1 sinon
-  public function apprendreCompetence($competence_id, $arbre) {
-		// si le perso a un entrainement pour cette maitrise, il l'utilise
-		foreach($this->entrainements as $id) {
-			if($arbre->isEntrainementFor($id, $competence_id)) {
-				return 0;
-			}
-		}
-		
-		// si le perso a assez de cristaux, il l'apprend
-		
-		return 0;
-		// sion, on retourn 1
-		return 1;
-	}
 	
 	public function getXp() {
 		return $this->xp;
 	}
 	
-	
-	// TODO : vérifier l'utilité
-	public function hasNeededXp($competenceId) {
-		$result = true;
-		
-		return $result;	
-	}
-	
-	public function getXpForCompetence($competence_id, $arbre) {
+	public function getXpForCompetence($competence_id, $arbre, $niveau) {
 		$res = array();
 		$famille = strtolower($arbre->getFamilleMaitrise());
 		$cristaux = array();
+		$total_cristaux = 0;
 		foreach(array($famille, INCOLORE) as $type) {
 			$tmp = $this->xp->getCristaux($type);
 			if($tmp > 0) {
 				$cristaux[$type] = $tmp;
+				$total_cristaux += $tmp;
 			}
 		}
-		if(count($cristaux) > 0) {
+		if(count($cristaux) > 0 && $total_cristaux >= $niveau) {
 			$res['cristaux'] = $cristaux;
 		}
 		
@@ -238,6 +215,11 @@ class Perso {
 		}
 		if(count($entrainement) > 0) {
 			$res['entrainement'] = $entrainement;
+		}
+		
+		$pc = $this->xp->getPointsCreation();
+		if($pc >= $niveau) {
+			$res['points_creation'] = $pc;
 		}
 		return $res;
 	}

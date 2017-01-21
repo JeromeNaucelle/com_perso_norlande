@@ -60,14 +60,23 @@ for($i=0; $i < count($menu_list); $i++)
 	</div> 
 	
 	<div id="question_dep_xp" style="display:none; cursor: default;max-width:300px;">
+	<input type="hidden" name="niveauCompetence" id="niveauCompetence"></input>
 	<p style="text-align:center">Pour acqu&eacute;rir cette comp&eacute;tence vous devez :</p>
+	<form id="depense_points_creation" style="display:none">
+		<fieldset>
+		<legend>Points de cr&eacute;ation</legend>
+		<input type="hidden" name="typeXp" value="points_creation"></input>
+
+		<input type="button" value="Valider" id="submit_points_creation" onclick="checkNbPointsCreation()"/>
+		</fieldset>
+	</form>	
+	
 	<form id="depense_cristaux" style="display:none">
 		<fieldset>
 		<legend>Cristaux</legend>
 		<input type="hidden" name="typeXp" value="cristaux"></input>
-		<input type="hidden" name="niveauCompetence" id="niveauCompetence"></input>
 		
-		<input type="button" value="Valider" id="submit_cristaux" onclick="checkNbCristaux()">
+		<input type="button" value="Valider" id="submit_cristaux" onclick="checkNbCristaux()"/>
 		</fieldset>
 	</form>
 	
@@ -80,7 +89,7 @@ for($i=0; $i < count($menu_list); $i++)
 		<input type="button" value="Valider" id="submit_entrainement" onclick="postChoixDepenseXP('depense_entrainement')">
 		</fieldset>
 	</form>
-	<input type="button" value="Annuler" style="width:100%" onclick="cancelDepenseCristaux()">
+	<input type="button" value="Annuler" style="width:100%" onclick="cancelDepenseCristaux()"/>
 	</div>	
 
 <?php 

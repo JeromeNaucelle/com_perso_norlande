@@ -125,6 +125,12 @@ class Perso_NorlandeController extends JControllerLegacy
 				return true;
 			}
 		}
+		if(array_key_exists('points_creation', $xpForCompetence)) {
+			$pc = $xpForCompetence['points_creation'];
+			if($pc >= $niveau) {
+				return true;
+			}
+		}
 		return false;
 	}
 	
@@ -177,7 +183,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			{
 				error_log("test4");
 				$data["result"] = 2;
-				$xpForCompetence = $perso->getXpForCompetence($competence_id, $arbre);
+				$xpForCompetence = $perso->getXpForCompetence($competence_id, $arbre, $competence->getNiveau());
 				
 				if( $this->enoughXp($xpForCompetence, $competence->getNiveau()) ) {
 					$data["xp"] = $xpForCompetence;
