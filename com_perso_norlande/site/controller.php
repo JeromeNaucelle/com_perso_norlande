@@ -255,6 +255,10 @@ class Perso_NorlandeController extends JControllerLegacy
 					$data = $this->depenseCristaux($perso, $competenceId);
 					break;
 					
+				case 'points_creation':
+					$data = $this->depensePointsCreation($perso, $competenceId);
+					break;
+					
 				default:
 					$data["msg"] = "Utilisation de l'XP inconnue";
 					$data["error"] = 1;
@@ -280,7 +284,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		 
 		// Load the results as a list of stdClass objects (see later for more options on retrieving data)
 		$entrainements = $perso->getXp()->getEntrainements();
-		$entrainementId = $jinput->get('dep_entrainement_group', -1, 'INT');
+		$entrainementId = $this->getInt('dep_entrainement_group', -1);
 		
 		if( $entrainementId == -1 ) {
 			$data["error"] = 1;
@@ -302,6 +306,39 @@ class Perso_NorlandeController extends JControllerLegacy
 		return $data;
 	}
 	
+	private function depensePointsCreation($perso, $competenceId) {
+		$db = JFactory::getDbo();
+		$jinput = JFactory::getApplication()->input;
+		$session = JFactory::getSession();
+		
+		$data = array("error" => 0, "msg" => "erreur inconnue");
+		$niveauCompetence = $session->get( 'niveauCompetence', -1 );
+		if($niveauCompetence == -1) {
+			$data["error"] = 1;
+			$data["msg"] = "Niveau de la compétence non stocké dans la session";
+		}
+		
+		/* TODO : check ce qu'il se passe si l'utilisateur rentre -2 en PC dépensés */
+		if($data["error"] == 0) {
+			$pcDep = 0;
+			$tmp = $this->getInt('dep_points_creation', -1);
+			if($tmp > -1 
+					&& $perso->getXp()->getPointsCreation() >= $tmp) {
+				$pcDep = $tmp;
+			}
+			if($pcDep != $niveauCompetence) {
+				$data["error"] = 1;
+				$data["msg"] = "Le nombre de point dépensés est incohérent avec le niveau de la compétence";
+			}
+		}
+		
+		if( $data["error"] == 0 ) {
+			$data = PersoHelper::usePointsCreation($pcDep, $competenceId, $perso);	
+		}
+		
+		return $data;
+	}
+	
 	private function depenseCristaux($perso, $competenceId) {
 		$db = JFactory::getDbo();
 		$jinput = JFactory::getApplication()->input;
@@ -318,7 +355,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			$cristauxDep = 0;
 			$xpUsed = new ClasseXP();
 			foreach(ClasseXP::getTypesCristaux() as $type) {
-				$tmp = $jinput->get('dep_cristaux_'.$type, -1, 'UINT');
+				$tmp = $this->getInt('dep_cristaux_'.$type, -1);
 				if($tmp != -1 
 						&& $perso->getXp()->getCristaux($type) >= $tmp) {
 					$cristauxDep += $tmp;
@@ -406,7 +443,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		$cristaux = array();
 		foreach(ClasseXP::getTypesCristaux() as $type) {
-			$cristaux['cristaux_'.$type] = $jinput->get('cristaux_'.$type, '0', 'INT');
+			$cristaux['cristaux_'.$type] = getInt('cristaux_'.$type, '0', 'INT');
 		}
 		$perso = $this->getCurrentPerso();
 		$model->setCristaux($cristaux, $perso);

@@ -45,7 +45,15 @@ function launch_ajax(){
 	      	// Question à l'utilisateur
 	      	//var xp = {niveau_competence:3,cristaux:{incolore:2, occultisme:3}, entrainement:{12:"Maitre des poisons", 20:"Maitre des anges"}};
 	      	questionDepenseXp(data['xp'], data['niveauCompetence']);
-	      	$.blockUI({ message: $('#question_dep_xp'), onUnblock: resetQuestionXp(),css: { position: 'absolute', textAlign: 'left', heigth:'40em', width:'300px', overflow: 'auto!important' }}); 
+	      	$.blockUI({ 
+	      		message: $('#question_dep_xp'), 
+	      		onUnblock: resetQuestionXp,
+					css: { position: 'absolute', 
+								textAlign: 'left', 
+								heigth:'40em', 
+								width:'300px', 
+								overflow: 'auto!important' }
+				}); 
 	      }
 	      
      },
