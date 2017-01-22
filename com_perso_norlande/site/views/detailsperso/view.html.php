@@ -9,6 +9,8 @@
  
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
+require_once JPATH_COMPONENT . '/includes/SyntheseCompetences.php';
  
 /**
  * HTML View class for the HelloWorld Component
@@ -20,6 +22,7 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 {
 	
 	protected $form = null;
+	protected $synthese = null;
 	/**
 	 * Display the Hello World view
 	 *
@@ -70,7 +73,11 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
                return;
        }
        // Assign the form
-       $this->form = $form;	
+       $this->form = $form;
+       
+       if($perso != null) {
+       	$this->synthese = SyntheseCompetences::create($perso->getId());
+       }
 
 		// Display the view
 		parent::display($tpl);

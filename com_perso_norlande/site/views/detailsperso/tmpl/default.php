@@ -176,6 +176,9 @@ $(function() {
     </form>
 </div>
 
+<?php echo "Actions de guerre : ". $this->synthese->getActionsGuerre(); ?>
+<?php echo "Rumeurs : ". $this->synthese->getRumeurs(); ?>
+
 <form>
 <fieldset>
   <legend align="left">Background</legend>
