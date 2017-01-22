@@ -114,6 +114,17 @@ class PersoHelper {
 		$db->execute();
 	}
 	
+	private static function updatePointsCreation($persoId, $newPcVal) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$field = $db->quoteName('points_creation') . ' = ' . $newPcVal;
+		
+		$conditions = $db->quoteName('id') . ' =  ' . $persoId;
+		$query->update($db->quoteName('persos'))->set($field)->where($conditions);
+		$db->setQuery($query);
+		$db->execute();
+	}
+	
 	private static function addCompetenceToPerso($perso, $competenceId, $xpUsed) {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -214,7 +225,7 @@ class PersoHelper {
 		
 		$newVal = $perso->getXp()->getPointsCreation() - $pcUsed;
 		$field = $db->quoteName('points_creation'). ' = ' .$newVal;
-		$xpUsed = json_encode(array("points_creation" => $xpUsed));
+		$xpUsed = json_encode(array("points_creation" => $pcUsed));
 		
 		try
 		{
@@ -328,6 +339,13 @@ class PersoHelper {
 				$xpUsed = json_decode($results['xp_used'], true);
 				
 				switch( array_keys($xpUsed)[0] ) {
+					case 'points_creation':
+						$pc = $xp->getPointsCreation();
+						$pcUsed = $xpUsed['points_creation'];
+						PersoHelper::updatePointsCreation($perso->getId(), $pc + $pcUsed);
+						PersoHelper::removeCompetence($perso->getId(), $competenceId);
+						break;
+					
 					case 'entrainement':
 						$entrainements = $xp->getEntrainements();
 						$entrainementId = $xpUsed['entrainement'];
