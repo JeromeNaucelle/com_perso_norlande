@@ -145,7 +145,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		$jinput = JFactory::getApplication()->input;
 		$data = array("result" => -1, "msg" => "erreur inconnue");
 		
-		$competence_id = $jinput->get('competence', -1, 'INT');
+		$competence_id = $this->getInt('competence', -1);
 		if($competence_id == -1)
 		{
 			$error = 1;
@@ -210,8 +210,7 @@ class Perso_NorlandeController extends JControllerLegacy
 				error_log("test6");
 				// compétence déjà acquise, on la désapprend
 				$data["result"] = -1;
-				$data["msg"] = "Supression de la competence";
-				PersoHelper::forgetCompetence($competence_id, $perso);
+				$data["msg"] = "La compétence est déjà acquise";
 				
 			} else {
 				$data["result"] = -1;
@@ -223,6 +222,35 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->close();
 	}
 	
+	
+	public function forgetCompetence() {
+		$perso = null;
+		$mainframe = JFactory::getApplication();
+		$data = array("error" => 0, "msg" => "");
+		
+		$competence_id = $this->getInt('competence', -1);
+		if($competence_id == -1)
+		{
+			$data["error"] = 1;
+			$data["msg"] = "competence ID invalide (".$competence_id.")";
+		}
+		
+		if($data["error"] === 0)
+		{
+			$perso = $this->getCurrentPerso();
+			if($perso == NULL)
+			{
+				$data["error"] = 1;
+				$data["msg"] = "Personnage non trouvé dans la session";
+			}
+		}
+		
+		if($data["error"] === 0) {
+			$data = PersoHelper::forgetCompetence($competence_id, $perso);
+		}
+		echo json_encode($data);
+		$mainframe->close();
+	}
 
 	
 	public function userChoiceDepenseXP()

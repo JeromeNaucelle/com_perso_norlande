@@ -302,37 +302,33 @@ class PersoHelper {
 	}	
 	
 	public static function forgetCompetence($competenceId, $perso) {
-		$error = 0;
-		$msg = "";
+		$data = array("error" => 0, "msg" => "Compétence supprimée");
 		$db = JFactory::getDbo();
 		$results = PersoHelper::getXpUsedForCompetence($perso, $competenceId);
 		$xp = $perso->getXp();
  		
  		if(count($results) == 0) {
- 			$error = 1;
-			$msg = "Cette compétence n'a pas été trouvée associée au personnage";
+ 			$data["error"] = 1;
+			$data["msg"] = "Cette compétence n'a pas été trouvée associée au personnage";
  		}
- 		error_log('forgetCompetence 1');
 		
 		try
 		{
 			$db->transactionStart();
 			
 			// récupération de l'xp dépensée lors de l'apprentissage
-			if($error == 0) {
+			if($data["error"] == 0) {
 				if($results['xp_used'] == "" 
 					|| $results['xp_used'] == NULL) {
-						error_log('forgetCompetence 2');
 						// TODO : compétence donnée par un orga, pas d'XP à recréditer
 						PersoHelper::removeCompetence($perso->getId(), $competenceId);
 						$db->transactionCommit();
-						return array("error" => $error, "msg" => $msg);
+						return $data;
 				}
 				$xpUsed = json_decode($results['xp_used'], true);
-				error_log('$xpUsed : ' . print_r($xpUsed, true));
+				
 				switch( array_keys($xpUsed)[0] ) {
 					case 'entrainement':
-						error_log('forgetCompetence 3');
 						$entrainements = $xp->getEntrainements();
 						$entrainementId = $xpUsed['entrainement'];
 						$nomEntrainement = PersoHelper::getNomCompetence($entrainementId);
@@ -342,7 +338,6 @@ class PersoHelper {
 						break;
 						
 					case 'cristaux':
-						error_log('forgetCompetence 4');
 						$fields = array();
 						foreach($xpUsed['cristaux'] as $type => $val) {
 							$newVal = $xp->getCristaux($type) + $val;
@@ -368,12 +363,17 @@ class PersoHelper {
 		catch (Exception $e)
 		{
 		   // catch any database errors.
-		   error_log('forgetCompetence 5');
 		   $db->transactionRollback();
-		   $error = 1;
-			$msg = "Erreur lors des changements en base de données pour la suppression de la compétence";
+		   $data["error"] = 1;
+			$data["msg"] = "Erreur lors des changements en base de données pour la suppression de la compétence";
 		}
-		return array("error" => $error, "msg" => $msg);
+		
+		if($data["error"] == 0) {
+			$perso->deleteCompetence($competenceId);
+			$competencesAcquises = array_keys($perso->getCompetences());
+			$data["competences"] = $competencesAcquises;
+		}
+		return $data;
 	}
 	
 }

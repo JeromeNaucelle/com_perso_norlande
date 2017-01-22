@@ -55,12 +55,37 @@ function launch_ajax(){
 								width:'300px', 
 								overflow: 'auto!important' }
 				}); 
-	      }
+	      } 
 	      
      },
      complete : function(data)
      {
          // do something, not critical.
+     }
+ });
+}
+
+
+function forgetCompetence(competence_id){
+	var url = 'index.php?format=raw&option=com_perso_norlande&task=forgetCompetence';
+	$.ajax(
+ 	{
+     // Post select to url.
+     type : 'post',
+     url : url,
+     data: {"competence":competence_id},
+    // contentType: "application/json",
+     dataType : 'json', // expected returned data format.
+     success : function(data)
+     {
+     		$( "#alert_msg" ).text( data['msg'] );
+	      $.blockUI({ message: $('#alert'), css: { width: '275px' } }); 
+	      if(data['error'] != 0) {
+	      	selectCompetencesAcquises(competences_acquises);
+	      } else {
+	      	selectCompetencesAcquises(data['competences']);
+	      } 
+	      
      }
  });
 }
@@ -103,6 +128,10 @@ function drawChart(arbre_maitrise_json) {
 		}
 	}
 	
+	
+	/* créé parce que lorsque l'utilisateur clique sur une case déjà
+	sélectionné, ça la dé-sélectionne et on ne peut pas récupérer l'identifiant
+	de la case choisie. Donc on sauvegarde l'identifiant sur onMouseOver */
 	function mouseOverNode(param) {
 		competenceIdOver = dataMaitrise.getValue(param.row, 0);
 	}
@@ -115,7 +144,16 @@ function drawChart(arbre_maitrise_json) {
 			user_selection(competence_id);
 		} else {
 			// l'utilisateur a cliqué sur une compétence déjà sélectionnée
-			user_selection(competenceIdOver);
+			$("#question_ok").click(function(){ 
+										forgetCompetence(competenceIdOver);
+										});
+										
+			$("#question_cancel").click(function(){ 
+											selectCompetencesAcquises(competences_acquises);
+											$.unblockUI(); 
+											});
+	      $.blockUI({ message: $('#question'), css: { width: '275px' } }); 
+			
 		}
 	}
 }

@@ -53,9 +53,9 @@ for($i=0; $i < count($menu_list); $i++)
 	</div> 
 	
 	<div id="question" style="display:none; cursor: default"> 
-        <p id="question_msg">Would you like to contine?.</p>
+        <p id="question_msg">Souhaitez-vous oublier cette comp&eacute;tence ?</p>
         <div id="question_options"></div>
-        <input type="button" id="question_ok" value="Valider" />
+        <input type="button" id="question_ok" value="Oublier" />
         <input type="button" id="question_cancel" value="Annuler" />
 	</div> 
 	

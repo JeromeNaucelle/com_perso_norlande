@@ -136,6 +136,10 @@ class Perso {
 		return $result;
     }
     
+    public function deleteCompetence($competenceId) {
+    	unset($this->competences[$competenceId]);
+    }
+    
     
 	public static function create($query_result, $competences_result)
 	{
