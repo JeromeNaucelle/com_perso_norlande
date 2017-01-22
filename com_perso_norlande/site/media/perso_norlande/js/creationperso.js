@@ -1,6 +1,7 @@
 var dataMaitrise = null;
 var chartMaitrise = null;
 var competences_acquises = null;
+var competenceIdOver = -1;
 
 function launch_ajax(){
 	var url = document.getElementById('ajax_url').value;
@@ -89,6 +90,7 @@ function drawChart(arbre_maitrise_json) {
 	chartMaitrise.draw(dataMaitrise, {allowHtml:true, nodeClass:'myNodeClass'});
 	  
 	google.visualization.events.addListener(chartMaitrise, 'select', selectHandler);
+	google.visualization.events.addListener(chartMaitrise, 'onmouseover', mouseOverNode);
   
 	function selectParents(row_id) {
 		var arraySelection = [{row: row_id}];
@@ -100,13 +102,21 @@ function drawChart(arbre_maitrise_json) {
 			row_id = potentialParents[0];
 		}
 	}
+	
+	function mouseOverNode(param) {
+		competenceIdOver = dataMaitrise.getValue(param.row, 0);
+	}
   
   
 	function selectHandler() {
 		var selection = chartMaitrise.getSelection();
-		var competence_id = dataMaitrise.getValue(selection[0].row, 0);
-		user_selection(competence_id);
-		//selectParents(selection[0].row);
+		if(selection.length != 0) {
+			var competence_id = dataMaitrise.getValue(selection[0].row, 0);
+			user_selection(competence_id);
+		} else {
+			// l'utilisateur a cliqué sur une compétence déjà sélectionnée
+			user_selection(competenceIdOver);
+		}
 	}
 }
 
