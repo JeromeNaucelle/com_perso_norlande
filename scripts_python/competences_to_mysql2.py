@@ -9,6 +9,8 @@ import mysql.connector
 import re
 
 
+DEBUG = 1
+
 f = open('Maitrises-2016.csv')
 if f == None:
 	print("Erreur a l'ouverture du fichier")
@@ -103,23 +105,71 @@ for tab_line in spamreader:
 	immunite_plaque = tab_line[42]
 	
 	amelioration = tab_line[43]
-	capacite = tab_line[44] + " " + tab_line[45]
-	technique1 = tab_line[46] + " ; Coût : " + tab_line[47] + " : " + tab_line[48]
-	technique2 = tab_line[49] + " ; Coût : " + tab_line[50] + " : " + tab_line[51]
-	piege1 = tab_line[52] + " ; Coût : " + tab_line[53] + " : " + tab_line[54]
-	piege2 = tab_line[55] + " ; Coût : " + tab_line[56] + " : " + tab_line[57]
-	breuvage1 = tab_line[58] + " ; Coût : " + tab_line[59] + " : " + tab_line[60]
-	breuvage2 = tab_line[61] + " ; Coût : " + tab_line[62] + " : " + tab_line[63]
-	breuvage3 = tab_line[64] + " ; Coût : " + tab_line[65] + " : " + tab_line[66]
-	breuvage4 = tab_line[67] + " ; Coût : " + tab_line[68] + " : " + tab_line[69]
-	breuvage5 = tab_line[70] + " ; Coût : " + tab_line[71] + " : " + tab_line[72]
-	invocation1 = ttab_line[73] + " ; Coût : " + tab_line[74] + " : " + tab_line[75]
-	invocation2 = tab_line[76] + " ; Coût : " + tab_line[77] + " : " + tab_line[78]
+	
+	capacite = ""
+	if tab_line[44] != "":
+		capacite = tab_line[44] + " (" + tab_line[45] + ")"
+	
+	technique1 = ""
+	if tab_line[46] != "":
+		technique1 = tab_line[46] + " ; Coût : " + tab_line[47] + " : " + tab_line[48]
+		
+	technique2 = ""
+	if tab_line[49] != "":
+		technique2 = tab_line[49] + " ; Coût : " + tab_line[50] + " : " + tab_line[51]
+		
+	piege1 = ""
+	if tab_line[52] != "":
+		piege1 = tab_line[52] + " ; Coût : " + tab_line[53] + " : " + tab_line[54]
+	
+	piege2 = ""
+	if tab_line[55] != "":
+		piege2 = tab_line[55] + " ; Coût : " + tab_line[56] + " : " + tab_line[57]
+	
+	breuvage1 = ""
+	if tab_line[58] != "":
+		breuvage1 = tab_line[58] + " ; Coût : " + tab_line[59] + " : " + tab_line[60]
+		
+	breuvage2 = ""
+	if tab_line[61] != "":
+		breuvage2 = tab_line[61] + " ; Coût : " + tab_line[62] + " : " + tab_line[63]
+		
+	breuvage3 = ""
+	if tab_line[64] != "":
+		breuvage3 = tab_line[64] + " ; Coût : " + tab_line[65] + " : " + tab_line[66]
+		
+	breuvage4 = ""
+	if tab_line[67] != "":
+		breuvage4 = tab_line[67] + " ; Coût : " + tab_line[68] + " : " + tab_line[69]
+		
+	breuvage5 = ""
+	if tab_line[70] != "":
+		breuvage5 = tab_line[70] + " ; Coût : " + tab_line[71] + " : " + tab_line[72]
+		
+	invocation1 = ""
+	if tab_line[73] != "":
+		invocation1 = tab_line[73] + " ; Coût : " + tab_line[74] + " : " + tab_line[75]
+		
+	invocation2 = ""
+	if tab_line[76] != "":
+		invocation2 = tab_line[76] + " ; Coût : " + tab_line[77] + " : " + tab_line[78]
 	metamorphose = tab_line[79]
-	pouvoir1 = tab_line[80] + " : " + tab_line[81]
-	pouvoir2 = tab_line[82] + " : " + tab_line[83]
-	pouvoir3 = tab_line[84] + " : " + tab_line[85]
-	pouvoir4 = tab_line[86] + " : " + tab_line[87]
+	
+	pouvoir1 = ""
+	if tab_line[80] != "":
+		pouvoir1 = tab_line[80] + " ; " + tab_line[81]
+	
+	pouvoir2 = ""
+	if tab_line[82] != "":
+		pouvoir2 = tab_line[82] + " ; " + tab_line[83]
+		
+	pouvoir3 = ""
+	if tab_line[84] != "":
+		pouvoir3 = tab_line[84] + " ; " + tab_line[85]
+		
+	pouvoir4 = ""
+	if tab_line[86] != "":
+		pouvoir4 = tab_line[86] + " ; " + tab_line[87]
 	
 	
 	
@@ -132,6 +182,23 @@ for tab_line in spamreader:
 	breuvage3, breuvage4, breuvage5, invocation1, invocation2, \
 	metamorphose, pouvoir1, pouvoir2, pouvoir3, pouvoir4, nom)
 	
+	
+	if DEBUG == 1:
+		if capacite != "":
+			print(capacite)			
+			
+		if technique1 != "":
+			print(technique1)		
+		
+		if piege1 != "":
+			print(piege1)	
+		
+		if breuvage1 != "":
+			print(breuvage1)	
+		
+		if pouvoir1 != "":
+			print(pouvoir1)
+			
 	try:
 		cursor = conn.cursor()
 		cursor.execute(query, data)
