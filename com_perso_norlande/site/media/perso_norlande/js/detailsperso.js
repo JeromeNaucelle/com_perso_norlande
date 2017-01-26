@@ -60,24 +60,7 @@ function updateMonnaie() {
  });
 }
 
-function deleteEntrainement(competence_id){
-	var nom_entrainement = $( "#row_entrainement_"+competence_id).text();
-	$("#del_entrainement_id").val(competence_id);
-	$("#question_msg").text("Voulez-vous supprimer l'entrainement du "+nom_entrainement +" ?");
-	$.blockUI({ message: $('#question'), css: { width: '275px' } }); 
-	
-}
-
-
- $(document).ready(function() {
- 
-  $('#alert_ok').click(function() { 
-      $.unblockUI(); 
-      return false; 
-  }); 
-  
-  $('#question_ok').click(function() { 
-  		var competence_id = $("#del_entrainement_id").val();
+function postDeleteEntrainement(competence_id) {
 		var url = "index.php?option=com_perso_norlande&task=deleteEntrainement&competence_id="+competence_id;
 		$.ajax(
     	{
@@ -98,6 +81,27 @@ function deleteEntrainement(competence_id){
             $.unblockUI(); 
         }
     });
+}
+
+function deleteEntrainement(competence_id){
+	var nom_entrainement = $( "#row_entrainement_"+competence_id).text();
+	$("#question_msg").text("Voulez-vous supprimer l'entrainement du "+nom_entrainement +" ?");
+	$('#question_cancel').click(function() { 
+			$.unblockUI();
+			});
+	$('#question_ok').click(function() { 
+			postDeleteEntrainement(competence_id);
+			});
+	$.blockUI({ message: $('#question'), css: { width: '275px' } }); 
+	
+}
+
+
+ $(document).ready(function() {
+ 
+  $('#alert_ok').click(function() { 
+      $.unblockUI(); 
+      return false; 
   }); 
  
 }); 
