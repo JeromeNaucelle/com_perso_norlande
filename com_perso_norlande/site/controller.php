@@ -12,6 +12,7 @@ defined('_JEXEC') or die('Restricted access');
 require_once JPATH_COMPONENT . '/includes/Perso.php';
 require_once JPATH_COMPONENT . '/includes/ClasseXP.php';
 require_once JPATH_COMPONENT . '/helpers/PersoHelper.php';
+require_once JPATH_COMPONENT . '/helpers/QuestionDepenseHelper.php';
 /**
  * Hello World Component Controller
  *
@@ -196,7 +197,6 @@ class Perso_NorlandeController extends JControllerLegacy
 					$data["msg"] = "Vous n'avez pas acquis suffisament d'expérience pour pouvoir apprendre cette compétence";
 				}
 				
-				// On ajoute la nouvelle compétence au Perso
 				// TODO : insérer la vérification des droits orga
 				
 				//$data["competences"] = array_merge($data['competences'], array_keys($perso->getCompetences()));
@@ -218,7 +218,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			}
 		}
 
-		echo json_encode($data);
+		echo QuestionDepenseHelper::getQuestionDepenseXp($data);
 		$mainframe->close();
 	}
 	

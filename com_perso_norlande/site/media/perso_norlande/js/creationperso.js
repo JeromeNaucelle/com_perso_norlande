@@ -33,29 +33,19 @@ function launch_ajax(){
      url : url,
      data: {"competence":competence_id},
     // contentType: "application/json",
-     dataType : 'json', // expected returned data format.
+     dataType : 'html', // expected returned data format.
      success : function(data)
      {
-     		
-	      if(data['result'] == 4 || data['result'] == -1) {
-	      	// Affichage d'un message d'info (erreur)
-	      	$( "#alert_msg" ).text( data['msg'] );
-	      	$.blockUI({ message: $('#alert'), css: { width: '275px' } }); 
-	      	selectCompetencesAcquises(competences_acquises);
-	      } else if(data['result'] == 2) {
-	      	// Question à l'utilisateur
-	      	//var xp = {niveau_competence:3,cristaux:{incolore:2, occultisme:3}, entrainement:{12:"Maitre des poisons", 20:"Maitre des anges"}};
-	      	questionDepenseXp(data['xp'], data['niveauCompetence']);
-	      	$.blockUI({ 
-	      		message: $('#question_dep_xp'), 
-	      		onUnblock: resetQuestionXp,
+     		$('#question_dep_xp').empty();
+			$('#question_dep_xp').append(data);
+			$.blockUI({ 
+	      		message: $('#question_dep_xp'),
 					css: { position: 'absolute', 
 								textAlign: 'left', 
 								heigth:'40em', 
 								width:'300px', 
 								overflow: 'auto!important' }
 				}); 
-	      } 
 	      
      },
      complete : function(data)
@@ -159,12 +149,6 @@ function drawChart(arbre_maitrise_json) {
 }
 
 
-function resetQuestionXp() {
-	var initialDiv = $(document).data("initialDepXpClone");
-	$("#question_dep_xp").replaceWith(initialDiv);
-	$(document).data("initialDepXpClone", initialDiv.clone(true));
-}
-
 function isNormalInteger(str) {
     var n = Math.floor(Number(str));
     return String(n) === str && n >= 0;
@@ -242,45 +226,8 @@ function cancelDepenseCristaux() {
 	return false; 
 }
 
-function questionDepenseXp(xp, competenceLevel) {
-	//var xp = {niveau_competence:3,cristaux:{incolore:2, occultisme:3}, entrainement:{12:"Maitre des poisons", 20:"Maitre des anges"}};
-	//var xp = {entrainement:{12:"Maitre des poisons", 20:"Maitre des anges"}};
-	//var xp = {cristaux:{incolore:2, occultisme:3}};
-	
-	if (xp.points_creation) {
-		$("#depense_points_creation").show();
-		
-		// TODO : faire l'affectation avec JQuery
-		document.getElementById("niveauCompetence").value = competenceLevel;
-		$("#submit_points_creation").before("<p>Dépenser "+competenceLevel+" points de création parmi vos points suivants :</p>");
-		$("#submit_points_creation").before('<label for="dep_points_creation">Points de création : </label><input type="text" name="dep_points_creation" value="0" class="shortNb"> / '+xp.points_creation+'<br>');
-		return;
-	}
-	
-	if (xp.cristaux) {
-		$("#depense_cristaux").show();
-		document.getElementById("niveauCompetence").value = competenceLevel;
-		$("#submit_cristaux").before("<p>Dépenser "+competenceLevel+" cristaux parmi les cristaux suivants :</p>");
-		for (var type in xp.cristaux) {
-			$("#submit_cristaux").before('<label for="dep_cristaux_'+type+'">'+type+' : </label><input type="text" name="dep_cristaux_'+type+'" value="0" class="shortNb"> / '+xp.cristaux[type]+'<br>');
-		}
-	}
-	
-	if (xp.cristaux && xp.entrainement) {
-		$("#depense_entrainement").before('<p style="text-align:center"><b>ou</b></p>');
-	}
-	if (xp.entrainement) {
-		$("#depense_entrainement").show();
-		for (var competenceId in xp.entrainement) {
-			$("#submit_entrainement").before('<input type="radio" name="dep_entrainement_group" value="'+competenceId+'">'+xp.entrainement[competenceId]+'<br>');
-		}
-	}		
-}
    
 $(document).ready(function() {
- 
- 	var initialDiv = $("#question_dep_xp").clone(true);
-	$(document).data("initialDepXpClone", initialDiv);
 	$('#alert_ok').click(function() { 
 		$.unblockUI(); 
 		return false; 
