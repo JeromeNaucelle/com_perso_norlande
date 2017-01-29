@@ -142,6 +142,24 @@ class PersoHelper {
 		$db->execute();
 	}
 	
+	public static function apprentissageGratuit($perso, $competenceId) {
+		$error = 0;
+		$msg = "";
+		$xpUsed = json_encode(array("gratuit" => ''));
+		
+		try
+		{
+			// ajout de la nouvelle compétence			 
+			PersoHelper::addCompetenceToPerso($perso, $competenceId, $xpUsed);
+		}
+		catch (Exception $e)
+		{
+		   $error = 1;
+			$msg = "Erreur lors des changements en base de données lors de l'aprentissage de la compétence";
+		}
+		return array("error" => $error, "msg" => $msg);
+	}
+	
 	
 	public static function useEntrainement($entrainementId, $competenceId, $perso) {
 		$error = 0;
@@ -329,16 +347,14 @@ class PersoHelper {
 			
 			// récupération de l'xp dépensée lors de l'apprentissage
 			if($data["error"] == 0) {
-				if($results['xp_used'] == "" 
-					|| $results['xp_used'] == NULL) {
-						// TODO : compétence donnée par un orga, pas d'XP à recréditer
-						PersoHelper::removeCompetence($perso->getId(), $competenceId);
-						$db->transactionCommit();
-						return $data;
-				}
 				$xpUsed = json_decode($results['xp_used'], true);
 				
 				switch( array_keys($xpUsed)[0] ) {
+					case 'gratuit':
+						PersoHelper::removeCompetence($perso->getId(), $competenceId);
+						break;
+										
+					
 					case 'points_creation':
 						$pc = $xp->getPointsCreation();
 						$pcUsed = $xpUsed['points_creation'];

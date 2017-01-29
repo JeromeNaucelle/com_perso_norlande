@@ -223,6 +223,8 @@ class Perso_NorlandeController extends JControllerLegacy
 	}
 	
 	
+	//TODO : check si c'est la dernière compétence de l'arbre
+	//check si elle n'a pas encore été validée
 	public function forgetCompetence() {
 		$perso = null;
 		$mainframe = JFactory::getApplication();
@@ -292,6 +294,11 @@ class Perso_NorlandeController extends JControllerLegacy
 					
 				case 'points_creation':
 					$data = $this->depensePointsCreation($perso, $competenceId);
+					break;
+					
+				case 'gratuit':
+				// TODO :CHECK_ORGA
+					$data = PersoHelper::apprentissageGratuit($perso, $competenceId);
 					break;
 					
 				default:

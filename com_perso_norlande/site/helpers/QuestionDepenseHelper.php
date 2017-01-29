@@ -51,6 +51,13 @@ class QuestionDepenseHelper {
 	</div>	
 	*/
 	
+	private static $questionOrga = '<form id="depense_orga">
+		<fieldset>
+		<legend>Réservé Orgas</legend>
+		<input type="hidden" name="typeXp" value="gratuit"></input>
+		<input type="button" style="width:100%" value="Gratuit (orgas uniquement)" onclick="postChoixDepenseXP(\'depense_orga\')"/>
+		</fieldset>
+	</form>';
 	
 	private static $questionPc = '<form id="depense_points_creation">
 		<fieldset>
@@ -100,9 +107,12 @@ class QuestionDepenseHelper {
 		$niveau = $data["niveauCompetence"];
 		$html = "<input type=\"hidden\" value=\"$niveau\" id=\"niveauCompetence\"></input>";
 		
+		// TODO : TEST_ORGA {
+			$html = $html . QuestionDepenseHelper::$questionOrga;
+		
 		if(array_key_exists("points_creation", $xp)
 			&& $xp["points_creation"] >= $niveau) {
-				$html = html . sprintf(QuestionDepenseHelper::$questionPc, $niveau, $xp["points_creation"]);
+				$html = $html . sprintf(QuestionDepenseHelper::$questionPc, $niveau, $xp["points_creation"]);
 				$html = $html . QuestionDepenseHelper::$cancelDepenseButton;
 				return $html;
 		}
