@@ -10,7 +10,7 @@ class SyntheseCompetences {
 	
 	/* Creation d'un tableau de la forme
 		"colonne BDD" => "Label" */
-	private static array(
+	private static $corres_label = array(
 	"parcelles" => "Possessions de départs (parcelles)",
 	"possessions_depart" => "Possessions de départs",
 	"a_prevoir" => "Objet de jeu que vous devez prévoir",

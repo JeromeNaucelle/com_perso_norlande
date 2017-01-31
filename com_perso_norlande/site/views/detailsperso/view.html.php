@@ -23,6 +23,7 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 	
 	protected $form = null;
 	protected $synthese = null;
+	protected $edit_orga = false;
 	/**
 	 * Display the Hello World view
 	 *
@@ -62,6 +63,9 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 		
 		$tablePerso = $model->getTable();
 		$data = $tablePerso->load($perso_id);
+		
+		$user = JFactory::getUser();
+		$this->edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		
 		// get the Form
        $form = $this->getForm();
