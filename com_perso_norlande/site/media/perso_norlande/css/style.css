@@ -44,13 +44,13 @@ background-image:linear-gradient(to bottom, #E0F2F7 0%, #848484 100%);
 	
 #menu-cat-maitrises li:nth-child(2){
 background-color: #65537A;
-background-image:-webkit-linear-gradient(top, #65537A 0%, #2A2333 100%);
-background-image:linear-gradient(to bottom, #65537A 0%, #2A2333 100%);
+background-image:-webkit-linear-gradient(top, #734D9D 0%, #2A2333 100%);
+background-image:linear-gradient(to bottom, #734D9D 0%, #2A2333 100%);
 }
 #menu-cat-maitrises li:nth-child(3){
 background-color: #729EBF;
-background-image: -webkit-linear-gradient(top, #FF3E3F 0%, #7F3A40 100%);
-background-image:linear-gradient(to bottom, #FF3E3F 0%, #7F3A40 100%);
+background-image: -webkit-linear-gradient(top, #D81D20 0%, #7F3A40 100%);
+background-image:linear-gradient(to bottom, #D81D20 0%, #7F3A40 100%);
 }
 #menu-cat-maitrises li:nth-child(4){
 background-color: #F6AD1A;
@@ -59,8 +59,8 @@ background-image:linear-gradient(to bottom, #729EBF 0%, #333A40 100%);
 }
 #menu-cat-maitrises li:last-child{
 background-color: #CFFF6A;
-background-image:-webkit-linear-gradient(top, #008000 0%, #006400 100%);
-background-image:linear-gradient(to bottom, #008000 0%, #006400 100%);
+background-image:-webkit-linear-gradient(top, #55A258 0%, #2F4930 100%);
+background-image:linear-gradient(to bottom, #55A258 0%, #2F4930 100%);
 }
 /* background des liens sous menus */
 #menu-cat-maitrises li:first-child li{
@@ -76,19 +76,10 @@ background:#333A40;
 background:#677F35;
 }
 /* background des liens menus et sous menus au survol */
-#menu-cat-maitrises li:first-child:hover, #menu-cat-maitrises li:first-child li:hover{
-background:#65537A;
+#menu-cat-maitrises li:hover, #menu-cat-maitrises li li:hover{
+background:#8A8C8C;
 }
-#menu-cat-maitrises li:nth-child(2):hover, #menu-cat-maitrises li:nth-child(2) li:hover{
-background:#F6AD1A;
-}
-#menu-cat-maitrises li:nth-child(3):hover, #menu-cat-maitrises li:nth-child(3) li:hover{
 
-background:#729EBF;
-}
-#menu-cat-maitrises li:last-child:hover, #menu-cat-maitrises li:last-child li:hover{
-background:#CFFF6A;
-}
 /* les a href */
 #menu-cat-maitrises a{
 text-decoration:none;
