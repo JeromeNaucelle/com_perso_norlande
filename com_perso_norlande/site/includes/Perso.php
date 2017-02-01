@@ -228,6 +228,15 @@ class Perso {
 		return $res;
 	}
 	
+	public function canForgetCompetence($competenceId) {
+		foreach($this->competences as $competence) {
+			if($competence->getParentId() == $competenceId) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public function addEntrainement($id_competence, $nom_competence) {
 		$this->xp->addEntrainement($id_competence, $nom_competence);
 	}

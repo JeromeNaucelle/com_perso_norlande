@@ -217,8 +217,7 @@ class Perso_NorlandeController extends JControllerLegacy
 	}
 	
 	
-	//TODO : check si c'est la dernière compétence de l'arbre
-	//check si elle n'a pas encore été validée
+	//TODO : check si elle n'a pas encore été validée
 	public function forgetCompetence() {
 		$perso = null;
 		$mainframe = JFactory::getApplication();
@@ -238,6 +237,14 @@ class Perso_NorlandeController extends JControllerLegacy
 			{
 				$data["error"] = 1;
 				$data["msg"] = "Personnage non trouvé dans la session";
+			}
+		}
+		
+		if($data["error"] === 0)
+		{
+			if( !$perso->canForgetCompetence($competence_id) ) {
+				$data["error"] = 1;
+				$data["msg"] = "Vous devez d'abord oublier les compétences dépendantes de celle-ci";
 			}
 		}
 		
