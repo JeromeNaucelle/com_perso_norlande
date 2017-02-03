@@ -523,6 +523,13 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}
 	
+	/* Retourne le nom de la compétence en enlevant
+	la chaine "Entraineur : " pour une meilleure lisibilité
+	*/
+	private function entrainementName($val) {
+		return substr($val, 13);
+	}
+	
 	public function searchEntrainement() {
 		$mainframe = JFactory::getApplication();
 		$jinput = JFactory::getApplication()->input;
@@ -537,10 +544,9 @@ class Perso_NorlandeController extends JControllerLegacy
 		// Order it by the ordering field.
 		
 		$query
-		->select('a.*')
-		->from($db->quoteName('competences', 'a'))
-		->join('INNER', $db->quoteName('competences', 'b') . ' ON (' . $db->quoteName('a.competence_id') . ' = ' . $db->quoteName('b.parent_id') . ')')
-		->where($db->quoteName('b.entraineur') . ' = 1 AND '.$db->quoteName('b.competence_nom').' LIKE '.$db->quote('%'.$term.'%'))
+		->select('*')
+		->from($db->quoteName('competences'))
+		->where($db->quoteName('entraineur') . ' = 1 AND '.$db->quoteName('competence_nom').' LIKE '.$db->quote('%'.$term.'%'))
 		->setLimit(10);
 				
 		// Reset the query using our newly populated query object.
@@ -558,7 +564,8 @@ class Perso_NorlandeController extends JControllerLegacy
 		else
 		{
 			foreach($results as $key => $item) {
-				array_push($array, array('label' => $item['competence_nom'], 'value'=> $item['competence_id']));
+				$nomEntrainement = $this->entrainementName($item['competence_nom']);
+				array_push($array, array('label' => $nomEntrainement, 'value'=> $item['competence_id']));
 			}
 		}
 		echo json_encode($array);
