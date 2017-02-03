@@ -15,6 +15,13 @@ else
 	//do user logged in stuff
 	$controller = JControllerLegacy::getInstance('Perso_Norlande'); 
 	
+	
+	$persoId = PersoHelper::getPersoIdFromUser($user->id);
+	if($persoId != -1) {
+		$session = JFactory::getSession();
+		$session->set( 'perso_id', $persoId );
+	}
+	
 	// Perform the Request task
 	$input = JFactory::getApplication()->input;
 	$controller->execute($input->getCmd('task')); 
