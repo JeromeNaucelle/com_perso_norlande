@@ -15,10 +15,14 @@ else
 	//do user logged in stuff
 	$controller = JControllerLegacy::getInstance('Perso_Norlande'); 
 	
+	$session = JFactory::getSession();
+	$persoId = $session->get( 'perso_id', -1 );
 	
-	$persoId = PersoHelper::getPersoIdFromUser($user->id);
+	if($persoId == -1) {
+		$persoId = PersoHelper::getPersoIdFromUser($user->id);
+	}		
+		
 	if($persoId != -1) {
-		$session = JFactory::getSession();
 		$session->set( 'perso_id', $persoId );
 	}
 	

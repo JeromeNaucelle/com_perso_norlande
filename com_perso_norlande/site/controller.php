@@ -57,9 +57,9 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe = JFactory::getApplication();
 		$session = JFactory::getSession();
 		
-		$persoId = $session->get( 'perso_id', NULL );
+		$persoId = $session->get( 'perso_id', -1 );
 		
-		if($persoId == NULL) {
+		if($persoId == -1) {
 			$data["msg"] = "Personnage non trouvé dans la session";
 			$data["error"] = 1;
 		}
@@ -264,9 +264,9 @@ class Perso_NorlandeController extends JControllerLegacy
 		$jinput = JFactory::getApplication()->input;
 		$data = array("error" => 0, "msg" => "erreur inconnue");
 		
-		$competenceId = $session->get('competenceToLearn');
+		$competenceId = $session->get('competenceToLearn', -1);
 		$typeXp = $jinput->get('typeXp', 'err', 'STR');
-		if($competenceId == 0)
+		if($competenceId == -1)
 		{
 			$data["error"] = 1;
 			$data['msg'] = "Erreur : identifiant de compétence non trouvé";
@@ -577,9 +577,9 @@ class Perso_NorlandeController extends JControllerLegacy
 	private function getCurrentPerso() {
 		$perso = NULL;
 		$session = JFactory::getSession();
-		$id = $session->get( 'perso_id', NULL );
+		$id = $session->get( 'perso_id', -1 );
 		
-		if($id == NULL) {
+		if($id == -1) {
 			JLog::add(JText::_("Aucun personnage sélectionné actuellement"), JLog::ERROR, 'jerror');
 		} else {
 			$perso = PersoHelper::getPersoById($id);
