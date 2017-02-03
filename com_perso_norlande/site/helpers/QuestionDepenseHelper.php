@@ -97,6 +97,8 @@ class QuestionDepenseHelper {
         <input type="button" onclick="cancelDepenseCristaux()" value="OK" />';
 	
 	public static function getQuestionDepenseXp($data) {
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		$html = "";
 		if($data["result"] == -1 
 				|| $data["result"] == 4 ) {
@@ -107,8 +109,9 @@ class QuestionDepenseHelper {
 		$niveau = $data["niveauCompetence"];
 		$html = "<input type=\"hidden\" value=\"$niveau\" id=\"niveauCompetence\"></input>";
 		
-		// TODO : TEST_ORGA {
+		if($edit_orga) {
 			$html = $html . QuestionDepenseHelper::$questionOrga;
+		}
 		
 		if(array_key_exists("points_creation", $xp)
 			&& $xp["points_creation"] >= $niveau) {

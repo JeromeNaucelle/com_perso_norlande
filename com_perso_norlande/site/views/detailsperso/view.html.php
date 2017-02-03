@@ -20,7 +20,7 @@ require_once JPATH_COMPONENT . '/includes/SyntheseCompetences.php';
  */
 class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 {
-	$perso = null;
+	protected $perso = null;
 	protected $form = null;
 	protected $synthese = null;
 	protected $edit_orga = false;
@@ -79,8 +79,8 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
        // Assign the form
        $this->form = $form;
        
-       if($perso != null) {
-       	$this->synthese = SyntheseCompetences::create($perso->getId());
+       if($this->perso != null) {
+       	$this->synthese = SyntheseCompetences::create($this->perso->getId());
        }
 
 		// Display the view

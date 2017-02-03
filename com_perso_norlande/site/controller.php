@@ -463,7 +463,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			$data["error"] = 1;
 		}
 		
-		if($data["error"] === 0)
+		if($data["error"] === 0) {
 			$perso = $this->getCurrentPerso();
 			if($perso === NULL)
 			{

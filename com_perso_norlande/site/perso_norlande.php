@@ -7,7 +7,7 @@ $user = JFactory::getUser();
 $status = $user->guest;
 
 if($status == 1){
-	$allDone =& JFactory::getApplication();
+	$allDone = JFactory::getApplication();
 	$allDone->redirect('index.php');
 }
 else
