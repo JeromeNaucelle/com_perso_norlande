@@ -56,12 +56,22 @@ class Perso_NorlandeController extends JControllerLegacy
 		$formResult = array();
 		$mainframe = JFactory::getApplication();
 		$session = JFactory::getSession();
+		$user = JFactory::getUser();
 		
-		$persoId = $session->get( 'perso_id', -1 );
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		
-		if($persoId == -1) {
-			$data["msg"] = "Personnage non trouvé dans la session";
+		if(!$edit_orga) {
+			$data["msg"] = "Vous ne disposez pas des droits nécessaires";
 			$data["error"] = 1;
+		}
+		
+		if($data["error"] == 0) {
+			$persoId = $session->get( 'perso_id', -1 );
+			
+			if($persoId == -1) {
+				$data["msg"] = "Personnage non trouvé dans la session";
+				$data["error"] = 1;
+			}
 		}
 		
 		if($data["error"] == 0) {
@@ -137,7 +147,10 @@ class Perso_NorlandeController extends JControllerLegacy
 		$perso = null;
 		$mainframe = JFactory::getApplication();
 		$session = JFactory::getSession();
-		$jinput = JFactory::getApplication()->input;
+		$jinput = $mainframe->input;
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
+		
 		$data = array("result" => -1, "msg" => "erreur inconnue");
 		
 		$competence_id = $this->getInt('competence', -1);
@@ -180,7 +193,8 @@ class Perso_NorlandeController extends JControllerLegacy
 				$data["result"] = 2;
 				$xpForCompetence = $perso->getXpForCompetence($competence_id, $arbre, $competence->getNiveau());
 				
-				if( $this->enoughXp($xpForCompetence, $competence->getNiveau()) ) {
+				if( $this->enoughXp($xpForCompetence, $competence->getNiveau()) 
+						|| $edit_orga) {
 					$data["xp"] = $xpForCompetence;
 					$data["niveauCompetence"] = $competence->getNiveau();
 					
@@ -191,9 +205,6 @@ class Perso_NorlandeController extends JControllerLegacy
 					$data["msg"] = "Vous n'avez pas acquis suffisament d'expérience pour pouvoir apprendre cette compétence";
 				}
 				
-				// TODO : insérer la vérification des droits orga
-				
-				//$data["competences"] = array_merge($data['competences'], array_keys($perso->getCompetences()));
 			} else if($result["result"] === 2)
 			{
 				error_log("test5");
@@ -261,7 +272,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		$error = 0;
 		$mainframe = JFactory::getApplication();
 		$session = JFactory::getSession();
-		$jinput = JFactory::getApplication()->input;
+		$jinput = $mainframe->input;
 		$data = array("error" => 0, "msg" => "erreur inconnue");
 		
 		$competenceId = $session->get('competenceToLearn', -1);
@@ -284,6 +295,9 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		if($data["error"] === 0)
 		{
+			$user = JFactory::getUser();
+			$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
+		
 			switch($typeXp) {
 				case 'entrainement':
 					$data = $this->depenseEntrainement($perso, $competenceId);
@@ -298,8 +312,12 @@ class Perso_NorlandeController extends JControllerLegacy
 					break;
 					
 				case 'gratuit':
-				// TODO :CHECK_ORGA
-					$data = PersoHelper::apprentissageGratuit($perso, $competenceId);
+					if($edit_orga) {
+						$data = PersoHelper::apprentissageGratuit($perso, $competenceId);
+					} else {
+						$data["msg"] = "Vous ne disposez pas des droits nécessaires";
+						$data["error"] = 1;
+					}
 					break;
 					
 				default:
@@ -437,11 +455,21 @@ class Perso_NorlandeController extends JControllerLegacy
 		$pointsCreation = $this->getInt('pointsCreation', -1);
 		$data = array("error"=>0, "msg"=>"");
 		
-		$perso = $this->getCurrentPerso();
-		if($perso === NULL)
-		{
-			$data["msg"] = "Personnage non trouvé dans la session";
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
+		
+		if(!$edit_orga) {
+			$data["msg"] = "Vous ne disposez pas des droits nécessaires";
 			$data["error"] = 1;
+		}
+		
+		if($data["error"] === 0)
+			$perso = $this->getCurrentPerso();
+			if($perso === NULL)
+			{
+				$data["msg"] = "Personnage non trouvé dans la session";
+				$data["error"] = 1;
+			}
 		}
 		
 		if($data["error"] === 0)
@@ -468,28 +496,29 @@ class Perso_NorlandeController extends JControllerLegacy
 			$data['msg'] =  "Données mises à jour";
 		}
 		
-		
 		echo json_encode($data);
 		$mainframe->close();
 	}
 	
-	public function updateCristauxPerso() {
-		// TODO : check orga	
-		// TODO : check que les inputs soient bien des chiffres		
-		
+	public function updateCristauxPerso() {		
 		$mainframe = JFactory::getApplication();
 		
-		$model = null;
-		$model = $this->getModel('detailsperso');
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		
-		$jinput = JFactory::getApplication()->input;
-		
-		$cristaux = array();
-		foreach(ClasseXP::getTypesCristaux() as $type) {
-			$cristaux['cristaux_'.$type] = getInt('cristaux_'.$type, '0', 'INT');
+		if($edit_orga) {
+			$model = null;
+			$model = $this->getModel('detailsperso');
+			
+			$jinput = $mainframe->input;
+			
+			$cristaux = array();
+			foreach(ClasseXP::getTypesCristaux() as $type) {
+				$cristaux['cristaux_'.$type] = $this->getInt('cristaux_'.$type, 0, 'INT');
+			}
+			$perso = $this->getCurrentPerso();
+			$model->setCristaux($cristaux, $perso);
 		}
-		$perso = $this->getCurrentPerso();
-		$model->setCristaux($cristaux, $perso);
 		
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}
@@ -563,7 +592,6 @@ class Perso_NorlandeController extends JControllerLegacy
 	}
 	
 	private function setCurrentPerso($perso_id) {
-		// TODO : check orga	ou joueur autorisé
  		$test = PersoHelper::persoExists($perso_id);
  		if($test === false) {
  			JLog::add(JText::_("Personnage non trouvé pour l'id ".$perso_id), JLog::WARNING, 'jerror');	
@@ -589,32 +617,37 @@ class Perso_NorlandeController extends JControllerLegacy
 	
 	public function selectPerso() {
 		$mainframe = JFactory::getApplication();
-		$jinput = JFactory::getApplication()->input;
- 		$perso_id = $jinput->get('perso_id', '0', 'STR');
- 		
- 		$this->setCurrentPerso($perso_id);
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
+		
+		if($edit_orga) {
+			$jinput = JFactory::getApplication()->input;
+	 		$perso_id = $jinput->get('perso_id', '0', 'STR');
+	 		
+	 		$this->setCurrentPerso($perso_id);
+	 	}
 		
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}
 	
 	public function addEntrainement() {
-		// TODO : check orga	
-		
-		error_log("controller addEntrainement");
 		$mainframe = JFactory::getApplication();
-		$model = null;
-		$model = $this->getModel('detailsperso');		
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		
-		$jinput = JFactory::getApplication()->input;
- 
-		//recherche des résultats dans la base de données
-
-		$competence_id = $jinput->get('competence_id', '0', 'STR');
-		
-		$perso = $this->getCurrentPerso();
-
-		$result = $model->addEntrainement($perso, $competence_id);
-		echo json_encode($result);
+		if($edit_orga) {
+			$model = null;
+			$model = $this->getModel('detailsperso');		
+			
+			$jinput = $mainframe->input;
+			//recherche des résultats dans la base de données
+	
+			$competence_id = $jinput->get('competence_id', '0', 'STR');
+			$perso = $this->getCurrentPerso();
+	
+			$result = $model->addEntrainement($perso, $competence_id);
+			echo json_encode($result);
+		}
 		$mainframe->close();
 	}
 	
@@ -623,21 +656,20 @@ class Perso_NorlandeController extends JControllerLegacy
 	// de la liste des entrainements acquis d'un perso
 	// (AJAX)
 	public function deleteEntrainement() {
-		// TODO : check orga		
-		
-		$model = null;
 		$model = $this->getModel('detailsperso');	
 		$mainframe = JFactory::getApplication();		
-		$jinput = JFactory::getApplication()->input;
- 
-		//recherche des résultats dans la base de données
-
-		$competence_id = $jinput->get('competence_id', '0', 'STR');
-		error_log("competence_id : ".$competence_id);
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		
-		$perso = $this->getCurrentPerso();
-		 
-		echo json_encode($model->deleteEntrainement($perso, $competence_id));
+		if($edit_orga) {
+			$jinput = $mainframe->input;
+			//recherche des résultats dans la base de données
+	
+			$competence_id = $jinput->get('competence_id', '0', 'STR');			
+			$perso = $this->getCurrentPerso();
+			 
+			echo json_encode($model->deleteEntrainement($perso, $competence_id));
+		}
 		$mainframe->close();
 	}	
 	
