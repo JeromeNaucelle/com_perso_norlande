@@ -20,7 +20,7 @@ require_once JPATH_COMPONENT . '/includes/SyntheseCompetences.php';
  */
 class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 {
-	
+	$perso = null;
 	protected $form = null;
 	protected $synthese = null;
 	protected $edit_orga = false;
@@ -54,7 +54,7 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 		} else {
 			$perso = PersoHelper::getPersoById($perso_id);
 			if($perso == null) {
-				JLog::add(JText::_('Perso non trouvé'), JLog::WARNING, 'jerror');
+				JLog::add(JText::_('Personnage non trouvé'), JLog::WARNING, 'jerror');
 			} else {	
 				$this->perso = $perso;
 				$session->set( 'perso', serialize($perso));

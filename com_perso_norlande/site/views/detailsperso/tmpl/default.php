@@ -26,7 +26,9 @@ $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/detailspe
 <?php include(JPATH_COMPONENT . '/includes/menu.php'); ?>
 <?php require_once(JPATH_COMPONENT . '/includes/define.php'); ?>
 
-
+<?php if($this->perso == null
+			|| $this->edit_orga) {
+?>
 <form action="index.php?view=detailsperso&format=raw&option=com_perso_norlande&task=createPerso" method="post">
 <fieldset>  
   <legend align="left">Cr&eacute;ation d&apos;un personnage</legend>
@@ -42,6 +44,10 @@ foreach(Lignees::$lignees as $key=>$lignee) {
 <input type="submit" name="button_submit" value="Créer" />
 </fieldset>
 </form>
+
+<?php 
+	}
+?>
 
 
 <?php if($this->edit_orga) { ?>

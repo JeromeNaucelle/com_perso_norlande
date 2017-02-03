@@ -678,22 +678,34 @@ class Perso_NorlandeController extends JControllerLegacy
 		$msg_error = "";
 		
 		$mainframe = JFactory::getApplication();		
-		$jinput = JFactory::getApplication()->input;
+		$jinput = $mainframe->input;
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
+		
+		if(PersoHelper::getPersoIdFromUser($user->id) != -1
+			&& !$edit_orga) {
+			$error = 1;
+			$msg_error = "Un utilisateur ne peut pas créer plus d'un personnage";
+		}
  
 		//recherche des résultats dans la base de données
 
-		$lignee_id = $jinput->get('lignee_perso', -1, 'INT');
-		if(array_key_exists($lignee_id, Lignees::$lignees)) {
-			$lignee = Lignees::$lignees[$lignee_id];
-		} else {
-			$error = 1;
-			$msg_error = "Lignée inconnue";
+		if($error === 0) {
+			$lignee_id = $jinput->get('lignee_perso', -1, 'INT');
+			if(array_key_exists($lignee_id, Lignees::$lignees)) {
+				$lignee = Lignees::$lignees[$lignee_id];
+			} else {
+				$error = 2;
+				$msg_error = "Lignée inconnue";
+			}
 		}
 		
-		$nom = $jinput->get('nom_perso', "", 'STR');
-		if($nom === "") {
-			$error = 2;
-			$msg_error = "Il faut renseigner le nom du personnage";
+		if($error === 0) {
+			$nom = $jinput->get('nom_perso', "", 'STR');
+			if($nom === "") {
+				$error = 3;
+				$msg_error = "Il faut renseigner le nom du personnage";
+			}
 		}
 		
 		if($error === 0) {
@@ -701,7 +713,7 @@ class Perso_NorlandeController extends JControllerLegacy
 				$newId = PersoHelper::insertPerso($nom, $lignee);
 				$this->setCurrentPerso($newId);
 			} catch(Exception $e) {
-				$error = 3;
+				$error = 4;
 				$msg_error = "Erreur lors de l'insertion d'un perso en BDD";
 				error_log("Erreur lors de l'insertion d'un perso en BDD : ".$e);
 			}
