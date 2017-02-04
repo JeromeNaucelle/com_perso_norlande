@@ -45,9 +45,28 @@ class PersoHelper {
  		return $result;
 	}
 	
+	public static function getOwnerIdFromPerso($persoId) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		
+		$columns = 'user_id';	
+		$query->select($db->quoteName($columns));
+		$query->from($db->quoteName('persos_users'));
+		$query->where($db->quoteName('perso_id') . ' = '. $persoId);
+		 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$db->setQuery($query);
+		$result = $db->loadResult();
+ 		
+ 		if($result === null) {
+ 			return -1;
+ 		}
+ 		return $result;
+	}
+	
 	public static function associateUserPerso($persoId, $userId) {
 		$data = array("error" => 0, "msg" => "Association effectuée");
-		if(getPersoIdFromUser($userId) != -1)	{
+		if(PersoHelper::getPersoIdFromUser($userId) != -1)	{
 			$data['error'] = 1;
 			$data['msg'] = 'Cet utilisateur est déjà associé à un personnage';
 			return $data;
@@ -57,8 +76,18 @@ class PersoHelper {
 		$query = $db->getQuery(true);
 		$columns = array('perso_id', 'user_id');
 		$values = array($persoId, $userId);
+		
+		$query
+		    ->delete($db->quoteName('persos_users'))
+		    ->where($db->quoteName('perso_id')." = $persoId");
+		    
+		error_log("query : ".$query->_toString());
+		    
+		$db->setQuery($query);
+		$db->execute();
 		 
 		// Prepare the insert query.
+		$query = $db->getQuery(true);
 		$query
 		    ->insert($db->quoteName('persos_users'))
 		    ->columns($db->quoteName($columns))

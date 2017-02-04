@@ -24,6 +24,7 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 	protected $form = null;
 	protected $synthese = null;
 	protected $edit_orga = false;
+	protected $owner = null;
 	/**
 	 * Display the Hello World view
 	 *
@@ -80,8 +81,14 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
        $this->form = $form;
        
        if($this->perso != null) {
-       	$this->synthese = SyntheseCompetences::create($this->perso->getId());
+       	$persoId = $this->perso->getId();
+       	$this->synthese = SyntheseCompetences::create($persoId);
+       	$ownerId = PersoHelper::getOwnerIdFromPerso($persoId);
+       	if($ownerId != -1) {
+       		$this->owner = JFactory::getUser($ownerId);
+       	}
        }
+       
 
 		// Display the view
 		parent::display($tpl);

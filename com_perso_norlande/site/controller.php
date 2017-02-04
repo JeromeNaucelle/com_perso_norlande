@@ -532,7 +532,7 @@ class Perso_NorlandeController extends JControllerLegacy
 	
 	public function searchEntrainement() {
 		$mainframe = JFactory::getApplication();
-		$jinput = JFactory::getApplication()->input;
+		$jinput = $mainframe->input;
 		$db = JFactory::getDbo();
  
 		//recherche des résultats dans la base de données
@@ -574,7 +574,7 @@ class Perso_NorlandeController extends JControllerLegacy
 	
 	public function searchPerso() {
 		$mainframe = JFactory::getApplication();
-		$jinput = JFactory::getApplication()->input;
+		$jinput = $mainframe->input;
  
 		//recherche des résultats dans la base de données
 		$term = $jinput->get('term', '0', 'STR');
@@ -596,6 +596,81 @@ class Perso_NorlandeController extends JControllerLegacy
 		}
 		echo json_encode($array);
 		$mainframe->close();
+	}
+	
+	public function searchUser() {
+		$mainframe = JFactory::getApplication();
+		$jinput = $mainframe->input;
+ 
+		//recherche des résultats dans la base de données
+		$term = $jinput->get('term', '0', 'STR');
+				 
+		$db = JFactory::getDbo();
+ 
+		//recherche des résultats dans la base de données
+		$query = $db->getQuery(true);
+		 
+		// Select all records from the user profile table where key begins with "custom.".
+		// Order it by the ordering field.
+		$columns = array('id','name','username');		
+		
+		$query
+		->select($db->quoteName($columns))
+		->from($db->quoteName('#__users'))
+		->where($db->quoteName('name').' LIKE '.$db->quote("%${term}%"))
+		->setLimit(10);
+				
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+				 
+		// Load the results as a list of stdClass objects (see later for more options on retrieving data).
+		$results = $db->loadAssocList();
+		$array = array();
+		 
+		// affichage d'un message "pas de résultats"
+		if( count( $results ) == 0 )
+		{
+				array_push($array, "Pas de r&eacute;sultats pour cette recherche");
+		}
+		else
+		{
+			foreach($results as $key => $item) {
+				array_push($array, array('label' => $item['name'].' ('.$item['username'].')', 'value'=> $item['id']));
+			}
+		}
+		echo json_encode($array);
+		$mainframe->close();
+	}
+	
+	public function associatePersoUser() {
+		$session = JFactory::getSession();
+		$data = array('error'=>0, 'msg'=>'Erreur inconnue');
+		$mainframe = JFactory::getApplication();
+		$jinput = $mainframe->input;
+		
+		$persoId = $session->get( 'perso_id', -1 );
+		$userId = $this->getInt('user_id', -1);
+		
+		if($userId == -1) {
+			$data['error'] = 1;
+			$data['msg'] = 'Paramètre user_id invalide';
+		}
+		
+		if($data['error'] == 0 
+			&& $persoId == -1) {
+			JLog::add(JText::_("Aucun personnage sélectionné actuellement"), JLog::ERROR, 'jerror');
+			$data['error'] = 1;
+			$data['msg'] = 'Aucun personnage sélectionné actuellement';
+		}
+		
+		if($data['error'] == 0 ) {
+			PersoHelper::associateUserPerso($persoId, $userId);
+		}
+		
+		if($data['error'] == 0 ) {
+			$data['msg'] = 'Association effectuée';
+		}
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}
 	
 	private function setCurrentPerso($perso_id) {
