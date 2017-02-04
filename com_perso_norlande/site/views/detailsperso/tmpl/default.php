@@ -80,6 +80,30 @@ $(function() {
 
 </script>
 
+<?php } ?>
+
+
+
+
+
+
+
+
+
+<?php if($this->perso !=NULL) { 
+if( $this->edit_orga ){
+	$display = '';
+	$disabled = '';
+} else {
+	$display = 'style="display:none;"';
+	$disabled = 'disabled';
+}
+
+?>
+<br>
+<h3>Personnage : <?php echo htmlspecialchars($this->perso->getNom().' ('.$this->perso->getLignee().')'); ?></h3>
+
+<?php if($this->edit_orga) { ?>
 <form>
 <fieldset>  
   <legend align="left">Associer un utilisateur au personnage</legend>
@@ -116,27 +140,6 @@ $(function() {
 </script>
 
 <?php } ?>
-
-
-
-
-
-
-
-
-
-<?php if($this->perso !=NULL) { 
-if( $this->edit_orga ){
-	$display = '';
-	$disabled = '';
-} else {
-	$display = 'style="display:none;"';
-	$disabled = 'disabled';
-}
-
-?>
-<br>
-<h3>Personnage : <?php echo htmlspecialchars($this->perso->getNom().' ('.$this->perso->getLignee().')'); ?></h3>
 
 <form id="formPointsCreation">
 <fieldset>  
