@@ -135,3 +135,9 @@ label
     width: 3em;
 }
 
+.long_text {
+	width: 90%;
+	height: 10em;
+}	
+	
+

@@ -794,6 +794,9 @@ class Perso_NorlandeController extends JControllerLegacy
 			try {
 				$newId = PersoHelper::insertPerso($nom, $lignee);
 				$this->setCurrentPerso($newId);
+				if(!$edit_orga) {
+					PersoHelper::associateUserPerso($newId, $user->id);
+				}
 			} catch(Exception $e) {
 				$error = 4;
 				$msg_error = "Erreur lors de l'insertion d'un perso en BDD";

@@ -230,9 +230,7 @@ if( $this->edit_orga ) {
             <?php foreach ($this->form->getFieldset('monnaie') as $field): ?>
                 <?php echo $field->label; ?>
                 
-                <?php if( !$this->edit_orga) {
-                	$field->disabled = true;
-                	} ?>
+                <?php $field->disabled = !$this->edit_orga; ?>
                 	
                 <?php echo $field->input.'<br>'; ?>
             <?php endforeach; ?>
@@ -241,13 +239,21 @@ if( $this->edit_orga ) {
     </form>
 </div>
 
-<?php echo "Actions de guerre : ". $this->synthese->getActionsGuerre(); ?>
-<?php echo "Rumeurs : ". $this->synthese->getRumeurs(); ?>
+<?php //echo "Actions de guerre : ". $this->synthese->getActionsGuerre(); ?>
+<?php //echo "Rumeurs : ". $this->synthese->getRumeurs(); ?>
 
 <form>
 <fieldset>
   <legend align="left">Background</legend>
-<textarea id="histoire" name="histoire" rows="12"></textarea>
+  <label for="armure">Choix de l'armure :</label>
+<select id="armure" name="armure">
+<?php foreach ($this->enumArmure as $field): ?> 
+	<?php $armureSelected = ($this->perso->getArmure() == $field ? ' selected': ''); ?> 
+	<?php echo "<option value=\"$field\"$armureSelected> $field</option>"; ?>
+<?php endforeach; ?>
+</select>
+<p><b>Histoire :</b></p>
+<textarea class="long_text" id="histoire" name="histoire"></textarea>
 <br>
 
 <input type="submit" name="button_submit" value="Valider" />

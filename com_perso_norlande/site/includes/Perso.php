@@ -12,6 +12,7 @@ class Perso {
 	private $nom;
 	private $lignee;
 	private $competences;
+	private $armure;
 	
 	//
 	private $xp;
@@ -163,6 +164,8 @@ class Perso {
 		foreach($entrainements as $id => $nom_competence) {
 			$perso->xp->addEntrainement($id, $nom_competence);
 		}
+		
+		$perso->armure = $query_result['armure'];
 		return $perso;
 	}
 	
@@ -193,6 +196,10 @@ class Perso {
 	
 	public function getXp() {
 		return $this->xp;
+	}
+	
+	public function getArmure() {
+		return $this->armure;	
 	}
 	
 	public function getXpForCompetence($competence_id, $arbre, $niveau) {
