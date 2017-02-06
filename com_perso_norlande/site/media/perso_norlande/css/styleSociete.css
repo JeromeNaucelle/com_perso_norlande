@@ -1,0 +1,16 @@
+.myNodeClass {
+    text-align: center;
+    vertical-align: middle;
+    font-family:sans-serif;
+    cursor: default;
+    border: 2px solid #374149;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 3px;
+    -moz-box-shadow: rgba(0, 0, 0, 0.5) 3px 3px 3px;
+    background-color: #A0C2DC;
+}
+
+#submenu li{
+background-color: #465967;
+}

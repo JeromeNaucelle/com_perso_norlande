@@ -14,12 +14,13 @@ $doc = JFactory::getDocument();
 
 // Add Javascript
 $doc->addStyleSheet("components/com_perso_norlande/media/perso_norlande/css/style.css",'text/css',"screen");
+$doc->addStyleSheet("components/com_perso_norlande/media/perso_norlande/css/style{$this->famille}.css",'text/css',"screen");
 $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/jquery-3.1.1.min.js");
 $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/jquery.blockUI.js");
 $doc->addScript("https://www.gstatic.com/charts/loader.js");
 $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/creationperso.js");
 
-echo "<input type='hidden' id='ajax_url' value='index.php?format=raw&option=com_perso_norlande&task=getArbreMaitrise&competence=".$this->competence."'>"; ?>
+echo "<input type='hidden' id='ajax_url' value='index.php?format=raw&option=com_perso_norlande&task=getArbreMaitrise&competence=$this->competence'>"; ?>
 
 
 <h1>Test</h1>
