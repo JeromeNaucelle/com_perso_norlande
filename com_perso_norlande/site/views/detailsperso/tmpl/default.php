@@ -242,21 +242,29 @@ if( $this->edit_orga ) {
 <?php //echo "Actions de guerre : ". $this->synthese->getActionsGuerre(); ?>
 <?php //echo "Rumeurs : ". $this->synthese->getRumeurs(); ?>
 
-<form>
+<form id="formArmure">
 <fieldset>
-  <legend align="left">Background</legend>
+  <legend align="left">Armure</legend>
   <label for="armure">Choix de l'armure :</label>
-<select id="armure" name="armure">
+<select id="armure" name="armure" onchange="updateArmure()">
 <?php foreach ($this->enumArmure as $field): ?> 
 	<?php $armureSelected = ($this->perso->getArmure() == $field ? ' selected': ''); ?> 
 	<?php echo "<option value=\"$field\"$armureSelected> $field</option>"; ?>
 <?php endforeach; ?>
 </select>
+
+</fieldset>
+</form>
+
+
+<form>
+<fieldset>
+  <legend align="left">Background</legend>
 <p><b>Histoire :</b></p>
 <textarea class="long_text" id="histoire" name="histoire"></textarea>
 <br>
 
-<input type="submit" name="button_submit" value="Valider" />
+<input type="submit" name="button_submit" value="Valider" onclick="updateHistoires()"/>
 </fieldset>
 </form>
 

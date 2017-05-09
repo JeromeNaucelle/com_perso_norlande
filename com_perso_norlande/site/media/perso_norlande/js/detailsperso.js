@@ -60,6 +60,27 @@ function updateMonnaie() {
  });
 }
 
+
+function updateArmure() {
+	var url = 'index.php?format=raw&option=com_perso_norlande&task=updateArmure';
+	$.ajax(
+ 	{
+     // Post select to url.s
+     type : 'post',
+     url : url,
+     data: $('#formArmure').serialize(),
+    // contentType: "application/json",
+     dataType : 'json', // expected returned data format.
+     success : function(data)
+     {
+      	// Affichage d'un message d'info
+      	$( "#alert_msg" ).text( data['msg'] );
+      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+	      
+     }
+ });
+}
+
 function postDeleteEntrainement(competence_id) {
 		var url = "index.php?option=com_perso_norlande&task=deleteEntrainement&competence_id="+competence_id;
 		$.ajax(

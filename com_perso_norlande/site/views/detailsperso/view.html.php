@@ -11,6 +11,8 @@
 defined('_JEXEC') or die('Restricted access');
 
 require_once JPATH_COMPONENT . '/includes/SyntheseCompetences.php';
+require_once JPATH_COMPONENT . '/helpers/CommonHelper.php';
+
  
 /**
  * HTML View class for the HelloWorld Component
@@ -28,16 +30,6 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
 	protected $enumArmure = null;
 	
 	
-	private function get_enum_values( $table, $field )
-	{
-		$db = JFactory::getDbo();
-		$sql = "SHOW COLUMNS FROM ".$db->quoteName($table)." WHERE Field = ".$db->quote($field);
-		$db->setQuery($sql);
-		$type = $db->loadAssocList()[0]['Type'];
-		preg_match("/^enum\(\'(.*)\'\)$/", $type, $matches);
-		$enum = explode("','", $matches[1]);
-		return $enum;
-	}
 	/**
 	 * Display the Hello World view
 	 *
@@ -101,7 +93,7 @@ class Perso_NorlandeViewDetailsPerso extends JViewLegacy
        		$this->owner = JFactory::getUser($ownerId);
        	}
        }
-       $this->enumArmure = $this->get_enum_values( 'persos', 'armure' );
+       $this->enumArmure = CommonHelper::getEnumValues( 'persos', 'armure' );
 
 		// Display the view
 		parent::display($tpl);

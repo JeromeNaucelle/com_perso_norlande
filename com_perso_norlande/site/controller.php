@@ -5,6 +5,7 @@ defined('_JEXEC') or die('Restricted access');
 
 require_once JPATH_COMPONENT . '/includes/Perso.php';
 require_once JPATH_COMPONENT . '/includes/ClasseXP.php';
+require_once JPATH_COMPONENT . '/helpers/CommonHelper.php';
 require_once JPATH_COMPONENT . '/helpers/PersoHelper.php';
 require_once JPATH_COMPONENT . '/helpers/QuestionDepenseHelper.php';
 /**
@@ -95,6 +96,60 @@ class Perso_NorlandeController extends JControllerLegacy
 				$data["msg"] = "Erreur lors de la sauvegarde en base de données";
 				$data["error"] = 1;
 			}
+		}
+		
+		echo json_encode($data);
+		$mainframe->close();
+	}
+	
+	
+	public function updateArmure() {
+		$data = array("error"=>0, "msg"=>"Données mises à jour");
+		$formResult = array();
+		$mainframe = JFactory::getApplication();
+		$session = JFactory::getSession();
+		$user = JFactory::getUser();
+		$jinput = $mainframe->input;
+		$armure = '';
+		
+		/*
+		ToDO : vérifier si l'utilisateur a encore le droit de modifier sa fiche
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
+		
+		if(!$edit_orga) {
+			$data["msg"] = "Vous ne disposez pas des droits nécessaires";
+			$data["error"] = 1;
+		}
+		*/
+		
+		if($data["error"] == 0) {
+			$persoId = $session->get( 'perso_id', -1 );
+			
+			if($persoId == -1) {
+				$data["msg"] = "Personnage non trouvé dans la session";
+				$data["error"] = 1;
+			}
+		}
+		
+		if($data["error"] == 0) {
+			$armure = $jinput->get('armure', '', 'STR');
+			
+			$armureValues = CommonHelper::getEnumValues( 'persos', 'armure' );
+			$found = false;
+			foreach($armureValues as $type) {
+				if($type == $armure) {
+					$found = true;
+					break;	
+				}
+			}
+			if($found == false) {
+				$data["msg"] = "Type d'armure inconnu";
+				$data["error"] = 1;
+			}
+		}
+		
+		if($data["error"] == 0) {
+			PersoHelper::updateArmure($persoId, $armure);
 		}
 		
 		echo json_encode($data);
