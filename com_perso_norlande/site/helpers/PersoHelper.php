@@ -187,6 +187,17 @@ class PersoHelper {
 		$db->execute();
 	}
 	
+	private static function updateChoixPerso($persoId, $histoire, $armure) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($entrainements));
+		
+		$conditions = $db->quoteName('id') . ' =  ' . $persoId;
+		$query->update($db->quoteName('persos'))->set($field)->where($conditions);
+		$db->setQuery($query);
+		$db->execute();
+	}
+	
 	public static function updateArmure($persoId, $armure) {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
