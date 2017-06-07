@@ -48,8 +48,6 @@ Anciennet&eacute;e : aucune
 </tr>
 </table>
 
-{rumeurs}
-{actions_guerre}
 <br>
 
 <table class="table_competences">
@@ -198,9 +196,11 @@ Anciennet&eacute;e : aucune
 <tr>
 	<th>PARCELLES</th>
 </tr>
+<!-- BEGIN parcelle -->
 <tr>
-	<td>aucune</td>
+	<td>{parcelle.nom}</td>
 </tr>
+<!-- END parcelle -->
 </table>
 
 <br>
@@ -259,11 +259,13 @@ Anciennet&eacute;e : aucune
 	<th>Co&ucirc;t</th>
 	<th>Effet</th>
 </tr>
+<!-- BEGIN capa_occulte -->
 <tr>
-	<td></td>
-	<td></td>
-	<td></td>
+	<td>{capa_occulte.nom}</td>
+	<td>{capa_occulte.cout}</td>
+	<td>{capa_occulte.effet}</td>
 </tr>
+<!-- END capa_occulte -->
 </table>
 
 

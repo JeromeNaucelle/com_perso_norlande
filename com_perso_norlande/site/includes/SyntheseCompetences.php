@@ -151,6 +151,9 @@ class SyntheseCompetences {
 		$this->resiste_plaque = 0;
 		$this->pieges = array();
 		$this->techniques = array();
+		$this->breuvages = array();
+		$this->invocations = array();
+		$this->parcelles = array();
    }
    
    public static function create($persoId)
@@ -190,6 +193,20 @@ class SyntheseCompetences {
 					
 					$tmp = new DefinitionTechnique($value);
 					array_push($synthese->techniques, $tmp);
+				} else if(SyntheseCompetences::$corres_label[$key] === "Breuvage"
+					&& $value != "") {
+					
+					$tmp = new DefinitionBreuvage($value);
+					array_push($synthese->breuvages, $tmp);
+				} else if(SyntheseCompetences::$corres_label[$key] === "Invocation"
+					&& $value != "") {
+					
+					$tmp = new DefinitionInvocation($value);
+					array_push($synthese->invocations, $tmp);
+				} else if($key === "parcelles"
+					&& $value != "") {
+					
+					array_push($synthese->parcelles, $value);
 				}else {
 					#error_log("key : ".$key);
 					#error_log("val : ".$value);
@@ -214,6 +231,18 @@ class SyntheseCompetences {
 	
 	public function getTechniques(){
 		return $this->techniques;
+	}
+	
+	public function getBreuvages(){
+		return $this->breuvages;
+	}
+	
+	public function getInvocations(){
+		return $this->invocations;
+	}
+	
+	public function getParcelles(){
+		return $this->parcelles;
 	}
 	
 }

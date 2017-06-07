@@ -46,11 +46,6 @@ $template = new Template('./');
     'coups' => 3
   		));
   		
-  	$template->assign_vars(array(
-    'rumeurs' => $this->synthese->getRumeurs(),
-    'actions_guerre' => $this->synthese->getActionsGuerre()
-  		));
-  		
   		
   	$pieges = $this->synthese->getPieges();
   	foreach($pieges as $piege) {
@@ -69,6 +64,34 @@ $template = new Template('./');
 	    'nom' => $technique->nom,
 	    'cout' => $technique->cout,
 	    'effet' => $technique->effet
+	  		));
+  	}
+  	
+  	$invocations = $this->synthese->getInvocations();
+  	foreach($invocations as $invocation) {
+  		
+	  	$template->assign_block_vars('capa_occulte', array(
+	    'nom' => $invocation->nom,
+	    'cout' => $invocation->cout,
+	    'effet' => $invocation->effet
+	  		));
+  	}
+  	
+  	$breuvages = $this->synthese->getBreuvages();
+  	foreach($breuvages as $breuvage) {
+  		
+	  	$template->assign_block_vars('capa_occulte', array(
+	    'nom' => $breuvage->nom,
+	    'cout' => $breuvage->cout,
+	    'effet' => $breuvage->effet
+	  		));
+  	}
+  	
+  	$parcelles = $this->synthese->getParcelles();
+  	foreach($parcelles as $parcelle) {
+  		
+	  	$template->assign_block_vars('parcelle', array(
+	    'nom' => $parcelle
 	  		));
   	}
 	
