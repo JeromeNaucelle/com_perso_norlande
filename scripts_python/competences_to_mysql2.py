@@ -112,47 +112,47 @@ for tab_line in spamreader:
 	
 	technique1 = ""
 	if tab_line[46] != "":
-		technique1 = tab_line[46] + " ; Coût : " + tab_line[47] + " : " + tab_line[48]
+		technique1 = tab_line[46] + "|" + tab_line[47] + "|" + tab_line[48]
 		
 	technique2 = ""
 	if tab_line[49] != "":
-		technique2 = tab_line[49] + " ; Coût : " + tab_line[50] + " : " + tab_line[51]
+		technique2 = tab_line[49] + "|" + tab_line[50] + "|" + tab_line[51]
 		
 	piege1 = ""
 	if tab_line[52] != "":
-		piege1 = tab_line[52] + " ; Coût : " + tab_line[53] + " : " + tab_line[54]
+		piege1 = tab_line[52] + "|" + tab_line[53] + "|" + tab_line[54]
 	
 	piege2 = ""
 	if tab_line[55] != "":
-		piege2 = tab_line[55] + " ; Coût : " + tab_line[56] + " : " + tab_line[57]
+		piege2 = tab_line[55] + "|" + tab_line[56] + "|" + tab_line[57]
 	
 	breuvage1 = ""
 	if tab_line[58] != "":
-		breuvage1 = tab_line[58] + " ; Coût : " + tab_line[59] + " : " + tab_line[60]
+		breuvage1 = tab_line[58] + "|" + tab_line[59] + "|" + tab_line[60]
 		
 	breuvage2 = ""
 	if tab_line[61] != "":
-		breuvage2 = tab_line[61] + " ; Coût : " + tab_line[62] + " : " + tab_line[63]
+		breuvage2 = tab_line[61] + "|" + tab_line[62] + "|" + tab_line[63]
 		
 	breuvage3 = ""
 	if tab_line[64] != "":
-		breuvage3 = tab_line[64] + " ; Coût : " + tab_line[65] + " : " + tab_line[66]
+		breuvage3 = tab_line[64] + "|" + tab_line[65] + "|" + tab_line[66]
 		
 	breuvage4 = ""
 	if tab_line[67] != "":
-		breuvage4 = tab_line[67] + " ; Coût : " + tab_line[68] + " : " + tab_line[69]
+		breuvage4 = tab_line[67] + "|" + tab_line[68] + "|" + tab_line[69]
 		
 	breuvage5 = ""
 	if tab_line[70] != "":
-		breuvage5 = tab_line[70] + " ; Coût : " + tab_line[71] + " : " + tab_line[72]
+		breuvage5 = tab_line[70] + "|" + tab_line[71] + "|" + tab_line[72]
 		
 	invocation1 = ""
 	if tab_line[73] != "":
-		invocation1 = tab_line[73] + " ; Coût : " + tab_line[74] + " : " + tab_line[75]
+		invocation1 = tab_line[73] + "|" + tab_line[74] + "|" + tab_line[75]
 		
 	invocation2 = ""
 	if tab_line[76] != "":
-		invocation2 = tab_line[76] + " ; Coût : " + tab_line[77] + " : " + tab_line[78]
+		invocation2 = tab_line[76] + "|" + tab_line[77] + "|" + tab_line[78]
 	metamorphose = tab_line[79]
 	
 	pouvoir1 = ""
@@ -184,6 +184,7 @@ for tab_line in spamreader:
 	
 	
 	if DEBUG == 1:
+		print("")
 		if capacite != "":
 			print(capacite)			
 			
@@ -213,10 +214,5 @@ for tab_line in spamreader:
 		cursor.close()
 		
 conn.close()
-	
-	
 
-	
-	
-	
 	
