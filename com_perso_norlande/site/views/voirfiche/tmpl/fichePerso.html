@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+<head>
+	<style type="text/css">
+		.table_competences {
+			border: 1px solid black;
+			border-spacing: 0px;
+			border-collapse: collapse;
+		}
+		.table_competences tr td {
+			border: 1px solid black;
+			padding: 2px;
+		}
+		
+		.table_competences tr th {
+			border: 1px solid black;
+			padding: 2px;
+		}
+	</style>
+</head>
+
+<body>
+{PRENOM} {NOM} (vrai pr&eacute;nom NOM)
+{perso.nom}
+22 ans
+Anciennet&eacute;e : aucune 
+
+<table class="table_competences">
+<tr>
+	<th>Mana</th>
+	<th>Coups</th>
+	<th>Force Physiques</th>
+	<th colspan="3">Armure</th>
+</tr>
+<tr>
+	<td rowspan="2">{mana}</td>
+	<td rowspan="2">{coups}</td>
+	<td rowspan="2">0</td>
+	<td>Esquive</td>
+	<td>R&eacute;siste</td>
+	<td>Immunit&eacute;</td>
+</tr>
+<tr>
+	<td>{esquive}</td>
+	<td>{resiste}</td>
+	<td>{immunite}</td>
+</tr>
+</table>
+
+{rumeurs}
+{actions_guerre}
+<br>
+
+<table class="table_competences">
+<tr>
+	<td></td>
+	<th>Maitrise de BELLIGERANCE</th>
+</tr>
+<tr>
+	<th>RUDIMENTAIRE</th><td>{comp_belligerance_lvl1}</td>
+</tr>
+<tr>
+	<th>CERTAINE</th><td>{comp_belligerance_lvl2}</td>
+</tr>
+<tr>
+	<th>RARE</th><td>{comp_belligerance_lvl3}</td>
+</tr>
+<tr>
+	<th>EXCEPTIONNELLE</th><td>{comp_belligerance_lvl4}</td>
+</tr>
+</table>
+
+<br>
+
+<table class="table_competences">
+<tr>
+	<td></td>
+	<th>Maitrise d'INTRIGUE</th>
+</tr>
+<tr>
+	<th>RUDIMENTAIRE</th><td>{comp_intrigue_lvl1}</td>
+</tr>
+<tr>
+	<th>CERTAINE</th><td>{comp_intrigue_lvl2}</td>
+</tr>
+<tr>
+	<th>RARE</th><td>{comp_intrigue_lvl3}</td>
+</tr>
+<tr>
+	<th>EXCEPTIONNELLE</th><td>{comp_intrigue_lvl4}</td>
+</tr>
+</table>
+
+<br>
+
+<table class="table_competences">
+<tr>
+	<td></td>
+	<th>Maitrise d'OCCULTISME</th>
+</tr>
+<tr>
+	<th>RUDIMENTAIRE</th><td>{comp_occultisme_lvl1}</td>
+</tr>
+<tr>
+	<th>CERTAINE</th><td>{comp_occultisme_lvl2}</td>
+</tr>
+<tr>
+	<th>RARE</th><td>{comp_occultisme_lvl3}</td>
+</tr>
+<tr>
+	<th>EXCEPTIONNELLE</th><td>{comp_occultisme_lvl4}</td>
+</tr>
+</table>
+
+<br>
+
+<table class="table_competences">
+<tr>
+	<td></td>
+	<th>Maitrise de SOCIETE</th>
+</tr>
+<tr>
+	<th>RUDIMENTAIRE</th><td>{comp_societe_lvl1}</td>
+</tr>
+<tr>
+	<th>CERTAINE</th><td>{comp_societe_lvl2}</td>
+</tr>
+<tr>
+	<th>RARE</th><td>{comp_societe_lvl3}</td>
+</tr>
+<tr>
+	<th>EXCEPTIONNELLE</th><td>{comp_societe_lvl4}</td>
+</tr>
+</table>
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th colspan="2">Capacit&eacute;s sp&eacute;ciales (Hors combat)</th>
+</tr>
+<tr>
+	<th>FREQUENCE D'USAGE</th>
+	<th>EFFET</th>
+</tr>
+<tr>
+	<td>frequence</td>
+	<td>effet</td>
+</tr>
+</table>
+
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th>AMELIORATIONS &amp; STRATEGIES </th>
+</tr>
+<tr>
+	<td>frequence</td>
+</tr>
+</table>
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th colspan="2">ATTAQUES SPECIALES DISPONIBLES</th>
+</tr>
+<tr>
+	<th>MANIEMENT</th>
+	<th>ATTAQUES SPECIALES</th>
+</tr>
+<tr>
+	<td>Armes basiques à 1 main (&eacute;p&eacute;e de taille de lame <80cm)</td>
+	<td>aucune</td>
+</tr>
+</table>
+
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th>POSSESSIONS</th>
+	<th>Lieux de Pouvoir</th>
+</tr>
+<tr>
+	<td>1 PA</td>
+	<td>Aucun</td>
+</tr>
+</table>
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th>PARCELLES</th>
+</tr>
+<tr>
+	<td>aucune</td>
+</tr>
+</table>
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th>CONNAISSANCES</th>
+</tr>
+<tr>
+	<td>aucune</td>
+</tr>
+</table>
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th>Niveau de langues : 0</th>
+</tr>
+<tr>
+	<th>LANGUES CONNUES (parl&eacute;es)</th>
+</tr>
+<tr>
+	<td>Norland&eacute;en</td>
+</tr>
+</table>
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th colspan="3">PIEGES & TECHNIQUES</th>
+</tr>
+<tr>
+	<th>Nom / type /niveau</th>
+	<th>Co&ucirc;t</th>
+	<th>Effet</th>
+</tr>
+<!-- BEGIN technique -->
+<tr>
+	<td>{technique.nom}</td>
+	<td>{technique.cout}</td>
+	<td>{technique.effet}</td>
+</tr>
+<!-- END technique -->
+</table>
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th colspan="3">CAPACITES OCCULTES</th>
+</tr>
+<tr>
+	<th>Nom / type /niveau</th>
+	<th>Co&ucirc;t</th>
+	<th>Effet</th>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+</table>
+
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th colspan="">POUVOIRS MAGIQUES</th>
+</tr>
+<tr>
+	<th>Nom / type / mana</th>
+	<th>Effet</th>
+</tr>
+<tr>
+	<td></td>
+	<td></td>
+</tr>
+</table>
+
+<br>
+Aide de jeu : aucune
+
+<p>
+<h3>Historique</h3>
+{perso.historique}
+</p>
+
+
+</body>
+</html>
+
+
