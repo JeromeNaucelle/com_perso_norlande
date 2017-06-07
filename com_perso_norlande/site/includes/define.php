@@ -15,4 +15,9 @@ class Lignees {
 	
 }
 
+class Familles {
+	public static $familles = array (OCCULTISME, SOCIETE, INTRIGUE, BELLIGERANCE);
+	
+}
+
 ?>

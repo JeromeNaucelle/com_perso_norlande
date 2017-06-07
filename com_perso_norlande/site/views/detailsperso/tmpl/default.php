@@ -268,6 +268,8 @@ if( $this->edit_orga ) {
 </fieldset>
 </form>
 
+<input type="button" value="Voir la fiche" onclick="javascript:open_infos();"/>
+
 <?php } ?>
 
 	<div id="alert" style="display:none; cursor: default"> 

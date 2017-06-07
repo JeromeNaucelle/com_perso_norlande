@@ -2,6 +2,24 @@
 
 defined('_JEXEC') or die;
 
+class DefinitionPiege {
+	
+	public $cout;
+	public $effet;
+	public $nom;
+	
+	public function __construct($value) {
+    $arr = explode('|', $value);
+    $this->nom = $arr[0];
+    $this->cout = $arr[1];
+    $this->effet = $arr[2];
+  }
+}
+
+class_alias ('DefinitionPiege','DefinitionBreuvage');
+class_alias ('DefinitionPiege','DefinitionTechnique');
+class_alias ('DefinitionPiege','DefinitionInvocation');
+
 class SyntheseCompetences {
 
 	private $persoId;
@@ -131,6 +149,8 @@ class SyntheseCompetences {
 		$this->resiste_maille = 0;
 		$this->esquive_plaque = 0;
 		$this->resiste_plaque = 0;
+		$this->pieges = array();
+		$this->techniques = array();
    }
    
    public static function create($persoId)
@@ -153,10 +173,27 @@ class SyntheseCompetences {
 			foreach($array as $key => $value) {
 				if($key === "lieux_pouvoir") {
 					// TODO grep pour check Guerre ou Conseil
-				} else {
-					error_log("key : ".$key);
-					error_log("val : ".$value);
-					$synthese->$key = $synthese->$key + $value;
+					
+				} else if($key === "actions_guerre") {
+					$synthese->actions_guerre += intval($value);
+					
+				} else if($key === "rumeurs") {
+					$synthese->rumeurs += intval($value);
+					
+				} else if(SyntheseCompetences::$corres_label[$key] === "Piège"
+					&& $value != "") {
+					
+					$tmp = new DefinitionPiege($value);
+					array_push($synthese->pieges, $tmp);
+				} else if(SyntheseCompetences::$corres_label[$key] === "Technique"
+					&& $value != "") {
+					
+					$tmp = new DefinitionTechnique($value);
+					array_push($synthese->techniques, $tmp);
+				}else {
+					#error_log("key : ".$key);
+					#error_log("val : ".$value);
+					#$synthese->$key = $synthese->$key + $value;
 				}
 			}
 		}
@@ -169,6 +206,14 @@ class SyntheseCompetences {
 	
 	public function getRumeurs(){
 		return $this->rumeurs;
+	}
+	
+	public function getPieges(){
+		return $this->pieges;
+	}
+	
+	public function getTechniques(){
+		return $this->techniques;
 	}
 	
 }

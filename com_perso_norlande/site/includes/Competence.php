@@ -67,4 +67,31 @@ class Competence {
 		return $str;
 	}
 }
+
+
+class CompetenceFamille {
+	private $famille;
+	private $compByLevel;
+	
+	function __construct() {
+		$this->compByLevel = array(1 => array(),2 => array(),3 => array(), 4 => array(), 5 => array());
+	}
+	
+	public function setFamille($famille) {
+		$this->famille = $famille;
+	}
+	
+	public function getFamille() {
+		return $this->famille;
+	}
+	
+	public function addCompetence($competence) {
+		$niveau = $competence->getNiveau();
+		array_push($this->compByLevel[$niveau], $competence);
+	}
+	
+	public function getFromLevel($niveau) {
+		return join('<br>', $this->compByLevel[$niveau]);
+	}
+}
 ?>
