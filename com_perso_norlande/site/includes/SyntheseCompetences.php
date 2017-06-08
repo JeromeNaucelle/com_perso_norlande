@@ -341,6 +341,20 @@ class SyntheseCompetences {
 		return 3 + $this->bonus_coups;
 	}
 	
+	public function getEsquive($armure){
+		$key = "esquive_".strtolower($armure);
+		return $this->$key;
+	}
+	
+	public function getResiste($armure){
+		$key = "resiste_".strtolower($armure);
+		return $this->$key;
+	}
+	
+	public function getImmunite(){
+		return "-";
+	}
+	
 	public function getForcePhysique(){
 		return $this->force_physique;
 	}

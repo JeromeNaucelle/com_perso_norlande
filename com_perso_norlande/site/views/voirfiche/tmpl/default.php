@@ -33,13 +33,18 @@ $template = new Template('./');
   		));
 	}
 	
+	$armure = $this->perso->getArmure();
 	$template->assign_vars(array(
     'mana' => $this->synthese->getMana(),
     'coups' => $this->synthese->getCoups(),
     'force_physique' => $this->synthese->getForcePhysique(),
     
     'aide_jeu' => $this->synthese->getAideJeu(),
-    'lieux_pouvoir' => $this->synthese->getLieuxPouvoir()
+    'lieux_pouvoir' => $this->synthese->getLieuxPouvoir(),
+    'esquive' => $this->synthese->getEsquive($armure),
+    'resiste' => $this->synthese->getResiste($armure),
+    'immunite' => $this->synthese->getImmunite($armure),
+    'armure' => $armure
   		));
   		
   		
