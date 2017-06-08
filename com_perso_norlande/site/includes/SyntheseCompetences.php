@@ -135,7 +135,7 @@ class SyntheseCompetences {
 		$this->voix_roi = 0;
 		$this->veto = 0;
 		$this->manigance = 0;
-		$this->lieux_pouvoir = "Aucun";
+		$this->lieux_pouvoir = array();
 		$this->force_physique = 0;
 		$this->bonus_mana = 0;
 		$this->globes_sortilege = 0;
@@ -154,6 +154,8 @@ class SyntheseCompetences {
 		$this->breuvages = array();
 		$this->invocations = array();
 		$this->parcelles = array();
+		$this->connaissances = array();
+		$this->aide_jeu = array();
    }
    
    public static function create($persoId)
@@ -207,10 +209,20 @@ class SyntheseCompetences {
 					&& $value != "") {
 					
 					array_push($synthese->parcelles, $value);
-				}else {
+				} else if($key === "connaissances"
+					&& $value != "") {
+					
+					array_push($synthese->connaissances, $value);
+				} else if($key === "aide_jeu"
+					&& $value != "") {
+					
+					array_push($synthese->aide_jeu, $value);
+				} 
+				
+				else if(is_numeric($value)) {
 					#error_log("key : ".$key);
 					#error_log("val : ".$value);
-					#$synthese->$key = $synthese->$key + $value;
+					$synthese->$key = $synthese->$key + $value;
 				}
 			}
 		}
@@ -242,7 +254,43 @@ class SyntheseCompetences {
 	}
 	
 	public function getParcelles(){
+		if(count($this->parcelles) == 0) {
+			return array('Aucune');
+		}
 		return $this->parcelles;
+	}
+	
+	public function getMana(){
+		return $this->bonus_mana;
+	}
+	
+	public function getCoups(){
+		return 3 + $this->bonus_coups;
+	}
+	
+	public function getForcePhysique(){
+		return $this->force_physique;
+	}
+	
+	public function getConnaissances(){
+		if(count($this->connaissances) == 0) {
+			return array('Aucune');
+		}
+		return $this->connaissances;
+	}
+	
+	public function getLieuxPouvoir(){
+		if(count($this->lieux_pouvoir) == 0) {
+			return 'Aucun';
+		}
+		return implode('<br>', $this->lieux_pouvoir);
+	}
+	
+	public function getAideJeu(){
+		if(count($this->aide_jeu) == 0) {
+			return 'Aucune';
+		}
+		return implode('<br>', $this->aide_jeu);
 	}
 	
 }

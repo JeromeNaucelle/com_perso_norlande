@@ -23,14 +23,6 @@ $template = new Template('./');
     'body' => 'components/com_perso_norlande/views/voirfiche/tmpl/fichePerso.html'
   ));
 
-  // Assignation des variables
-/*
-  $template->assign_vars(array(
-    'PSEUDO' => "pseudo",
-    'EMAIL'  => "mail"
-
-  ));
-  */
 
 	foreach($this->competencesClassees as $classement) {
 		$template->assign_vars(array(
@@ -42,8 +34,11 @@ $template = new Template('./');
 	}
 	
 	$template->assign_vars(array(
-    'mana' => 10,
-    'coups' => 3
+    'mana' => $this->synthese->getMana(),
+    'coups' => $this->synthese->getCoups(),
+    'force_physique' => $this->synthese->getForcePhysique(),
+    
+    'aide_jeu' => $this->synthese->getAideJeu()
   		));
   		
   		
@@ -54,6 +49,14 @@ $template = new Template('./');
 	    'nom' => $piege->nom,
 	    'cout' => $piege->cout,
 	    'effet' => $piege->effet
+	  		));
+  	}
+  	
+  	$connaissances = $this->synthese->getConnaissances();
+  	foreach($connaissances as $connaissance) {
+  		
+	  	$template->assign_block_vars('connaissance', array(
+	    'nom' => $connaissance
 	  		));
   	}
   	

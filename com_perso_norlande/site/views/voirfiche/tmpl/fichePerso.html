@@ -36,7 +36,7 @@ Anciennet&eacute;e : aucune
 <tr>
 	<td rowspan="2">{mana}</td>
 	<td rowspan="2">{coups}</td>
-	<td rowspan="2">0</td>
+	<td rowspan="2">{force_physique}</td>
 	<td>Esquive</td>
 	<td>R&eacute;siste</td>
 	<td>Immunit&eacute;</td>
@@ -209,9 +209,11 @@ Anciennet&eacute;e : aucune
 <tr>
 	<th>CONNAISSANCES</th>
 </tr>
+<!-- BEGIN connaissance -->
 <tr>
-	<td>aucune</td>
+	<td>{connaissance.nom}</td>
 </tr>
+<!-- END connaissance -->
 </table>
 
 <br>
@@ -285,8 +287,11 @@ Anciennet&eacute;e : aucune
 </tr>
 </table>
 
-<br>
-Aide de jeu : aucune
+<p>
+<h3>Aides de jeu :
+{aide_jeu}
+</p>
+
 
 <p>
 <h3>Historique</h3>
