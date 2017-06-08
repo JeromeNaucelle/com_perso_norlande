@@ -130,5 +130,5 @@ function deleteEntrainement(competence_id){
 
 function open_infos()
 {
-	window.open('index.php?option=com_perso_norlande&view=voirfiche','nom_de_ma_popup','menubar=no, scrollbars=yes, top=100, left=100, width=300, height=200');
+	window.open('index.php?option=com_perso_norlande&view=voirfiche&tmpl=component','Fiche Perso','menubar=no, scrollbars=yes, top=100, left=100, width=800, height=600');
 }
