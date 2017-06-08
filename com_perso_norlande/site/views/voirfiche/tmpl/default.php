@@ -100,6 +100,14 @@ $template = new Template('./');
 	  		));
   	}
   	
+  	$ameliorations = $this->synthese->getAmeliorations();
+  	foreach($ameliorations as $amelioration) {
+  		
+	  	$template->assign_block_vars('amelioration', array(
+	    'nom' => $amelioration
+	  		));
+  	}
+  	
   	$parcelles = $this->synthese->getParcelles();
   	foreach($parcelles as $parcelle) {
   		

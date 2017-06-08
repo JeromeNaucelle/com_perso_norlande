@@ -168,6 +168,7 @@ class SyntheseCompetences {
 		$this->parcelles = array();
 		$this->connaissances = array();
 		$this->pouvoirs_magiques = array();
+		$this->ameliorations = array();
 		$this->aide_jeu = array();
    }
    
@@ -228,6 +229,10 @@ class SyntheseCompetences {
 					&& $value != "") {
 					
 					array_push($synthese->connaissances, $value);
+				} else if($key === "amelioration"
+					&& $value != "") {
+					
+					array_push($synthese->ameliorations, $value);
 				} else if($key === "aide_jeu"
 					&& $value != "") {
 					
@@ -300,6 +305,13 @@ class SyntheseCompetences {
 			return array('Aucune');
 		}
 		return $this->connaissances;
+	}
+	
+	public function getAmeliorations(){
+		if(count($this->ameliorations) == 0) {
+			return array('Aucune');
+		}
+		return $this->ameliorations;
 	}
 	
 	public function getLieuxPouvoir(){
