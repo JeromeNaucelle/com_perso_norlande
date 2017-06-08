@@ -14,6 +14,10 @@ class DefinitionPiege {
     $this->cout = $arr[1];
     $this->effet = $arr[2];
   }
+  
+  public static function defaultValue() {
+  		return new DefinitionPiege("-|-|-");
+  	}
 }
 
 class_alias ('DefinitionPiege','DefinitionBreuvage');
@@ -30,6 +34,11 @@ class DefinitionPouvoir {
     $this->nom = $arr[0];
     $this->effet = $arr[1];
   }
+  
+  public static function defaultValue() {
+  		return new DefinitionPouvoir("-|-");
+  	}
+}
 
 class DefinitionCapacite {
 	
@@ -283,22 +292,37 @@ class SyntheseCompetences {
 	}
 	
 	public function getPieges(){
+		if(count($this->pieges) == 0) {
+			return array(DefinitionPiege::defaultValue());
+		}
 		return $this->pieges;
 	}
 	
 	public function getTechniques(){
+		if(count($this->techniques) == 0) {
+			return array(DefinitionTechnique::defaultValue());
+		}
 		return $this->techniques;
 	}
 	
 	public function getBreuvages(){
+		if(count($this->breuvages) == 0) {
+			return array(DefinitionBreuvage::defaultValue());
+		}
 		return $this->breuvages;
 	}
 	
 	public function getPouvoirsMagiques(){
+		if(count($this->pouvoirs_magiques) == 0) {
+			return array(DefinitionPouvoir::defaultValue());
+		}
 		return $this->pouvoirs_magiques;
 	}
 	
 	public function getInvocations(){
+		if(count($this->invocations) == 0) {
+			return array(DefinitionInvocation::defaultValue());
+		}
 		return $this->invocations;
 	}
 	
