@@ -186,7 +186,7 @@ Anciennet&eacute;e : aucune
 </tr>
 <tr>
 	<td>1 PA</td>
-	<td>Aucun</td>
+	<td>{lieux_pouvoir}</td>
 </tr>
 </table>
 
@@ -275,27 +275,29 @@ Anciennet&eacute;e : aucune
 
 <table class="table_competences" >
 <tr>
-	<th colspan="">POUVOIRS MAGIQUES</th>
+	<th colspan="2">POUVOIRS MAGIQUES</th>
 </tr>
 <tr>
 	<th>Nom / type / mana</th>
 	<th>Effet</th>
 </tr>
+<!-- BEGIN pouvoir -->
 <tr>
-	<td></td>
-	<td></td>
+	<td>{pouvoir.nom}</td>
+	<td>{pouvoir.effet}</td>
 </tr>
+<!-- END pouvoir -->
 </table>
 
 <p>
-<h3>Aides de jeu :
+<h3>Aides de jeu :</h3>
 {aide_jeu}
 </p>
 
 
 <p>
 <h3>Historique</h3>
-{perso.historique}
+{historique}
 </p>
 
 

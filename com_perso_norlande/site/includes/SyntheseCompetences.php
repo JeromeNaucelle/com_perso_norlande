@@ -20,6 +20,18 @@ class_alias ('DefinitionPiege','DefinitionBreuvage');
 class_alias ('DefinitionPiege','DefinitionTechnique');
 class_alias ('DefinitionPiege','DefinitionInvocation');
 
+class DefinitionPouvoir {
+	
+	public $effet;
+	public $nom;
+	
+	public function __construct($value) {
+    $arr = explode(' ; ', $value);
+    $this->nom = $arr[0];
+    $this->effet = $arr[1];
+  }
+}
+
 class SyntheseCompetences {
 
 	private $persoId;
@@ -155,6 +167,7 @@ class SyntheseCompetences {
 		$this->invocations = array();
 		$this->parcelles = array();
 		$this->connaissances = array();
+		$this->pouvoirs_magiques = array();
 		$this->aide_jeu = array();
    }
    
@@ -176,10 +189,7 @@ class SyntheseCompetences {
 		
 		foreach($result_competences as $array) {
 			foreach($array as $key => $value) {
-				if($key === "lieux_pouvoir") {
-					// TODO grep pour check Guerre ou Conseil
-					
-				} else if($key === "actions_guerre") {
+				if($key === "actions_guerre") {
 					$synthese->actions_guerre += intval($value);
 					
 				} else if($key === "rumeurs") {
@@ -205,6 +215,11 @@ class SyntheseCompetences {
 					
 					$tmp = new DefinitionInvocation($value);
 					array_push($synthese->invocations, $tmp);
+				} else if(SyntheseCompetences::$corres_label[$key] === "Pouvoir magique"
+					&& $value != "") {
+					
+					$tmp = new DefinitionPouvoir($value);
+					array_push($synthese->pouvoirs_magiques, $tmp);
 				} else if($key === "parcelles"
 					&& $value != "") {
 					
@@ -217,6 +232,10 @@ class SyntheseCompetences {
 					&& $value != "") {
 					
 					array_push($synthese->aide_jeu, $value);
+				} else if($key === "lieux_pouvoir"
+					&& $value != "") {
+					
+					array_push($synthese->lieux_pouvoir, $value);
 				} 
 				
 				else if(is_numeric($value)) {
@@ -247,6 +266,10 @@ class SyntheseCompetences {
 	
 	public function getBreuvages(){
 		return $this->breuvages;
+	}
+	
+	public function getPouvoirsMagiques(){
+		return $this->pouvoirs_magiques;
 	}
 	
 	public function getInvocations(){

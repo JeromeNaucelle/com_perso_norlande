@@ -38,7 +38,8 @@ $template = new Template('./');
     'coups' => $this->synthese->getCoups(),
     'force_physique' => $this->synthese->getForcePhysique(),
     
-    'aide_jeu' => $this->synthese->getAideJeu()
+    'aide_jeu' => $this->synthese->getAideJeu(),
+    'lieux_pouvoir' => $this->synthese->getLieuxPouvoir()
   		));
   		
   		
@@ -87,6 +88,15 @@ $template = new Template('./');
 	    'nom' => $breuvage->nom,
 	    'cout' => $breuvage->cout,
 	    'effet' => $breuvage->effet
+	  		));
+  	}
+  	
+	$pouvoirs = $this->synthese->getPouvoirsMagiques();
+  	foreach($pouvoirs as $pouvoir) {
+  		
+	  	$template->assign_block_vars('pouvoir', array(
+	    'nom' => $pouvoir->nom,
+	    'effet' => $pouvoir->effet
 	  		));
   	}
   	
