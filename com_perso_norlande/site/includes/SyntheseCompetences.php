@@ -30,6 +30,21 @@ class DefinitionPouvoir {
     $this->nom = $arr[0];
     $this->effet = $arr[1];
   }
+
+class DefinitionCapacite {
+	
+	public $effet;
+	public $frequence;
+	
+	public function __construct($value) {
+    $arr = explode('|', $value);
+    $this->effet = $arr[0];
+    $this->frequence = $arr[1];
+  }
+  
+  public static function defaultValue() {
+  		return new DefinitionCapacite("-|-");
+  	}
 }
 
 class SyntheseCompetences {
@@ -169,6 +184,7 @@ class SyntheseCompetences {
 		$this->connaissances = array();
 		$this->pouvoirs_magiques = array();
 		$this->ameliorations = array();
+		$this->capacites = array();
 		$this->aide_jeu = array();
    }
    
@@ -221,6 +237,11 @@ class SyntheseCompetences {
 					
 					$tmp = new DefinitionPouvoir($value);
 					array_push($synthese->pouvoirs_magiques, $tmp);
+				} else if($key === "capacite"
+					&& $value != "") {
+					
+					$tmp = new DefinitionCapacite($value);
+					array_push($synthese->capacites, $tmp);
 				} else if($key === "parcelles"
 					&& $value != "") {
 					
@@ -305,6 +326,13 @@ class SyntheseCompetences {
 			return array('Aucune');
 		}
 		return $this->connaissances;
+	}
+	
+	public function getCapacites(){
+		if(count($this->capacites) == 0) {
+			return array(DefinitionCapacite::defaultValue());
+		}
+		return $this->capacites;
 	}
 	
 	public function getAmeliorations(){

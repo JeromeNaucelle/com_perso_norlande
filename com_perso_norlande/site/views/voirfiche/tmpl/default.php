@@ -108,6 +108,15 @@ $template = new Template('./');
 	  		));
   	}
   	
+  	$capacites = $this->synthese->getCapacites();
+  	foreach($capacites as $capacite) {
+  		
+	  	$template->assign_block_vars('capacite', array(
+	    'effet' => $capacite->effet,
+	    'frequence' => $capacite->frequence
+	  		));
+  	}
+  	
   	$parcelles = $this->synthese->getParcelles();
   	foreach($parcelles as $parcelle) {
   		
