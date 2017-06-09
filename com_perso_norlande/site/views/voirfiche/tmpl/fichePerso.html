@@ -293,9 +293,40 @@ Anciennet&eacute;e : TODO
 <!-- END pouvoir -->
 </table>
 
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th colspan="3">SORTILEGES</th>
+</tr>
+<tr>
+	<th>Nom</th>
+	<th>Formule</th>
+	<th>Effet</th>
+</tr>
+<!-- BEGIN sortilege -->
+<tr>
+	<td>{sortilege.nom}</td>
+	<td>{sortilege.formule}</td>
+	<td>{sortilege.effet}</td>
+</tr>
+<!-- END sortilege -->
+</table>
+
+<br>
+
 <p>
 <h3>Aides de jeu :</h3>
 {aide_jeu}
+</p>
+
+<p>
+<h3>Possessions de départ</h3>
+	<ul>
+<!-- BEGIN possession -->
+		<li>{possession.nom}</li>
+<!-- END possession -->
+	</ul>
 </p>
 
 

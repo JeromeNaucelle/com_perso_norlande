@@ -77,6 +77,16 @@ $template = new Template('./');
 	  		));
   	}
   	
+  	$sortileges = $this->synthese->getSortileges();
+  	foreach($sortileges as $sortilege) {
+  		
+	  	$template->assign_block_vars('sortilege', array(
+	    'nom' => $sortilege->nom,
+	    'formule' => $sortilege->formule,
+	    'effet' => $sortilege->effet
+	  		));
+  	}
+  	
   	$invocations = $this->synthese->getInvocations();
   	foreach($invocations as $invocation) {
   		
@@ -84,6 +94,14 @@ $template = new Template('./');
 	    'nom' => $invocation->nom,
 	    'cout' => $invocation->cout,
 	    'effet' => $invocation->effet
+	  		));
+  	}
+  	
+  	$possessions = $this->synthese->getPossessionsDepart();
+  	foreach($possessions as $possession) {
+  		
+	  	$template->assign_block_vars('possession', array(
+	    'nom' => $possession
 	  		));
   	}
   	

@@ -63,6 +63,24 @@ class DefinitionCapacite {
   	}
 }
 
+class DefinitionSortilege {
+	
+	public $nom;
+	public $formule;
+	public $effet;
+	
+	public function __construct($value) {
+    $arr = explode("|", $value);
+    $this->nom = $arr[0];
+    $this->formule = $arr[1];
+    $this->effet = $arr[2];
+  }
+  
+  public static function defaultValue() {
+  		return new DefinitionSortilege("-|-|-");
+  	}
+}
+
 class SyntheseCompetences {
 
 	private $persoId;
@@ -206,6 +224,8 @@ class SyntheseCompetences {
 		$this->immunite_cuir = array();
 		$this->immunite_maille = array();
 		$this->immunite_plaque = array();
+		$this->sortileges = array();
+		$this->possessions_depart = array();
    }
    
    public static function create($persoId)
@@ -235,6 +255,14 @@ class SyntheseCompetences {
 					
 				} else if($key === "rumeurs") {
 					$synthese->rumeurs += intval($value);
+					
+				} else if($key === "possessions_depart"
+					&& $value != "") {
+					array_push($synthese->possessions_depart, $value);
+					
+				} else if($key === "sortilege"
+					&& $value != "") {
+					array_push($synthese->sortileges, new DefinitionSortilege($value));
 					
 				} else if(SyntheseCompetences::$corres_label[$key] === "Piège"
 					&& $value != "") {
@@ -341,6 +369,13 @@ class SyntheseCompetences {
 		return $this->invocations;
 	}
 	
+	public function getSortileges(){
+		if(count($this->sortileges) == 0) {
+			return array(DefinitionSortilege::defaultValue());
+		}
+		return $this->sortileges;
+	}
+	
 	public function getParcelles(){
 		if(count($this->parcelles) == 0) {
 			return array('Aucune');
@@ -411,6 +446,45 @@ class SyntheseCompetences {
 			return 'Aucune';
 		}
 		return implode('<br>', $this->aide_jeu);
+	}
+	
+	
+	public function getPossessionsDepart(){
+		$possessions = array();
+		if($this->rumeurs > 0) {
+			array_push($possessions, $this->rumeurs . " rumeurs");
+		}
+		if($this->actions_guerre > 0) {
+			array_push($possessions, $this->actions_guerre . " actions de guerre");
+		}
+		if($this->coup_force > 0) {
+			array_push($possessions, $this->coup_force . " coups de force");
+		}
+		if($this->voix_noires > 0) {
+			array_push($possessions, $this->voix_noires . " voix noires");
+		}
+		if($this->voix_blanches > 0) {
+			array_push($possessions, $this->voix_blanches . " voix blanches");
+		}
+		if($this->voix_peuple > 0) {
+			array_push($possessions, $this->voix_peuple . " voix du peuple");
+		}
+		if($this->voix_roi > 0) {
+			array_push($possessions, $this->voix_roi . " voix du roi");
+		}
+		if($this->veto > 0) {
+			array_push($possessions, $this->veto . " veto");
+		}
+		if($this->manigance > 0) {
+			array_push($possessions, $this->manigance . " manigances");
+		}
+		if($this->globes_sortilege > 0) {
+			array_push($possessions, $this->globes_sortilege . " globes sortilèges");
+		}
+		
+		error_log("LE TEST !!! ".var_dump($possessions));
+		$result = array_merge($this->possessions_depart, $possessions);
+		return $result;
 	}
 	
 }
