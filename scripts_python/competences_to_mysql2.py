@@ -108,7 +108,7 @@ for tab_line in spamreader:
 	
 	capacite = ""
 	if tab_line[44] != "":
-		capacite = tab_line[44] + " (" + tab_line[45] + ")"
+		capacite = tab_line[44] + "|" + tab_line[45]
 	
 	technique1 = ""
 	if tab_line[46] != "":
@@ -148,11 +148,11 @@ for tab_line in spamreader:
 		
 	invocation1 = ""
 	if tab_line[73] != "":
-		invocation1 = tab_line[73] + "|" + tab_line[74] + "|" + tab_line[75]
+		invocation1 = tab_line[73] + "|" + tab_line[74] + " mana|" + tab_line[75]
 		
 	invocation2 = ""
 	if tab_line[76] != "":
-		invocation2 = tab_line[76] + "|" + tab_line[77] + "|" + tab_line[78]
+		invocation2 = tab_line[76] + "|" + tab_line[77] + " mana|" + tab_line[78]
 	metamorphose = tab_line[79]
 	
 	pouvoir1 = ""
