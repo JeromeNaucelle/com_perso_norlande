@@ -35,6 +35,7 @@ $template = new Template('./');
 	
 	$armure = $this->perso->getArmure();
 	$template->assign_vars(array(
+	 'nom_perso' => $this->perso->getNom(),
     'mana' => $this->synthese->getMana(),
     'coups' => $this->synthese->getCoups(),
     'force_physique' => $this->synthese->getForcePhysique(),

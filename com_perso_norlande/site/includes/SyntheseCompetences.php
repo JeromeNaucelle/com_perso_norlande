@@ -2,6 +2,13 @@
 
 defined('_JEXEC') or die;
 
+/*
+* TODO : métamorphoses : dégagé le "capacité occulte" en début de ligne
+*
+*/
+
+
+
 class DefinitionPiege {
 	
 	public $cout;
@@ -195,6 +202,10 @@ class SyntheseCompetences {
 		$this->ameliorations = array();
 		$this->capacites = array();
 		$this->aide_jeu = array();
+		$this->immunite_etoffe = array();
+		$this->immunite_cuir = array();
+		$this->immunite_maille = array();
+		$this->immunite_plaque = array();
    }
    
    public static function create($persoId)
@@ -217,6 +228,10 @@ class SyntheseCompetences {
 			foreach($array as $key => $value) {
 				if($key === "actions_guerre") {
 					$synthese->actions_guerre += intval($value);
+					
+				} else if(substr( $key, 0, 9 )	== "immunite_"	
+					&& $value != "") {
+					array_push($synthese->$key, $value);
 					
 				} else if($key === "rumeurs") {
 					$synthese->rumeurs += intval($value);
@@ -351,8 +366,12 @@ class SyntheseCompetences {
 		return $this->$key;
 	}
 	
-	public function getImmunite(){
-		return "-";
+	public function getImmunite($armure){
+		$key = "immunite_".strtolower($armure);
+		if(count($this->$key) == 0) {
+			return "-";
+		}
+		return implode("<br>", $this->$key);
 	}
 	
 	public function getForcePhysique(){
