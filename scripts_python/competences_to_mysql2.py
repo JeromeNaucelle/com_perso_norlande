@@ -96,9 +96,9 @@ for tab_line in spamreader:
 	attaque_spe_hast = tab_line[23]
 	attaque_spe_tir = tab_line[24]
 	attaque_spe_lancer = tab_line[25]
-	sortilege = tab_line[26].replace("\n", "")
-	sort_masse1 = tab_line[27].replace("\n", "")
-	sort_masse2 = tab_line[28].replace("\n", "")
+	sortilege = tab_line[26].replace("\n", "|")
+	sort_masse1 = tab_line[27].replace("\n", "|")
+	sort_masse2 = tab_line[28].replace("\n", "|")
 	immunite_etoffe = tab_line[33]
 	immunite_cuir = tab_line[36]
 	immunite_maille = tab_line[39]

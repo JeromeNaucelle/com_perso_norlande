@@ -3,8 +3,14 @@
 defined('_JEXEC') or die;
 
 /*
-* TODO : métamorphoses : dégagé le "capacité occulte" en début de ligne
-*
+* TODO : 
+* - métamorphoses : dégager le "capacité occulte" en début de ligne
+* - langues particulères (secret, echos forestiers)
+* - Argent
+* - Unicité des tables de conseil et de guerre
+* - préciser la limite : parcelle ramenant de l'argent
+* - maniements
+* - bonus des familles
 */
 
 
@@ -80,6 +86,8 @@ class DefinitionSortilege {
   		return new DefinitionSortilege("-|-|-");
   	}
 }
+
+class_alias ('DefinitionSortilege','DefinitionSortMasse');
 
 class SyntheseCompetences {
 
@@ -226,6 +234,8 @@ class SyntheseCompetences {
 		$this->immunite_plaque = array();
 		$this->sortileges = array();
 		$this->possessions_depart = array();
+		$this->a_prevoir = array();
+		$this->sorts_masse = array();
    }
    
    public static function create($persoId)
@@ -246,6 +256,10 @@ class SyntheseCompetences {
 		
 		foreach($result_competences as $array) {
 			foreach($array as $key => $value) {
+				if($value == "") {
+					continue;
+				}				
+				
 				if($key === "actions_guerre") {
 					$synthese->actions_guerre += intval($value);
 					
@@ -259,6 +273,9 @@ class SyntheseCompetences {
 				} else if($key === "possessions_depart"
 					&& $value != "") {
 					array_push($synthese->possessions_depart, $value);
+					
+				} else if($key === "a_prevoir") {
+					array_push($synthese->a_prevoir, $value);
 					
 				} else if($key === "sortilege"
 					&& $value != "") {
@@ -289,6 +306,10 @@ class SyntheseCompetences {
 					
 					$tmp = new DefinitionPouvoir($value);
 					array_push($synthese->pouvoirs_magiques, $tmp);
+				} else if(SyntheseCompetences::$corres_label[$key] === "Sort de masse") {
+					
+					$tmp = new DefinitionSortMasse($value);
+					array_push($synthese->sorts_masse, $tmp);
 				} else if($key === "capacite"
 					&& $value != "") {
 					
@@ -376,6 +397,13 @@ class SyntheseCompetences {
 		return $this->sortileges;
 	}
 	
+	public function getSortsMasse(){
+		if(count($this->sorts_masse) == 0) {
+			return array(DefinitionSortMasse::defaultValue());
+		}
+		return $this->sorts_masse;
+	}
+	
 	public function getParcelles(){
 		if(count($this->parcelles) == 0) {
 			return array('Aucune');
@@ -448,6 +476,13 @@ class SyntheseCompetences {
 		return implode('<br>', $this->aide_jeu);
 	}
 	
+	public function getObjetsAPrevoir(){
+		if(count($this->a_prevoir) == 0) {
+			return array('- Rien -');
+		}
+		return $this->a_prevoir;
+	}
+	
 	
 	public function getPossessionsDepart(){
 		$possessions = array();
@@ -482,7 +517,6 @@ class SyntheseCompetences {
 			array_push($possessions, $this->globes_sortilege . " globes sortilèges");
 		}
 		
-		error_log("LE TEST !!! ".var_dump($possessions));
 		$result = array_merge($this->possessions_depart, $possessions);
 		return $result;
 	}

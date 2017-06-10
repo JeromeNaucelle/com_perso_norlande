@@ -87,6 +87,16 @@ $template = new Template('./');
 	  		));
   	}
   	
+  	$sortsMasse = $this->synthese->getSortsMasse();
+  	foreach($sortsMasse as $sortMasse) {
+  		
+	  	$template->assign_block_vars('sort_masse', array(
+	    'nom' => $sortMasse->nom,
+	    'formule' => $sortMasse->formule,
+	    'effet' => $sortMasse->effet
+	  		));
+  	}
+  	
   	$invocations = $this->synthese->getInvocations();
   	foreach($invocations as $invocation) {
   		
@@ -138,6 +148,14 @@ $template = new Template('./');
 	  	$template->assign_block_vars('capacite', array(
 	    'effet' => $capacite->effet,
 	    'frequence' => $capacite->frequence
+	  		));
+  	}
+  	
+  	$objsAPrevoir = $this->synthese->getObjetsAPrevoir();
+  	foreach($objsAPrevoir as $obj) {
+  		
+	  	$template->assign_block_vars('a_prevoir', array(
+	    'nom' => $obj
 	  		));
   	}
   	
