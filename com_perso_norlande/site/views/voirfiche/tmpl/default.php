@@ -39,7 +39,7 @@ $template = new Template('./');
     'mana' => $this->synthese->getMana(),
     'coups' => $this->synthese->getCoups(),
     'force_physique' => $this->synthese->getForcePhysique(),
-    
+    'niveau_langue' => $this->synthese->getNiveauLangue(),
     'aide_jeu' => $this->synthese->getAideJeu(),
     'lieux_pouvoir' => $this->synthese->getLieuxPouvoir(),
     'esquive' => $this->synthese->getEsquive($armure),
@@ -164,6 +164,14 @@ $template = new Template('./');
   		
 	  	$template->assign_block_vars('parcelle', array(
 	    'nom' => $parcelle
+	  		));
+  	}
+  	
+  	$langues = $this->synthese->getSyntheseLangue();
+  	foreach($langues as $langue) {
+  		
+	  	$template->assign_block_vars('langue', array(
+	    'nom' => $langue
 	  		));
   	}
 	

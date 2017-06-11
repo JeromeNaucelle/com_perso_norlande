@@ -89,6 +89,19 @@ class DefinitionSortilege {
 
 class_alias ('DefinitionSortilege','DefinitionSortMasse');
 
+class SyntheseLangues {
+	
+	public $secrets;
+	public $echosForestiers;
+	public $niveauLangue;
+	
+	public function __construct() {
+    $this->secrets = 0;
+    $this->echosForestiers = 0;
+    $this->niveauLangue = 0;
+  }
+}
+
 class SyntheseCompetences {
 
 	private $persoId;
@@ -103,7 +116,7 @@ class SyntheseCompetences {
 	"a_prevoir" => "Objet de jeu que vous devez prévoir",
 	"connaissances" => "Connaissances",
 	"aide_jeu" => "Aides de jeu",
-	
+	"niveau_langue" => "Niveau de langue",
 	"lecture_ecriture" => "Lecture et écriture",
 	"rumeurs" => "Rumeurs",
 	"actions_guerre" => "Actions de Guerre",
@@ -218,6 +231,7 @@ class SyntheseCompetences {
 		$this->resiste_maille = 0;
 		$this->esquive_plaque = 0;
 		$this->resiste_plaque = 0;
+		$this->synthese_langue = new SyntheseLangues();
 		$this->pieges = array();
 		$this->techniques = array();
 		$this->breuvages = array();
@@ -236,6 +250,24 @@ class SyntheseCompetences {
 		$this->possessions_depart = array();
 		$this->a_prevoir = array();
 		$this->sorts_masse = array();
+   }
+   
+   private static function gestionNiveauLangue(&$synthese, $value) {
+   	if(strpos($value, "forestiers") !== false) {
+   		$synthese->synthese_langue->echosForestiers += 1;
+   		return;
+   	}
+   	if(strpos($value, "Secrets") !== false) {
+   		$synthese->synthese_langue->secrets += 1;
+   		return;
+   	}
+   	$matches = array();
+   	$ret = preg_match("/\+[0-9]+/", $value, $matches);
+   	if($ret == 1) {
+   		error_log("niveau de langue ok : ".var_dump($matches));
+   		$tmp = substr($matches[0], 1);
+   		$synthese->synthese_langue->niveauLangue += intval($tmp);
+   	}
    }
    
    public static function create($persoId)
@@ -273,6 +305,9 @@ class SyntheseCompetences {
 				} else if($key === "possessions_depart"
 					&& $value != "") {
 					array_push($synthese->possessions_depart, $value);
+					
+				} else if($key === "niveau_langue") {
+					SyntheseCompetences::gestionNiveauLangue($synthese, $value);
 					
 				} else if($key === "a_prevoir") {
 					array_push($synthese->a_prevoir, $value);
@@ -413,6 +448,21 @@ class SyntheseCompetences {
 	
 	public function getMana(){
 		return $this->bonus_mana;
+	}
+	
+	public function getSyntheseLangue(){
+		$ret = array();
+		if($this->synthese_langue->secrets > 0) {
+			array_push($ret, "+".$this->synthese_langue->secrets." Secrets");
+		}
+		if($this->synthese_langue->echosForestiers > 0) {
+			array_push($ret, "+".$this->synthese_langue->echosForestiers." Echos forestiers");
+		}
+		return array_pad($ret, count($ret)+$this->synthese_langue->niveauLangue, "A REMPLIR PAR UN ORGA");
+	}
+	
+	public function getNiveauLangue() {
+		return $this->synthese_langue->niveauLangue;
 	}
 	
 	public function getCoups(){
