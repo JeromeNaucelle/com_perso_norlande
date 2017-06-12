@@ -98,6 +98,24 @@ class SyntheseLangues {
     $this->echosForestiers = 0;
     $this->niveauLangue = 0;
   }
+  
+	public function checkValue($value) {
+   	if(strpos($value, "forestiers") !== false) {
+   		$this->echosForestiers += 1;
+   		return;
+   	}
+   	if(strpos($value, "Secrets") !== false) {
+   		$this->secrets += 1;
+   		return;
+   	}
+   	$matches = array();
+   	$ret = preg_match("/\+[0-9]+/", $value, $matches);
+   	if($ret == 1) {
+   		error_log("niveau de langue ok : ".var_dump($matches));
+   		$tmp = substr($matches[0], 1);
+   		$this->niveauLangue += intval($tmp);
+   	}
+   }
 }
 
 class SyntheseLieuxPouvoir{
@@ -272,24 +290,6 @@ class SyntheseCompetences {
 		$this->sorts_masse = array();
    }
    
-   private static function gestionNiveauLangue(&$synthese, $value) {
-   	if(strpos($value, "forestiers") !== false) {
-   		$synthese->synthese_langue->echosForestiers += 1;
-   		return;
-   	}
-   	if(strpos($value, "Secrets") !== false) {
-   		$synthese->synthese_langue->secrets += 1;
-   		return;
-   	}
-   	$matches = array();
-   	$ret = preg_match("/\+[0-9]+/", $value, $matches);
-   	if($ret == 1) {
-   		error_log("niveau de langue ok : ".var_dump($matches));
-   		$tmp = substr($matches[0], 1);
-   		$synthese->synthese_langue->niveauLangue += intval($tmp);
-   	}
-   }
-   
    public static function create($persoId)
    {
    	$synthese = new SyntheseCompetences();
@@ -327,7 +327,7 @@ class SyntheseCompetences {
 					array_push($synthese->possessions_depart, $value);
 					
 				} else if($key === "niveau_langue") {
-					SyntheseCompetences::gestionNiveauLangue($synthese, $value);
+					$this->synthese_langue->checkValue($value);
 					
 				} else if($key === "a_prevoir") {
 					array_push($synthese->a_prevoir, $value);
