@@ -5,9 +5,7 @@ defined('_JEXEC') or die;
 /*
 * TODO : 
 * - métamorphoses : dégager le "capacité occulte" en début de ligne
-* - langues particulères (secret, echos forestiers)
 * - Argent
-* - Unicité des tables de conseil et de guerre
 * - préciser la limite : parcelle ramenant de l'argent
 * - maniements
 * - bonus des familles
@@ -99,6 +97,28 @@ class SyntheseLangues {
     $this->secrets = 0;
     $this->echosForestiers = 0;
     $this->niveauLangue = 0;
+  }
+}
+
+class SyntheseLieuxPouvoir{
+	
+	public $tableGuerre;
+	public $tableConseil;
+	
+	public function __construct() {
+    $this->tableGuerre = false;
+    $this->tableConseil = false;
+  }
+  
+  public function checkValue($value) {
+   	$ret = preg_match("/guerre/i", $value);
+   	if($ret == 1) {
+   		$this->tableGuerre = true;
+   	}
+   	$ret = preg_match("/conseil/i", $value);
+   	if($ret == 1) {
+   		$this->tableConseil = true;
+   	}
   }
 }
 
@@ -217,7 +237,7 @@ class SyntheseCompetences {
 		$this->voix_roi = 0;
 		$this->veto = 0;
 		$this->manigance = 0;
-		$this->lieux_pouvoir = array();
+		$this->lieux_pouvoir = new SyntheseLieuxPouvoir();
 		$this->force_physique = 0;
 		$this->bonus_mana = 0;
 		$this->globes_sortilege = 0;
@@ -366,10 +386,9 @@ class SyntheseCompetences {
 					&& $value != "") {
 					
 					array_push($synthese->aide_jeu, $value);
-				} else if($key === "lieux_pouvoir"
-					&& $value != "") {
+				} else if($key === "lieux_pouvoir") {
 					
-					array_push($synthese->lieux_pouvoir, $value);
+					$synthese->lieux_pouvoir->checkValue($value);
 				} 
 				
 				else if(is_numeric($value)) {
@@ -513,10 +532,18 @@ class SyntheseCompetences {
 	}
 	
 	public function getLieuxPouvoir(){
-		if(count($this->lieux_pouvoir) == 0) {
+		$ret = array();
+		
+		if($this->lieux_pouvoir->tableGuerre) {
+			array_push($ret, "Table de Guerre");
+		}
+		if($this->lieux_pouvoir->tableConseil) {
+			array_push($ret, "Table du Conseil");
+		}
+		if(count($ret) == 0) {
 			return 'Aucun';
 		}
-		return implode('<br>', $this->lieux_pouvoir);
+		return implode('<br>', $ret);
 	}
 	
 	public function getAideJeu(){
