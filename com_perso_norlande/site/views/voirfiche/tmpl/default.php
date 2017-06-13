@@ -62,6 +62,14 @@ $template = new Template('./');
 	  		));
   	}
   	
+  	$maniements = $this->synthese->getManiements();
+  	foreach($maniements as $maniement) {
+  		
+	  	$template->assign_block_vars('maniement', array(
+	    'nom' => $maniement
+	  		));
+  	}
+  	
   	$metamorphoses = $this->synthese->getMetamorphoses();
   	foreach($metamorphoses as $metamorphose) {
   		
