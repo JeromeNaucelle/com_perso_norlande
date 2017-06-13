@@ -78,7 +78,7 @@ pouvoir1=%s,
 pouvoir2=%s,
 pouvoir3=%s,
 pouvoir4=%s
-WHERE competence_nom=%s"""
+WHERE (competence_nom=%s AND maitrise=%s)"""
            
 
 
@@ -191,7 +191,7 @@ for tab_line in spamreader:
 	immunite_maille, immunite_plaque, amelioration, capacite, \
 	technique1, technique2, piege1, piege2, breuvage1, breuvage2, \
 	breuvage3, breuvage4, breuvage5, invocation1, invocation2, \
-	metamorphose, pouvoir1, pouvoir2, pouvoir3, pouvoir4, nom)
+	metamorphose, pouvoir1, pouvoir2, pouvoir3, pouvoir4, nom, maitrise_brut)
 	
 	
 	if DEBUG == 1:
@@ -210,6 +210,7 @@ for tab_line in spamreader:
 		
 		if pouvoir1 != "":
 			print(pouvoir1)
+
 			
 	try:
 		cursor = conn.cursor()
