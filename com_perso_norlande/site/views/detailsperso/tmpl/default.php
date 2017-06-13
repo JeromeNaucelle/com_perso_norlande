@@ -239,9 +239,6 @@ if( $this->edit_orga ) {
     </form>
 </div>
 
-<?php //echo "Actions de guerre : ". $this->synthese->getActionsGuerre(); ?>
-<?php //echo "Rumeurs : ". $this->synthese->getRumeurs(); ?>
-
 <form id="formArmure">
 <fieldset>
   <legend align="left">Armure</legend>

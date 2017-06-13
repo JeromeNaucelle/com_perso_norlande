@@ -4,6 +4,7 @@ defined('_JEXEC') or die;
 
 require_once JPATH_COMPONENT . '/includes/Competence.php';
 require_once JPATH_COMPONENT . '/includes/ClasseXP.php';
+require_once JPATH_COMPONENT . '/includes/Monnaie.php';
 require_once JPATH_COMPONENT . '/includes/define.php';
 
 class Perso {
@@ -13,6 +14,7 @@ class Perso {
 	private $lignee;
 	private $competences;
 	private $armure;
+	private $monnaie;
 	
 	//
 	private $xp;
@@ -21,6 +23,7 @@ class Perso {
     function __construct() {
     	$this->nom = "nom base";
     	$this->competences = array();
+    	$this->monnaie = new Monnaie();
     	$this->xp = new ClasseXP();
     }
     
@@ -166,6 +169,9 @@ class Perso {
 		}
 		
 		$perso->armure = $query_result['armure'];
+		$perso->monnaie->piecesOr = $query_result['pieces_or'];
+		$perso->monnaie->piecesArgent = $query_result['pieces_argent'];
+		$perso->monnaie->piecesCuivre = $query_result['pieces_cuivre'];
 		return $perso;
 	}
 	
@@ -243,6 +249,10 @@ class Perso {
 		}
 		return true;
 	}
+	
+	public function getMonnaie() {
+		return $this->monnaie;
+	}	
 	
 	public function addEntrainement($id_competence, $nom_competence) {
 		$this->xp->addEntrainement($id_competence, $nom_competence);

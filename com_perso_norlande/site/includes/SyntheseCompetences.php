@@ -6,10 +6,8 @@ require_once JPATH_COMPONENT . '/includes/BonusLigneeChecker.php';
 /*
 * TODO : 
 * - métamorphoses : dégager le "capacité occulte" en début de ligne
-* - Argent
 * - préciser la limite : parcelle ramenant de l'argent
 * - maniements
-* - bonus de lignée Intrigue
 */
 
 
@@ -375,8 +373,7 @@ class SyntheseCompetences {
 				} else if($key === "maniement") {
 					array_push($synthese->maniements, $value);
 					
-				} else if($key === "possessions_depart"
-					&& $value != "") {
+				} else if($key === "possessions_depart") {
 					array_push($synthese->possessions_depart, $value);
 					
 				} else if($key === "niveau_langue") {
@@ -385,8 +382,7 @@ class SyntheseCompetences {
 				} else if($key === "a_prevoir") {
 					array_push($synthese->a_prevoir, $value);
 					
-				} else if($key === "sortilege"
-					&& $value != "") {
+				} else if($key === "sortilege") {
 					array_push($synthese->sortileges, new DefinitionSortilege($value));
 					
 				} else if(SyntheseCompetences::$corres_label[$key] === "Piège"
@@ -418,25 +414,20 @@ class SyntheseCompetences {
 					
 					$tmp = new DefinitionSortMasse($value);
 					array_push($synthese->sorts_masse, $tmp);
-				} else if($key === "capacite"
-					&& $value != "") {
+				} else if($key === "capacite") {
 					
 					$tmp = new DefinitionCapacite($value);
 					array_push($synthese->capacites, $tmp);
-				} else if($key === "parcelles"
-					&& $value != "") {
+				} else if($key === "parcelles") {
 					
 					array_push($synthese->parcelles, $value);
-				} else if($key === "connaissances"
-					&& $value != "") {
+				} else if($key === "connaissances") {
 					
 					array_push($synthese->connaissances, $value);
-				} else if($key === "amelioration"
-					&& $value != "") {
+				} else if($key === "amelioration") {
 					
 					array_push($synthese->ameliorations, $value);
-				} else if($key === "aide_jeu"
-					&& $value != "") {
+				} else if($key === "aide_jeu") {
 					
 					array_push($synthese->aide_jeu, $value);
 				} else if($key === "lieux_pouvoir") {
@@ -647,6 +638,22 @@ class SyntheseCompetences {
 	
 	public function getAttaquesSpe() {
 		return $this->attaques_spe;
+	}
+	
+	public function getMonnaie() {
+		$bonusFamille = 0;
+		$lignee = $this->lignee_perso;
+		$bonusFamilleChecker = $this->bonus_famille_checker;
+		
+		if( $bonusFamilleChecker->hasBonusIntrigue($lignee) ) {
+			$competencesClasses = $this->competences_classees[INTRIGUE];
+			// 2*niveauMax d'intrigue en pièces d'or
+			$bonusFamille = 2*$competencesClasses->getNiveauMax();
+		}
+		$monnaie = new Monnaie();
+		$monnaie->piecesOr = $bonusFamille;
+		
+		return $monnaie;
 	}
 	
 	public function getPossessionsDepart(){
