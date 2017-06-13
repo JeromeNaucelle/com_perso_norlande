@@ -35,20 +35,6 @@ class Perso_NorlandeViewVoirFiche extends JViewLegacy
 	 */
 	function display($tpl = null)
 	{		
-		// Assign data to the view
-		//$this->setModel( $this->getModel( 'perso_norlande' ), true );
-		$model = null;
-		$model = $this->getModel('creationperso');
-		
-		if($model != null) {
-			$this->setModel($model);
-		} else {
-			JLog::add(JText::_('Model creationperso non trouvé'), JLog::WARNING, 'jerror');		
-		}
-		
-		$jinput = JFactory::getApplication()->input;
-		
-		
 		$this->perso = NULL;
 		$session = JFactory::getSession();
 		$perso_id = $session->get('perso_id',NULL);
@@ -74,10 +60,12 @@ class Perso_NorlandeViewVoirFiche extends JViewLegacy
 					$classement->addCompetence($comp);
 				}
 			}
-			array_push($this->competencesClassees, $classement);
+			$this->competencesClassees[$famille] = $classement;
 		}
 		
-		$this->synthese = SyntheseCompetences::create($this->perso->getId());
+		$this->synthese = SyntheseCompetences::create($this->perso->getId(), 
+			$this->perso->getLignee(),
+			$this->competencesClassees);
 		
 
 		// Display the view

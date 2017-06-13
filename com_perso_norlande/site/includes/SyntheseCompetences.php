@@ -1,6 +1,7 @@
 <?php
 
 defined('_JEXEC') or die;
+require_once JPATH_COMPONENT . '/includes/BonusLigneeChecker.php';
 
 /*
 * TODO : 
@@ -8,7 +9,7 @@ defined('_JEXEC') or die;
 * - Argent
 * - préciser la limite : parcelle ramenant de l'argent
 * - maniements
-* - bonus des familles
+* - bonus de lignée Intrigue
 */
 
 
@@ -279,6 +280,8 @@ class SyntheseCompetences {
 	
 
    function __construct() {
+   	$this->bonus_famille_checker = new BonusLigneeChecker();
+   	$this->lignee_perso = "";
    	$this->parent_id = 0;
    	$this->lecture_ecriture = 0;
 		$this->rumeurs = 0;
@@ -323,11 +326,16 @@ class SyntheseCompetences {
 		$this->possessions_depart = array();
 		$this->a_prevoir = array();
 		$this->sorts_masse = array();
+		$this->attaques_spe = new SyntheseAttaquesSpe();
+		$this->maniements = array();
    }
    
-   public static function create($persoId)
-   {
+   public static function create($persoId, $lignee, $competencesClassees)
+   { 	
    	$synthese = new SyntheseCompetences();
+   	$synthese->lignee_perso = $lignee;
+   	$synthese->competences_classees = $competencesClassees;
+   	
    	$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		
@@ -511,18 +519,37 @@ class SyntheseCompetences {
 	}
 	
 	public function getMana(){
-		return $this->bonus_mana;
+		$bonusFamille = 0;
+		$lignee = $this->lignee_perso;
+		$bonusFamilleChecker = $this->bonus_famille_checker;
+		
+		if( $bonusFamilleChecker->hasBonusOccultisme($lignee) ) {
+			$competencesClasses = $this->competences_classees[OCCULTISME];
+			$bonusFamille = $competencesClasses->getNiveauMax();
+		}
+		return $this->bonus_mana + $bonusFamille;
 	}
 	
 	public function getSyntheseLangue(){
 		$ret = array();
+		$bonusFamille = 0;
+		$lignee = $this->lignee_perso;
+		$bonusFamilleChecker = $this->bonus_famille_checker;
+		
+		if( $bonusFamilleChecker->hasBonusSociete($lignee) ) {
+			$competencesClasses = $this->competences_classees[SOCIETE];
+			$bonusFamille = $competencesClasses->getNiveauMax();
+		}	
+		
 		if($this->synthese_langue->secrets > 0) {
 			array_push($ret, "+".$this->synthese_langue->secrets." Secrets");
 		}
 		if($this->synthese_langue->echosForestiers > 0) {
 			array_push($ret, "+".$this->synthese_langue->echosForestiers." Echos forestiers");
 		}
-		return array_pad($ret, count($ret)+$this->synthese_langue->niveauLangue, "A REMPLIR PAR UN ORGA");
+		
+		$niveauLangue = $bonusFamille + $this->synthese_langue->niveauLangue;
+		return array_pad($ret, count($ret)+$niveauLangue, "A REMPLIR PAR UN ORGA");
 	}
 	
 	public function getNiveauLangue() {
@@ -530,7 +557,16 @@ class SyntheseCompetences {
 	}
 	
 	public function getCoups(){
-		return 3 + $this->bonus_coups;
+		$bonusFamille = 0;
+		$lignee = $this->lignee_perso;
+		$bonusFamilleChecker = $this->bonus_famille_checker;
+		
+		if( $bonusFamilleChecker->hasBonusBelligerance($lignee) ) {
+			$competencesClasses = $this->competences_classees[BELLIGERANCE];
+			$bonusFamille = $competencesClasses->getNiveauMax();
+		}	
+		
+		return 3 + $this->bonus_coups + $bonusFamille;
 	}
 	
 	public function getEsquive($armure){
