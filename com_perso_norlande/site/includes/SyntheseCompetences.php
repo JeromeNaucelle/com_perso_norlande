@@ -372,7 +372,7 @@ class SyntheseCompetences {
 					array_push($synthese->possessions_depart, $value);
 					
 				} else if($key === "niveau_langue") {
-					$this->synthese_langue->checkValue($value);
+					$synthese->synthese_langue->checkValue($value);
 					
 				} else if($key === "a_prevoir") {
 					array_push($synthese->a_prevoir, $value);
