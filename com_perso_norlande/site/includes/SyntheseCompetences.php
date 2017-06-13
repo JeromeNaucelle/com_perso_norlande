@@ -140,6 +140,41 @@ class SyntheseLieuxPouvoir{
   }
 }
 
+
+class SyntheseAttaquesSpe{
+	
+	private $tranchant;
+	private $contondant;
+	private $hast;
+	private $tir;
+	private $lancer;
+	private $toutType;
+	
+	public function __construct() {
+    $this->tranchant = array();
+    $this->contondant = array();
+    $this->hast = array();
+    $this->tir = array();
+    $this->lancer = array();
+    $this->toutType = array();
+  }
+  
+  public function checkValue($type, $value) {
+   	array_push($this->$type, $value);
+  }
+  
+  public function getTypes() {
+  		$types = array('tranchant'=>'Attaques tranchantes', 'contondant'=>'Attaques contondante', 
+  			'hast'=>"Attaques d'hast et bâtons", 'tir'=>'Attaques de tir', 
+  			'lancer'=>'Attaques de lancer', 'toutType'=>"Attaques spéciales");
+  		return $types;
+  }
+  
+  public function getAttaques($type){
+  		return $this->$type;
+  }
+}
+
 class SyntheseCompetences {
 
 	private $persoId;
@@ -315,12 +350,22 @@ class SyntheseCompetences {
 				if($key === "actions_guerre") {
 					$synthese->actions_guerre += intval($value);
 					
-				} else if(substr( $key, 0, 9 )	== "immunite_"	
-					&& $value != "") {
+				} else if(substr( $key, 0, 9 )	== "immunite_") {
 					array_push($synthese->$key, $value);
+					
+				} else if(substr( $key, 0, 11 )	== "attaque_spe") {
+					$tmp = explode("_", $key);
+					$type = "toutType";
+					if(count($tmp) > 2) {
+						$type = $tmp[2];
+					}
+					$synthese->attaques_spe->checkValue($type, $value);
 					
 				} else if($key === "rumeurs") {
 					$synthese->rumeurs += intval($value);
+					
+				} else if($key === "maniement") {
+					array_push($synthese->maniements, $value);
 					
 				} else if($key === "possessions_depart"
 					&& $value != "") {
@@ -560,6 +605,13 @@ class SyntheseCompetences {
 		return $this->a_prevoir;
 	}
 	
+	public function getManiements() {
+		return $this->maniements;
+	}
+	
+	public function getAttaquesSpe() {
+		return $this->attaques_spe;
+	}
 	
 	public function getPossessionsDepart(){
 		$possessions = array();

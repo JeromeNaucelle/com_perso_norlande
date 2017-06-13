@@ -174,6 +174,19 @@ $template = new Template('./');
 	    'nom' => $langue
 	  		));
   	}
+  	
+  	$attaques_spe = $this->synthese->getAttaquesSpe();
+  	$typesAttaques = $attaques_spe->getTypes();
+  	foreach($typesAttaques as $type => $labelType) {
+  		$attaques = $attaques_spe->getAttaques($type);
+  		
+		foreach($attaques as $attaque) {
+		  	$template->assign_block_vars('attaque_spe', array(
+		  		'type' => $labelType,
+		   	'nom' => $attaque
+		  		));
+		}
+  	}
 	
   // Affichage des données
 
