@@ -62,6 +62,15 @@ $template = new Template('./');
 	  		));
   	}
   	
+  	$metamorphoses = $this->synthese->getMetamorphoses();
+  	foreach($metamorphoses as $metamorphose) {
+  		
+	  	$template->assign_block_vars('metamorphose', array(
+	    'cout' => $metamorphose->cout,
+	    'effet' => $metamorphose->effet
+	  		));
+  	}
+  	
   	$connaissances = $this->synthese->getConnaissances();
   	foreach($connaissances as $connaissance) {
   		

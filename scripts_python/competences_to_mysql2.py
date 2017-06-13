@@ -8,6 +8,16 @@ import unicodedata
 import mysql.connector 
 import re
 
+def treatMetamorphose(value):
+  ret = value
+  regex = "[A-Za-zé]+ \((.*\))[ ]+:[ ]?(.*)"
+  m = re.search(regex, value)
+  if m is not None:
+    #print("grp1 "+m.group(1))
+    #print("grp2 "+m.group(2))
+    ret = m.group(1)+"|"+m.group(2)
+  return ret
+
 
 DEBUG = 1
 
@@ -153,7 +163,8 @@ for tab_line in spamreader:
 	invocation2 = ""
 	if tab_line[76] != "":
 		invocation2 = tab_line[76] + "|" + tab_line[77] + " mana|" + tab_line[78]
-	metamorphose = tab_line[79]
+
+	metamorphose = treatMetamorphose(tab_line[79])
 	
 	pouvoir1 = ""
 	if tab_line[80] != "":

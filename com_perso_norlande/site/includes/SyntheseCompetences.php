@@ -5,9 +5,10 @@ require_once JPATH_COMPONENT . '/includes/BonusLigneeChecker.php';
 
 /*
 * TODO : 
-* - métamorphoses : dégager le "capacité occulte" en début de ligne
 * - préciser la limite : parcelle ramenant de l'argent
 * - maniements
+* - bonus_coup_etoffe
+* - cacher les formules magiques
 */
 
 
@@ -63,6 +64,22 @@ class DefinitionCapacite {
   
   public static function defaultValue() {
   		return new DefinitionCapacite("-|-");
+  	}
+}
+
+class DefinitionMetamorphose {
+	
+	public $cout;
+	public $effet;
+	
+	public function __construct($value) {
+    $arr = explode('|', $value);
+    $this->cout = $arr[0];
+    $this->effet = $arr[1];
+  }
+  
+  public static function defaultValue() {
+  		return new DefinitionMetamorphose("-|-");
   	}
 }
 
@@ -326,6 +343,7 @@ class SyntheseCompetences {
 		$this->sorts_masse = array();
 		$this->attaques_spe = new SyntheseAttaquesSpe();
 		$this->maniements = array();
+		$this->metamorphoses = array();
    }
    
    public static function create($persoId, $lignee, $competencesClassees)
@@ -390,8 +408,7 @@ class SyntheseCompetences {
 					
 					$tmp = new DefinitionPiege($value);
 					array_push($synthese->pieges, $tmp);
-				} else if(SyntheseCompetences::$corres_label[$key] === "Technique"
-					&& $value != "") {
+				} else if(SyntheseCompetences::$corres_label[$key] === "Technique") {
 					
 					$tmp = new DefinitionTechnique($value);
 					array_push($synthese->techniques, $tmp);
@@ -400,13 +417,11 @@ class SyntheseCompetences {
 					
 					$tmp = new DefinitionBreuvage($value);
 					array_push($synthese->breuvages, $tmp);
-				} else if(SyntheseCompetences::$corres_label[$key] === "Invocation"
-					&& $value != "") {
+				} else if(SyntheseCompetences::$corres_label[$key] === "Invocation") {
 					
 					$tmp = new DefinitionInvocation($value);
 					array_push($synthese->invocations, $tmp);
-				} else if(SyntheseCompetences::$corres_label[$key] === "Pouvoir magique"
-					&& $value != "") {
+				} else if(SyntheseCompetences::$corres_label[$key] === "Pouvoir magique") {
 					
 					$tmp = new DefinitionPouvoir($value);
 					array_push($synthese->pouvoirs_magiques, $tmp);
@@ -414,6 +429,10 @@ class SyntheseCompetences {
 					
 					$tmp = new DefinitionSortMasse($value);
 					array_push($synthese->sorts_masse, $tmp);
+				} else if($key === "metamorphose") {
+					
+					$tmp = new DefinitionMetamorphose($value);
+					array_push($synthese->metamorphoses, $tmp);
 				} else if($key === "capacite") {
 					
 					$tmp = new DefinitionCapacite($value);
@@ -486,6 +505,13 @@ class SyntheseCompetences {
 			return array(DefinitionInvocation::defaultValue());
 		}
 		return $this->invocations;
+	}
+	
+	public function getMetamorphoses(){
+		if(count($this->metamorphoses) == 0) {
+			return array(DefinitionMetamorphose::defaultValue());
+		}
+		return $this->metamorphoses;
 	}
 	
 	public function getSortileges(){
