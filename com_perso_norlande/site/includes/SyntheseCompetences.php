@@ -6,7 +6,6 @@ require_once JPATH_COMPONENT . '/includes/BonusLigneeChecker.php';
 /*
 * TODO : 
 * - préciser la limite : parcelle ramenant de l'argent
-* - bonus_coup_etoffe
 * - ajouter la lignée sur la fiche
 */
 
@@ -557,8 +556,9 @@ class SyntheseCompetences {
 		return $this->synthese_langue->niveauLangue;
 	}
 	
-	public function getCoups(){
+	public function getCoups($armure){
 		$bonusFamille = 0;
+		$bonusCoupEtoffe = 0;
 		$lignee = $this->lignee_perso;
 		$bonusFamilleChecker = $this->bonus_famille_checker;
 		
@@ -566,8 +566,11 @@ class SyntheseCompetences {
 			$competencesClasses = $this->competences_classees[BELLIGERANCE];
 			$bonusFamille = $competencesClasses->getNiveauMax();
 		}	
+		if(strtolower($armure) == "etoffe") {
+			$bonusCoupEtoffe = $this->bonus_coup_etoffe;
+		}
 		
-		return 3 + $this->bonus_coups + $bonusFamille;
+		return 3 + $this->bonus_coups + $bonusFamille + $bonusCoupEtoffe;
 	}
 	
 	public function getEsquive($armure){

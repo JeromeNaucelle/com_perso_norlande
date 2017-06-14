@@ -40,7 +40,7 @@ $template = new Template('./');
 	$template->assign_vars(array(
 	 'nom_perso' => $this->perso->getNom(),
     'mana' => $this->synthese->getMana(),
-    'coups' => $this->synthese->getCoups(),
+    'coups' => $this->synthese->getCoups($armure),
     'force_physique' => $this->synthese->getForcePhysique(),
     'niveau_langue' => $this->synthese->getNiveauLangue(),
     'aide_jeu' => $this->synthese->getAideJeu(),
