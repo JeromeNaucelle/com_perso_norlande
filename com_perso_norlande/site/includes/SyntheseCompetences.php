@@ -6,7 +6,6 @@ require_once JPATH_COMPONENT . '/includes/BonusLigneeChecker.php';
 /*
 * TODO : 
 * - préciser la limite : parcelle ramenant de l'argent
-* - ajouter la lignée sur la fiche
 */
 
 
@@ -110,7 +109,6 @@ class SyntheseLangues {
    	$matches = array();
    	$ret = preg_match("/\+[0-9]+/", $value, $matches);
    	if($ret == 1) {
-   		error_log("niveau de langue ok : ".var_dump($matches));
    		$tmp = substr($matches[0], 1);
    		$this->niveauLangue += intval($tmp);
    	}

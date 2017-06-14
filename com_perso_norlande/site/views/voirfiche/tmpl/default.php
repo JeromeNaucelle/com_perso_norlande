@@ -38,6 +38,7 @@ $template = new Template('./');
 	$monnaie = $this->perso->getMonnaie();
 	$monnaie->add($this->synthese->getMonnaie());
 	$template->assign_vars(array(
+	 'lignee' => $this->perso->getLignee(),
 	 'nom_perso' => $this->perso->getNom(),
     'mana' => $this->synthese->getMana(),
     'coups' => $this->synthese->getCoups($armure),
