@@ -6,9 +6,8 @@ require_once JPATH_COMPONENT . '/includes/BonusLigneeChecker.php';
 /*
 * TODO : 
 * - préciser la limite : parcelle ramenant de l'argent
-* - maniements
 * - bonus_coup_etoffe
-* - cacher les formules magiques
+* - ajouter la lignée sur la fiche
 */
 
 
@@ -34,22 +33,6 @@ class DefinitionPiege {
 class_alias ('DefinitionPiege','DefinitionBreuvage');
 class_alias ('DefinitionPiege','DefinitionTechnique');
 class_alias ('DefinitionPiege','DefinitionInvocation');
-
-class DefinitionPouvoir {
-	
-	public $effet;
-	public $nom;
-	
-	public function __construct($value) {
-    $arr = explode(' ; ', $value);
-    $this->nom = $arr[0];
-    $this->effet = $arr[1];
-  }
-  
-  public static function defaultValue() {
-  		return new DefinitionPouvoir("-|-");
-  	}
-}
 
 class DefinitionCapacite {
 	
@@ -102,6 +85,7 @@ class DefinitionSortilege {
 }
 
 class_alias ('DefinitionSortilege','DefinitionSortMasse');
+class_alias ('DefinitionSortilege','DefinitionPouvoir');
 
 class SyntheseLangues {
 	

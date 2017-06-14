@@ -36,8 +36,12 @@ class Perso_NorlandeViewVoirFiche extends JViewLegacy
 	function display($tpl = null)
 	{		
 		$this->perso = NULL;
+		$this->edit_orga = false;
 		$session = JFactory::getSession();
 		$perso_id = $session->get('perso_id',NULL);
+		
+		$user = JFactory::getUser();
+		$this->edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		
 		if($perso_id == NULL)
 		{

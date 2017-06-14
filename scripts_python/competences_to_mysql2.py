@@ -18,8 +18,14 @@ def treatMetamorphose(value):
     ret = m.group(1)+"|"+m.group(2)
   return ret
 
+def treatPouvoir(value):
+  index = value.index('»')
+  formule = value[:index+2]
+  effet = value[index+2:]
+  return formule+"|"+effet
 
-DEBUG = 1
+
+DEBUG = 0
 
 f = open('Maitrises-2016.csv')
 if f == None:
@@ -168,19 +174,19 @@ for tab_line in spamreader:
 	
 	pouvoir1 = ""
 	if tab_line[80] != "":
-		pouvoir1 = tab_line[80] + " ; " + tab_line[81]
+		pouvoir1 = tab_line[80] + "|" + treatPouvoir(tab_line[81])
 	
 	pouvoir2 = ""
 	if tab_line[82] != "":
-		pouvoir2 = tab_line[82] + " ; " + tab_line[83]
+		pouvoir2 = tab_line[82] + "|" + treatPouvoir(tab_line[83])
 		
 	pouvoir3 = ""
 	if tab_line[84] != "":
-		pouvoir3 = tab_line[84] + " ; " + tab_line[85]
+		pouvoir3 = tab_line[84] + "|" + treatPouvoir(tab_line[85])
 		
 	pouvoir4 = ""
 	if tab_line[86] != "":
-		pouvoir4 = tab_line[86] + " ; " + tab_line[87]
+		pouvoir4 = tab_line[86] + "|" + treatPouvoir(tab_line[87])
 	
 	
 	

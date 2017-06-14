@@ -18,6 +18,7 @@ $doc = JFactory::getDocument();
 $template = new Template('./');
 
   // modèle à utiliser auquel on adjoint un nom arbitraire
+  
 
   $template->set_filenames(array(
     'body' => 'components/com_perso_norlande/views/voirfiche/tmpl/fichePerso.html'
@@ -102,7 +103,7 @@ $template = new Template('./');
   		
 	  	$template->assign_block_vars('sortilege', array(
 	    'nom' => $sortilege->nom,
-	    'formule' => $sortilege->formule,
+	    'formule' => $this->edit_orga ? $sortilege->formule : "« ??? »",
 	    'effet' => $sortilege->effet
 	  		));
   	}
@@ -112,7 +113,7 @@ $template = new Template('./');
   		
 	  	$template->assign_block_vars('sort_masse', array(
 	    'nom' => $sortMasse->nom,
-	    'formule' => $sortMasse->formule,
+	    'formule' => $this->edit_orga ? $sortMasse->formule : "« ??? »",
 	    'effet' => $sortMasse->effet
 	  		));
   	}
@@ -150,6 +151,7 @@ $template = new Template('./');
   		
 	  	$template->assign_block_vars('pouvoir', array(
 	    'nom' => $pouvoir->nom,
+	    'formule' => $this->edit_orga ? $pouvoir->formule : "« ??? »",
 	    'effet' => $pouvoir->effet
 	  		));
   	}
