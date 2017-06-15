@@ -1,25 +1,3 @@
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
-<head>
-	<style type="text/css">
-		.table_competences {
-			border: 1px solid black;
-			border-spacing: 0px;
-			border-collapse: collapse;
-		}
-		.table_competences tr td {
-			border: 1px solid black;
-			padding: 2px;
-		}
-		
-		.table_competences tr th {
-			border: 1px solid black;
-			padding: 2px;
-		}
-	</style>
-</head>
-
 <body>
 <h2 style="display: inline-block;">NORLANDE</h2>  <h2 style="display: inline-block; float: right;">{lignee}</h2>
 <p>
@@ -40,9 +18,9 @@ Anciennet&eacute;e : TODO
 	<td rowspan="2">{mana}</td>
 	<td rowspan="2">{coups}</td>
 	<td rowspan="2">{force_physique}</td>
-	<td>Esquive</td>
-	<td>R&eacute;siste</td>
-	<td>Immunit&eacute;</td>
+	<td class="subHeader">Esquive</td>
+	<td class="subHeader">R&eacute;siste</td>
+	<td class="subHeader">Immunit&eacute;</td>
 </tr>
 <tr>
 	<td>{esquive}</td>
@@ -72,7 +50,7 @@ Anciennet&eacute;e : TODO
 </tr>
 </table>
 
-<br>
+
 
 <table class="table_competences">
 <tr>
@@ -93,7 +71,6 @@ Anciennet&eacute;e : TODO
 </tr>
 </table>
 
-<br>
 
 <table class="table_competences">
 <tr>
@@ -114,7 +91,6 @@ Anciennet&eacute;e : TODO
 </tr>
 </table>
 
-<br>
 
 <table class="table_competences">
 <tr>
@@ -142,8 +118,8 @@ Anciennet&eacute;e : TODO
 	<th colspan="2">Capacit&eacute;s sp&eacute;ciales (Hors combat)</th>
 </tr>
 <tr>
-	<th>EFFET</th>
-	<th>FREQUENCE D'USAGE</th>
+	<th class="subHeader">EFFET</th>
+	<th class="subHeader">FREQUENCE D'USAGE</th>
 </tr>
 <!-- BEGIN capacite -->
 <tr>
@@ -230,7 +206,7 @@ Anciennet&eacute;e : TODO
 	<th>Niveau de langues : {niveau_langue}</th>
 </tr>
 <tr>
-	<th>LANGUES CONNUES (parl&eacute;es)</th>
+	<th class="subHeader">LANGUES CONNUES (parl&eacute;es)</th>
 </tr>
 <tr>
 	<td>Norland&eacute;en</td>
@@ -250,8 +226,8 @@ Anciennet&eacute;e : TODO
 	<th colspan="2">Attaques Spéciales</th>
 </tr>
 <tr>
-	<th>Type</th>
-	<th>Effet</th>
+	<th class="subHeader">Type</th>
+	<th class="subHeader">Effet</th>
 </tr>
 	<!-- BEGIN attaque_spe -->
 <tr>
@@ -268,9 +244,9 @@ Anciennet&eacute;e : TODO
 	<th colspan="3">PIEGES & TECHNIQUES</th>
 </tr>
 <tr>
-	<th>Nom / type /niveau</th>
-	<th>Co&ucirc;t</th>
-	<th>Effet</th>
+	<th class="subHeader">Nom / type /niveau</th>
+	<th class="subHeader">Co&ucirc;t</th>
+	<th class="subHeader">Effet</th>
 </tr>
 <!-- BEGIN technique -->
 <tr>
@@ -288,9 +264,9 @@ Anciennet&eacute;e : TODO
 	<th colspan="3">CAPACITES OCCULTES</th>
 </tr>
 <tr>
-	<th>Nom / type /niveau</th>
-	<th>Co&ucirc;t</th>
-	<th>Effet</th>
+	<th class="subHeader">Nom / type /niveau</th>
+	<th class="subHeader">Co&ucirc;t</th>
+	<th class="subHeader">Effet</th>
 </tr>
 <!-- BEGIN capa_occulte -->
 <tr>
@@ -306,12 +282,12 @@ Anciennet&eacute;e : TODO
 
 <table class="table_competences" >
 <tr>
-	<th colspan="2">POUVOIRS MAGIQUES</th>
+	<th colspan="3">POUVOIRS MAGIQUES</th>
 </tr>
 <tr>
-	<th>Nom / type / mana</th>
-	<th>Formule</th>
-	<th>Effet</th>
+	<th class="subHeader">Nom / type / mana</th>
+	<th class="subHeader">Formule</th>
+	<th class="subHeader">Effet</th>
 </tr>
 <!-- BEGIN pouvoir -->
 <tr>
@@ -329,9 +305,9 @@ Anciennet&eacute;e : TODO
 	<th colspan="3">SORTILEGES</th>
 </tr>
 <tr>
-	<th>Nom</th>
-	<th>Formule</th>
-	<th>Effet</th>
+	<th class="subHeader">Nom</th>
+	<th class="subHeader">Formule</th>
+	<th class="subHeader">Effet</th>
 </tr>
 <!-- BEGIN sortilege -->
 <tr>
@@ -350,9 +326,9 @@ Anciennet&eacute;e : TODO
 	<th colspan="3">SORTS DE MASSE<br>(réduit le mana à 0)</th>
 </tr>
 <tr>
-	<th>Nom</th>
-	<th>Formule</th>
-	<th>Effet</th>
+	<th class="subHeader">Nom</th>
+	<th class="subHeader">Formule</th>
+	<th class="subHeader">Effet</th>
 </tr>
 <!-- BEGIN sort_masse -->
 <tr>
@@ -370,8 +346,8 @@ Anciennet&eacute;e : TODO
 	<th colspan="3">METAMORPHOSES</th>
 </tr>
 <tr>
-	<th>Conditions/Coût</th>
-	<th>Effet</th>
+	<th class="subHeader">Conditions/Coût</th>
+	<th class="subHeader">Effet</th>
 </tr>
 <!-- BEGIN metamorphose -->
 <tr>
@@ -412,6 +388,5 @@ Anciennet&eacute;e : TODO
 
 
 </body>
-</html>
 
 

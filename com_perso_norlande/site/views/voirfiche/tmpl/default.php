@@ -14,6 +14,8 @@ defined('_JEXEC') or die('Restricted access');
 
 $doc = JFactory::getDocument();
 
+$doc->addStyleSheet("components/com_perso_norlande/media/perso_norlande/css/fiche_perso.css",'text/css',"screen");
+
 
 $template = new Template('./');
 

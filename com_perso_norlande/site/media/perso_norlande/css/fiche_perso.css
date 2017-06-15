@@ -1,0 +1,23 @@
+.table_competences {
+	border: 1px solid black;
+	border-spacing: 0px;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.table_competences tr td {
+	border: 1px solid black;
+	padding: 2px;
+}
+		
+.table_competences tr th {
+	border: 1px solid black;
+	padding: 2px;
+	background-color: #595959;
+	color: #ffffff;
+}
+
+.table_competences tr .subHeader {
+  background-color: #7F7F7F;
+	color: #ffffff;
+}
