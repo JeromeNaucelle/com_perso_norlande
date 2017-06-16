@@ -555,6 +555,61 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->close();
 	}
 	
+	
+	public function updateAnciennete() {
+		error_log('test updateAnciennete');
+		$mainframe = JFactory::getApplication();
+		$jinput = $mainframe->input;
+		
+		$anciennete = $jinput->getInt('anciennete', -1);
+		$data = array("error"=>0, "msg"=>"");
+		error_log('test updateAnciennete');
+		
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
+		
+		if(!$edit_orga) {
+			$data["msg"] = "Vous ne disposez pas des droits nécessaires";
+			$data["error"] = 1;
+		}
+		
+		if($data["error"] === 0) {
+			$perso = $this->getCurrentPerso();
+			if($perso === NULL)
+			{
+				$data["msg"] = "Personnage non trouvé dans la session";
+				$data["error"] = 1;
+			}
+		}
+		
+		if($data["error"] === 0)
+		{
+			$data['anciennete'] = $perso->getAnciennete();
+			if($anciennete == -1) {
+				$data['error'] = 1;
+				$data['msg'] =  "La valeur entrée n'est pas un chiffre valide";
+			}
+		}
+		
+		if($data["error"] === 0)
+		{
+			$model = $this->getModel('detailsperso');
+			if($model->setAnciennete($anciennete, $perso) != 1) {
+				$data['error'] = 1;
+				$data['msg'] =  "Erreur lors du changement en BDD";
+			}
+		}
+		
+		if($data["error"] === 0)
+		{
+			$data['anciennete'] = $anciennete;
+			$data['msg'] =  "Données mises à jour";
+		}
+		
+		echo json_encode($data);
+		$mainframe->close();
+	}
+	
 	public function updateCristauxPerso() {		
 		$mainframe = JFactory::getApplication();
 		

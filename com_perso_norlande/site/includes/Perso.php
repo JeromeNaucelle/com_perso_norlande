@@ -15,6 +15,7 @@ class Perso {
 	private $competences;
 	private $armure;
 	private $monnaie;
+	private $anciennete;
 	
 	//
 	private $xp;
@@ -172,11 +173,16 @@ class Perso {
 		$perso->monnaie->piecesOr = $query_result['pieces_or'];
 		$perso->monnaie->piecesArgent = $query_result['pieces_argent'];
 		$perso->monnaie->piecesCuivre = $query_result['pieces_cuivre'];
+		$perso->anciennete = $query_result['anciennete'];
 		return $perso;
 	}
 	
 	public function getId(){
 		return $this->id;
+  }
+  
+	public function getAnciennete(){
+		return $this->anciennete;
   }
 
   public function getNom(){

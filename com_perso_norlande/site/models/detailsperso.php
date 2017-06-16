@@ -86,6 +86,22 @@ class Perso_NorlandeModelDetailsPerso extends JModelForm
 		return $db->execute();
 	}
 	
+	public function setAnciennete($anciennete, $perso) {
+		$db = JFactory::getDbo();
+ 
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		
+		$field = $db->quoteName('anciennete') . ' = ' . $anciennete;		
+		$conditions = $db->quoteName('id') . ' =  ' . $perso->getId();
+		$query->update($db->quoteName('persos'))->set($field)->where($conditions);
+		
+		// Reset the query using our newly populated query object.
+		$db->setQuery($query);
+		//TODO : mettre à jour le perso dans la session
+		return $db->execute();
+	}
+	
 	public function addEntrainement($perso, $competence_id) {
 		$db = JFactory::getDbo();
  

@@ -40,6 +40,27 @@ function updatePointsCreationPerso() {
  });
 }
 
+function updateAnciennete() {
+	var url = 'index.php?format=raw&option=com_perso_norlande&task=updateAnciennete';
+	$.ajax(
+ 	{
+     // Post select to url.
+     type : 'post',
+     url : url,
+     data: $('#formAnciennete').serialize(),
+    // contentType: "application/json",
+     dataType : 'json', // expected returned data format.
+     success : function(data)
+     {
+      	// Affichage d'un message d'info
+      	$( "#alert_msg" ).text( data['msg'] );
+      	$('#anciennete').val(data['anciennete']);
+      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+	      
+     }
+ });
+}
+
 function updateMonnaie() {
 	var url = 'index.php?format=raw&option=com_perso_norlande&task=updateMonnaie';
 	$.ajax(
