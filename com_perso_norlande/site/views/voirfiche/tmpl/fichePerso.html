@@ -9,9 +9,9 @@ Anciennet&eacute;e : TODO
 
 <table class="table_competences">
 <tr>
-	<th>Mana</th>
-	<th>Coups</th>
-	<th>Force Physiques</th>
+	<th class="propor15">Mana</th>
+	<th class="propor15">Coups</th>
+	<th class="propor15">Force Physiques</th>
 	<th colspan="3">Armure : {armure}</th>
 </tr>
 <tr>
@@ -33,20 +33,20 @@ Anciennet&eacute;e : TODO
 
 <table class="table_competences">
 <tr>
-	<td></td>
-	<th>Maitrise de BELLIGERANCE</th>
+	<td class="propor20"></td>
+	<th>Maitrises de BELLIGERANCE</th>
 </tr>
 <tr>
-	<th>RUDIMENTAIRE</th><td>{comp_belligerance_lvl1}</td>
+	<th class="propor25">RUDIMENTAIRE</th><td>{comp_belligerance_lvl1}</td>
 </tr>
 <tr>
-	<th>CERTAINE</th><td>{comp_belligerance_lvl2}</td>
+	<th class="propor25">CERTAINE</th><td>{comp_belligerance_lvl2}</td>
 </tr>
 <tr>
-	<th>RARE</th><td>{comp_belligerance_lvl3}</td>
+	<th class="propor25">RARE</th><td>{comp_belligerance_lvl3}</td>
 </tr>
 <tr>
-	<th>EXCEPTIONNELLE</th><td>{comp_belligerance_lvl4}</td>
+	<th class="propor25">EXCEPTIONNELLE</th><td>{comp_belligerance_lvl4}</td>
 </tr>
 </table>
 
@@ -54,8 +54,8 @@ Anciennet&eacute;e : TODO
 
 <table class="table_competences">
 <tr>
-	<td></td>
-	<th>Maitrise d'INTRIGUE</th>
+	<td class="propor20"></td>
+	<th>Maitrises d'INTRIGUE</th>
 </tr>
 <tr>
 	<th>RUDIMENTAIRE</th><td>{comp_intrigue_lvl1}</td>
@@ -74,8 +74,8 @@ Anciennet&eacute;e : TODO
 
 <table class="table_competences">
 <tr>
-	<td></td>
-	<th>Maitrise d'OCCULTISME</th>
+	<td class="propor20"></td>
+	<th>Maitrises d'OCCULTISME</th>
 </tr>
 <tr>
 	<th>RUDIMENTAIRE</th><td>{comp_occultisme_lvl1}</td>
@@ -94,8 +94,8 @@ Anciennet&eacute;e : TODO
 
 <table class="table_competences">
 <tr>
-	<td></td>
-	<th>Maitrise de SOCIETE</th>
+	<td class="propor20"></td>
+	<th>Maitrises de SOCIETE</th>
 </tr>
 <tr>
 	<th>RUDIMENTAIRE</th><td>{comp_societe_lvl1}</td>
@@ -244,9 +244,9 @@ Anciennet&eacute;e : TODO
 	<th colspan="3">PIEGES & TECHNIQUES</th>
 </tr>
 <tr>
-	<th class="subHeader">Nom / type /niveau</th>
-	<th class="subHeader">Co&ucirc;t</th>
-	<th class="subHeader">Effet</th>
+	<th class="subHeader propor33">Nom / type /niveau</th>
+	<th class="subHeader propor33">Co&ucirc;t</th>
+	<th class="subHeader propor33">Effet</th>
 </tr>
 <!-- BEGIN technique -->
 <tr>
@@ -264,9 +264,9 @@ Anciennet&eacute;e : TODO
 	<th colspan="3">CAPACITES OCCULTES</th>
 </tr>
 <tr>
-	<th class="subHeader">Nom / type /niveau</th>
-	<th class="subHeader">Co&ucirc;t</th>
-	<th class="subHeader">Effet</th>
+	<th class="subHeader propor33">Nom / type /niveau</th>
+	<th class="subHeader propor33">Co&ucirc;t</th>
+	<th class="subHeader propor33">Effet</th>
 </tr>
 <!-- BEGIN capa_occulte -->
 <tr>
@@ -275,68 +275,6 @@ Anciennet&eacute;e : TODO
 	<td>{capa_occulte.effet}</td>
 </tr>
 <!-- END capa_occulte -->
-</table>
-
-
-<br>
-
-<table class="table_competences" >
-<tr>
-	<th colspan="3">POUVOIRS MAGIQUES</th>
-</tr>
-<tr>
-	<th class="subHeader">Nom / type / mana</th>
-	<th class="subHeader">Formule</th>
-	<th class="subHeader">Effet</th>
-</tr>
-<!-- BEGIN pouvoir -->
-<tr>
-	<td>{pouvoir.nom}</td>
-	<td>{pouvoir.formule}</td>
-	<td>{pouvoir.effet}</td>
-</tr>
-<!-- END pouvoir -->
-</table>
-
-<br>
-
-<table class="table_competences" >
-<tr>
-	<th colspan="3">SORTILEGES</th>
-</tr>
-<tr>
-	<th class="subHeader">Nom</th>
-	<th class="subHeader">Formule</th>
-	<th class="subHeader">Effet</th>
-</tr>
-<!-- BEGIN sortilege -->
-<tr>
-	<td>{sortilege.nom}</td>
-	<td>{sortilege.formule}</td>
-	<td>{sortilege.effet}</td>
-</tr>
-<!-- END sortilege -->
-</table>
-
-<br>
-
-
-<table class="table_competences" >
-<tr>
-	<th colspan="3">SORTS DE MASSE<br>(réduit le mana à 0)</th>
-</tr>
-<tr>
-	<th class="subHeader">Nom</th>
-	<th class="subHeader">Formule</th>
-	<th class="subHeader">Effet</th>
-</tr>
-<!-- BEGIN sort_masse -->
-<tr>
-	<td>{sort_masse.nom}</td>
-	<td>{sort_masse.formule}</td>
-	<td>{sort_masse.effet}</td>
-</tr>
-<!-- END sort_masse -->
 </table>
 
 <br>
@@ -356,6 +294,69 @@ Anciennet&eacute;e : TODO
 </tr>
 <!-- END metamorphose -->
 </table>
+
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th colspan="3">POUVOIRS MAGIQUES</th>
+</tr>
+<tr>
+	<th class="subHeader propor40">Nom / type / mana</th>
+	<th class="subHeader propor20">Formule</th>
+	<th class="subHeader propor40">Effet</th>
+</tr>
+<!-- BEGIN pouvoir -->
+<tr>
+	<td>{pouvoir.nom}</td>
+	<td>{pouvoir.formule}</td>
+	<td>{pouvoir.effet}</td>
+</tr>
+<!-- END pouvoir -->
+</table>
+
+<br>
+
+<table class="table_competences" >
+<tr>
+	<th colspan="3">SORTILEGES</th>
+</tr>
+<tr>
+	<th class="subHeader propor40">Nom</th>
+	<th class="subHeader propor20">Formule</th>
+	<th class="subHeader propor40">Effet</th>
+</tr>
+<!-- BEGIN sortilege -->
+<tr>
+	<td>{sortilege.nom}</td>
+	<td>{sortilege.formule}</td>
+	<td>{sortilege.effet}</td>
+</tr>
+<!-- END sortilege -->
+</table>
+
+<br>
+
+
+<table class="table_competences" >
+<tr>
+	<th colspan="3">SORTS DE MASSE<br>(réduit le mana à 0)</th>
+</tr>
+<tr>
+	<th class="subHeader propor40">Nom</th>
+	<th class="subHeader propor20">Formule</th>
+	<th class="subHeader propor40">Effet</th>
+</tr>
+<!-- BEGIN sort_masse -->
+<tr>
+	<td>{sort_masse.nom}</td>
+	<td>{sort_masse.formule}</td>
+	<td>{sort_masse.effet}</td>
+</tr>
+<!-- END sort_masse -->
+</table>
+
 
 <p>
 <h3>Aides de jeu :</h3>

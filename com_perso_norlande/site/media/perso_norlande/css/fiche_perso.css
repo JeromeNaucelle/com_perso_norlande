@@ -17,6 +17,30 @@
 	color: #ffffff;
 }
 
+.propor15 {
+	width: 15%;
+}
+
+.propor20 {
+	width: 20%;
+}
+
+.propor30 {
+	width: 30%;
+}
+
+.propor40 {
+	width: 40%;
+}
+
+.propor33 {
+	width: 33.3%;
+}
+
+.propor50 {
+	width: 50%;
+}
+
 .table_competences tr .subHeader {
   background-color: #7F7F7F;
 	color: #ffffff;
