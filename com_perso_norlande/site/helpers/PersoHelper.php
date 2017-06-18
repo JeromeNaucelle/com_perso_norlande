@@ -118,6 +118,7 @@ class PersoHelper {
  		return $results['nom'];
 	}
 	
+	
 	public static function searchPersoByName($term) {
 		$db = JFactory::getDbo();
  
@@ -162,7 +163,7 @@ class PersoHelper {
 		
 		$query_competences = $db->getQuery(true);
 		$query_competences
-			->select('a.*')
+			->select('a.*, b.valide')
 			->from($db->quoteName('competences', 'a'))
 			->join('INNER', $db->quoteName('persos_competences', 'b') . ' ON (' . $db->quoteName('a.competence_id') . ' = ' . $db->quoteName('b.competence_id') . ')')
 			->where($db->quoteName('b.id_perso') . ' = ' . $results['id']);
@@ -224,8 +225,12 @@ class PersoHelper {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$date = JFactory::getDate()->format('Y-m-d');
-		$columns = array('id_perso', 'competence_id', 'date_acquisition', 'xp_used');
-		$values = array($perso->getId(), $competenceId, $db->quote($date), $db->quote($xpUsed));
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
+		$valide = $edit_orga ? 1 : 0;	
+		
+		$columns = array('id_perso', 'competence_id', 'date_acquisition', 'valide', 'xp_used');
+		$values = array($perso->getId(), $competenceId, $db->quote($date), $valide, $db->quote($xpUsed));
 		 
 		// Prepare the insert query.
 		$query

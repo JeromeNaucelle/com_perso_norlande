@@ -12,12 +12,16 @@ class Competence {
 	private $niveau;
 	//boolean
 	private $entraineur;
+	// 1 si l'orga a déjà validé la fiche ou
+	// a lui même ajouté cette compétence
+	private $valide;
 
    function __construct() {
    	$this->nom = "nom base";
    	$this->niveau = 1;
    	$this->parent_id = 0;
    	$this->entraineur = false;
+   	$this->valide = false;
    }
    
    public static function create($query_result)
@@ -30,6 +34,7 @@ class Competence {
    	$competence->parent_id = (int)$query_result['parent_id'];
    	$competence->niveau = (int)$query_result['niveau'];
    	$competence->entraineur = $query_result['entraineur'];
+   	$competence->valide = $query_result['valide'];
    	return $competence;
    }
 
@@ -59,6 +64,10 @@ class Competence {
 	
 	public function isEntraineur(){
 		return $this->entraineur;
+	}
+	
+	public function isAlredayValidated(){
+		return $this->valide;
 	}
 	
 	public function __toString() 

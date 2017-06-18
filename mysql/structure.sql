@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  db
--- Généré le :  Dim 11 Juin 2017 à 19:49
+-- Généré le :  Dim 18 Juin 2017 à 16:04
 -- Version du serveur :  5.7.14
 -- Version de PHP :  5.6.25
 
@@ -120,7 +120,9 @@ CREATE TABLE `persos` (
   `entrainements` text,
   `histoire` text NOT NULL,
   `armure` enum('Etoffe','Cuir','Maille','Plaque') NOT NULL DEFAULT 'Etoffe',
-  `derniere_session` int(11) DEFAULT NULL
+  `derniere_session` int(11) DEFAULT NULL,
+  `anciennete` int(11) NOT NULL DEFAULT '0',
+  `validation_user` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -134,7 +136,7 @@ CREATE TABLE `persos_competences` (
   `id_perso` int(11) NOT NULL,
   `competence_id` int(11) NOT NULL,
   `date_acquisition` date NOT NULL,
-  `valide` int(11) NOT NULL DEFAULT '1',
+  `valide` int(11) NOT NULL DEFAULT '0',
   `xp_used` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -197,7 +199,7 @@ ALTER TABLE `persos`
 -- AUTO_INCREMENT pour la table `persos_competences`
 --
 ALTER TABLE `persos_competences`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 --
 -- Contraintes pour les tables exportées
 --

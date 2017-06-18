@@ -239,7 +239,9 @@ class Perso_NorlandeController extends JControllerLegacy
 			$arbre = $model->getArbreMaitrisePhp($competence_id);
 			$competence = $arbre->getCompetence($competence_id);
 			
-			$result = $perso->canLearn($competence_id, $arbre);
+			// TODO voir si la vérification de orga/joueur ne pourrait pas se faire
+			// dans le controleur pour une meilleur homogénéité du code
+			$result = $perso->canLearn($competence_id, $arbre, $edit_orga);
 			error_log("dump : ".print_r($result,true));
 			
 			if($result["result"] === 1)
@@ -286,6 +288,11 @@ class Perso_NorlandeController extends JControllerLegacy
 	//TODO : check si elle n'a pas encore été validée
 	public function forgetCompetence() {
 		$perso = null;
+		$validation_user = true;
+		$validation_orga = true;	
+		$user = JFactory::getUser();
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');	
+		
 		$mainframe = JFactory::getApplication();
 		$data = array("error" => 0, "msg" => "");
 		
@@ -303,6 +310,28 @@ class Perso_NorlandeController extends JControllerLegacy
 			{
 				$data["error"] = 1;
 				$data["msg"] = "Personnage non trouvé dans la session";
+			}
+		}
+		
+		if($data["error"] === 0
+			&& !$edit_orga)
+		{
+			$validation_user = $perso->userHasValidate();
+			if($validation_user == true)
+			{
+				$data["error"] = 1;
+				$data["msg"] = "Vous avez déjà validé votre personnage, seul un orga peut encore le modifier";
+			}
+		}
+		
+		if($data["error"] === 0
+				&& !$edit_orga)
+		{
+			$validation_orga = $perso->isValidatedCompetence($competence_id);
+			if($validation_orga == true)
+			{
+				$data["error"] = 1;
+				$data["msg"] = "Cette compétence a été validée par un orga, seul un orga peut la modifier";
 			}
 		}
 		

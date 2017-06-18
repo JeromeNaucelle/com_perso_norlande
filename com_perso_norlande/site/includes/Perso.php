@@ -20,12 +20,14 @@ class Perso {
 	//
 	private $xp;
 	private $derniere_session;
+	private $validation_user;
 
     function __construct() {
     	$this->nom = "nom base";
     	$this->competences = array();
     	$this->monnaie = new Monnaie();
     	$this->xp = new ClasseXP();
+    	$this->validation_user = false;
     }
     
     private function checkCompetencesRequises($arbre, $competence_id)
@@ -48,6 +50,21 @@ class Perso {
     	return $competencesRequises;
     }
     
+    private function maxNouvelleCompetenceAtteint() {
+    	if($this->anciennete == 0) {
+    		return false;
+    	}
+    	
+    	$ret = false;
+    	foreach($this->competences as $competence) {
+    		if( $competence->isAlredayValidated() ) {
+    			$ret = true;
+    			break;
+    		}
+    	}
+    	return $ret;
+    }
+    
     /* Les différents cas :
     		- la compétence demandée peut être acquise (return 1)
     		- une autre branche est en cours d'apprentissage
@@ -55,8 +72,10 @@ class Perso {
     		- une ou plusieurs compétences doivent être acquises
     			avant la compétence demandée (return 2, pre-requis)
     		- compétence déjà acquise (return 3)
+    		- le personnage n'est pas nouveau et a déjà acquis une nouvelle
+    			compétence cette année (return 5, msg)
     */
-    public function canLearn($competence_id, $arbre)
+    public function canLearn($competence_id, $arbre, $editOrga)
     {
     	$result = array("result" => 3, "msg" =>"", "competences" => array());
     	if(isset($this->competences[$competence_id])) {
@@ -65,7 +84,14 @@ class Perso {
     		return $result;
     	}
     	
-    	error_log("can_develop(". $competence_id .")");
+    	if( !$editOrga 
+    			&& $this->maxNouvelleCompetenceAtteint()) {
+    		$result['result'] = 5;
+    		$result['msg'] = "Vous avez déjà développé une nouvelle compétence cette année.";
+    		return $result;
+    	}
+    	
+    	error_log("canLearn(". $competence_id .")");
     	// On récupère toutes les compétences acquises dans cette maitrise
     	$competenceFromMaitrise = array();
     	foreach($this->competences as $key => $competence) {
@@ -174,6 +200,7 @@ class Perso {
 		$perso->monnaie->piecesArgent = $query_result['pieces_argent'];
 		$perso->monnaie->piecesCuivre = $query_result['pieces_cuivre'];
 		$perso->anciennete = $query_result['anciennete'];
+		$perso->validation_user = $query_result['validation_user'];
 		return $perso;
 	}
 	
@@ -254,6 +281,14 @@ class Perso {
 			}
 		}
 		return true;
+	}
+	
+	public function isValidatedCompetence($competenceId) {
+		return $this->competences[$competenceId]->isAlredayValidated();
+	}
+	
+	public function userHasValidate() {
+		return $this->validation_user;
 	}
 	
 	public function getMonnaie() {
