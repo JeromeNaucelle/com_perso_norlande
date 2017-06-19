@@ -112,15 +112,21 @@ class Perso_NorlandeController extends JControllerLegacy
 		$jinput = $mainframe->input;
 		$armure = '';
 		
-		/*
-		ToDO : vérifier si l'utilisateur a encore le droit de modifier sa fiche
+		
+		//ToDO : vérifier si l'utilisateur a encore le droit de modifier sa fiche
 		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		
-		if(!$edit_orga) {
-			$data["msg"] = "Vous ne disposez pas des droits nécessaires";
-			$data["error"] = 1;
+		if($data["error"] === 0
+			&& !$edit_orga)
+		{
+			$validation_user = $perso->userHasValidate();
+			if($validation_user == true)
+			{
+				$data["error"] = 1;
+				$data["msg"] = "Vous avez déjà validé votre personnage, seul un orga peut encore le modifier";
+			}
 		}
-		*/
+		
 		
 		if($data["error"] == 0) {
 			$persoId = $session->get( 'perso_id', -1 );
@@ -232,7 +238,6 @@ class Perso_NorlandeController extends JControllerLegacy
 		$result = null;
 		if($error === 0)
 		{
-			error_log("test3");
 			$model = $this->getModel('creationperso');
 			
 			// TODO check l'existance de competence_id
@@ -242,11 +247,9 @@ class Perso_NorlandeController extends JControllerLegacy
 			// TODO voir si la vérification de orga/joueur ne pourrait pas se faire
 			// dans le controleur pour une meilleur homogénéité du code
 			$result = $perso->canLearn($competence_id, $arbre, $edit_orga);
-			error_log("dump : ".print_r($result,true));
 			
 			if($result["result"] === 1)
 			{
-				error_log("test4");
 				$data["result"] = 2;
 				$xpForCompetence = $perso->getXpForCompetence($competence_id, $arbre, $competence->getNiveau());
 				
@@ -264,12 +267,10 @@ class Perso_NorlandeController extends JControllerLegacy
 				
 			} else if($result["result"] === 2)
 			{
-				error_log("test5");
 				//pré-requis à vérifier
 				$data["result"] = -1;
 				$data["msg"] = "Il est nécessaire d'acquérir les compétences précédentes dans cette branche";
 			} else if($result["result"] === 3) {
-				error_log("test6");
 				// compétence déjà acquise, on la désapprend
 				$data["result"] = -1;
 				$data["msg"] = "La compétence est déjà acquise";
@@ -285,7 +286,6 @@ class Perso_NorlandeController extends JControllerLegacy
 	}
 	
 	
-	//TODO : check si elle n'a pas encore été validée
 	public function forgetCompetence() {
 		$perso = null;
 		$validation_user = true;
@@ -586,7 +586,6 @@ class Perso_NorlandeController extends JControllerLegacy
 	
 	
 	public function updateAnciennete() {
-		error_log('test updateAnciennete');
 		$mainframe = JFactory::getApplication();
 		$jinput = $mainframe->input;
 		
