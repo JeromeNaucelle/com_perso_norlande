@@ -266,14 +266,16 @@ if( $this->edit_orga ) {
 </form>
 
 
-<form>
+<form action="index.php?view=detailsperso&option=com_perso_norlande&task=updateHistoire" method="post">
 <fieldset>
   <legend align="left">Background</legend>
 <p><b>Histoire :</b></p>
-<textarea class="long_text" id="histoire" name="histoire"></textarea>
+<textarea class="long_text" id="histoire" name="histoire">
+<?php echo $this->perso->getHistoire(); ?>
+</textarea>
 <br>
 
-<input type="submit" name="button_submit" value="Valider" onclick="updateHistoires()"/>
+<input type="submit" name="button_submit" value="Valider"/>
 </fieldset>
 </form>
 

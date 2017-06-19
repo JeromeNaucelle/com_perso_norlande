@@ -41,7 +41,7 @@ $template = new Template('./');
 	$monnaie->add($this->synthese->getMonnaie());
 	$template->assign_vars(array(
 	 'lignee' => $this->perso->getLignee(),
-	 'nom_perso' => $this->perso->getNom(),
+	 'nom_perso' => htmlentities($this->perso->getNom()),
     'mana' => $this->synthese->getMana(),
     'coups' => $this->synthese->getCoups($armure),
     'force_physique' => $this->synthese->getForcePhysique(),
@@ -52,7 +52,8 @@ $template = new Template('./');
     'resiste' => $this->synthese->getResiste($armure),
     'immunite' => $this->synthese->getImmunite($armure),
     'armure' => $armure,
-    'monnaie' => $monnaie->getFormatedText()
+    'monnaie' => $monnaie->getFormatedText(),
+    'histoire' => htmlentities($this->perso->getHistoire())
   		));
   		
   		

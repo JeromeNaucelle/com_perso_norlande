@@ -188,10 +188,10 @@ class PersoHelper {
 		$db->execute();
 	}
 	
-	private static function updateChoixPerso($persoId, $histoire, $armure) {
+	public static function updateHistoire($persoId, $histoire) {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$field = $db->quoteName('entrainements') . ' = ' . $db->quote(json_encode($entrainements));
+		$field = $db->quoteName('histoire') . ' = ' . $db->quote($histoire);
 		
 		$conditions = $db->quoteName('id') . ' =  ' . $persoId;
 		$query->update($db->quoteName('persos'))->set($field)->where($conditions);

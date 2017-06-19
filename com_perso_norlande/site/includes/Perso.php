@@ -16,6 +16,7 @@ class Perso {
 	private $armure;
 	private $monnaie;
 	private $anciennete;
+	private $histoire;
 	
 	//
 	private $xp;
@@ -196,6 +197,7 @@ class Perso {
 		}
 		
 		$perso->armure = $query_result['armure'];
+		$perso->histoire = $query_result['histoire'];
 		$perso->monnaie->piecesOr = $query_result['pieces_or'];
 		$perso->monnaie->piecesArgent = $query_result['pieces_argent'];
 		$perso->monnaie->piecesCuivre = $query_result['pieces_cuivre'];
@@ -218,6 +220,10 @@ class Perso {
   
   public function getLignee(){
 		return $this->lignee;
+  }
+  
+  public function getHistoire(){
+		return $this->histoire;
   }
   
   public function getCompetences()
