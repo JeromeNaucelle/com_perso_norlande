@@ -199,6 +199,17 @@ class PersoHelper {
 		$db->execute();
 	}
 	
+	public static function validationUser($persoId) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$field = $db->quoteName('validation_user') . ' = 1';
+		
+		$conditions = $db->quoteName('id') . ' =  ' . $persoId;
+		$query->update($db->quoteName('persos'))->set($field)->where($conditions);
+		$db->setQuery($query);
+		$db->execute();
+	}
+	
 	public static function updateArmure($persoId, $armure) {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);

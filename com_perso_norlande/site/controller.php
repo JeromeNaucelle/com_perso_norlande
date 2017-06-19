@@ -786,7 +786,6 @@ class Perso_NorlandeController extends JControllerLegacy
 		$session = JFactory::getSession();
 		$user = JFactory::getUser();
 		$jinput = $mainframe->input;
-		$armure = '';
 		
 		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		
@@ -814,6 +813,29 @@ class Perso_NorlandeController extends JControllerLegacy
 		if($data["error"] == 0) {
 			$histoire = $jinput->get('histoire', '', 'STR');
 			PersoHelper::updateHistoire($persoId, $histoire);
+		}
+		
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+	}
+	
+	public function validationUser() {
+		$data = array("error"=>0, "msg"=>"");
+		$mainframe = JFactory::getApplication();
+		$session = JFactory::getSession();
+		$user = JFactory::getUser();
+		
+		
+		if($data["error"] == 0) {
+			$persoId = $session->get( 'perso_id', -1 );
+			
+			if($persoId == -1) {
+				$data["msg"] = "Personnage non trouvé dans la session";
+				$data["error"] = 1;
+			}
+		}
+		
+		if($data["error"] == 0) {
+			PersoHelper::validationUser($persoId);
 		}
 		
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
