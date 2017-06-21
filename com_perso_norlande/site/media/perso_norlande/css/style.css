@@ -129,5 +129,15 @@ label
 	width: 90%;
 	height: 10em;
 }	
+
+.center_wraper {
+	text-align: center;
+}
+
+#buttonFiche {
+	width: 50%;
+	margin:auto;
+	display:block;
+}
 	
 

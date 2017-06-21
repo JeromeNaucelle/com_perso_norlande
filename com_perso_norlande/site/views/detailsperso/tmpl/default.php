@@ -43,7 +43,18 @@ if( $this->edit_orga ){
 	$disabled = 'disabled';
 }
 
+
 if($this->perso !=NULL) { 
+
+	if( $this->perso->userHasValidate() 
+			&& !$this->edit_orga){
+		$user_validation_disabled = 'disabled';
+		$user_validation_display = 'style="display:none;"';
+	} else {
+		$user_validation_disabled = '';
+		$user_validation_display = '';
+	}
+
 	include 'desc_perso.php';
 }
 

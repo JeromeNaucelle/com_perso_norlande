@@ -88,7 +88,7 @@ if( $this->edit_orga ) {
 <fieldset>
   <legend align="left">Armure</legend>
   <label for="armure">Choix de l'armure :</label>
-<select id="armure" name="armure" onchange="updateArmure()">
+<select id="armure" name="armure" onchange="updateArmure()" <?php echo $user_validation_disabled; ?> >
 <?php foreach ($this->enumArmure as $field): ?> 
 	<?php $armureSelected = ($this->perso->getArmure() == $field ? ' selected': ''); ?> 
 	<?php echo "<option value=\"$field\"$armureSelected> $field</option>"; ?>
@@ -103,25 +103,28 @@ if( $this->edit_orga ) {
 <fieldset>
   <legend align="left">Background</legend>
 <p><b>Histoire :</b></p>
-<textarea class="long_text" id="histoire" name="histoire">
+<textarea class="long_text" id="histoire" name="histoire" <?php echo $user_validation_disabled; ?>>
 <?php echo $this->perso->getHistoire(); ?>
 </textarea>
 <br>
 
-<input type="submit" name="button_submit" value="Valider"/>
+<input type="submit" name="button_submit" value="Valider" <?php $user_validation_disabled; ?>/>
 </fieldset>
 </form>
 
 
 
 <fieldset>
-  <legend align="left">Finalisations</legend>
+  <legend align="left">Visualisation</legend>
   
   <p style="color: red;">(Attention : après validation seul un orga pourra modifier votre fiche !)</p>
-<input type="button" value="Voir la fiche" onclick="javascript:open_infos();"/>
+  
+	<div class="center_wrapper">
+		<input type="button" value="Voir la fiche" onclick="javascript:open_infos();" id="buttonFiche"/>
+	</div>
 
 <form action="index.php?view=detailsperso&option=com_perso_norlande&task=validationUser" method="post">
-	<input type="submit" value="Valider le personnage"/>
+	<input type="submit" value="Valider le personnage" <?php echo $user_validation_display; ?>/>
 </form>
 </fieldset>
 
