@@ -153,3 +153,8 @@ function open_infos()
 {
 	window.open('index.php?option=com_perso_norlande&view=voirfiche&tmpl=component','Fiche Perso','menubar=no, scrollbars=yes, top=100, left=100, width=800, height=600');
 }
+
+function download_fiche()
+{
+	window.open('index.php?option=com_perso_norlande&view=voirfiche&layout=exportodt','Fiche Perso','menubar=no, scrollbars=yes, top=100, left=100, width=800, height=600');
+}

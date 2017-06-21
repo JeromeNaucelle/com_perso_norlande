@@ -121,6 +121,7 @@ if( $this->edit_orga ) {
   
 	<div class="center_wrapper">
 		<input type="button" value="Voir la fiche" onclick="javascript:open_infos();" id="buttonFiche"/>
+		<input type="button" value="Télécharger la fiche" onclick="javascript:download_fiche();" id="buttonFiche"/>
 	</div>
 
 <form action="index.php?view=detailsperso&option=com_perso_norlande&task=validationUser" method="post">
