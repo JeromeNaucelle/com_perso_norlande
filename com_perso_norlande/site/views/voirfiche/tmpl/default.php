@@ -57,8 +57,8 @@ $template = new Template('./');
   		));
   		
   		
-  	$pieges = $this->synthese->getPieges();
-  	foreach($pieges as $piege) {
+  	$piegeEtTechniques = $this->synthese->getPiegesEtTechniques();
+  	foreach($piegeEtTechniques as $piege) {
   		
 	  	$template->assign_block_vars('technique', array(
 	    'nom' => $piege->nom,
@@ -92,16 +92,6 @@ $template = new Template('./');
 	  		));
   	}
   	
-  	$techniques = $this->synthese->getTechniques();
-  	foreach($techniques as $technique) {
-  		
-	  	$template->assign_block_vars('technique', array(
-	    'nom' => $technique->nom,
-	    'cout' => $technique->cout,
-	    'effet' => $technique->effet
-	  		));
-  	}
-  	
   	$sortileges = $this->synthese->getSortileges();
   	foreach($sortileges as $sortilege) {
   		
@@ -122,16 +112,6 @@ $template = new Template('./');
 	  		));
   	}
   	
-  	$invocations = $this->synthese->getInvocations();
-  	foreach($invocations as $invocation) {
-  		
-	  	$template->assign_block_vars('capa_occulte', array(
-	    'nom' => $invocation->nom,
-	    'cout' => $invocation->cout,
-	    'effet' => $invocation->effet
-	  		));
-  	}
-  	
   	$possessions = $this->synthese->getPossessionsDepart();
   	foreach($possessions as $possession) {
   		
@@ -140,8 +120,8 @@ $template = new Template('./');
 	  		));
   	}
   	
-  	$breuvages = $this->synthese->getBreuvages();
-  	foreach($breuvages as $breuvage) {
+  	$breuvagesEtInvocations = $this->synthese->getBreuvagesEtInvocations();
+  	foreach($breuvagesEtInvocations as $breuvage) {
   		
 	  	$template->assign_block_vars('capa_occulte', array(
 	    'nom' => $breuvage->nom,

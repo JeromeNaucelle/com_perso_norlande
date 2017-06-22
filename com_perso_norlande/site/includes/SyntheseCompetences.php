@@ -453,25 +453,41 @@ class SyntheseCompetences {
 		return $this->rumeurs;
 	}
 	
-	public function getPieges(){
+	private function getPieges(){
 		if(count($this->pieges) == 0) {
 			return array(DefinitionPiege::defaultValue());
 		}
 		return $this->pieges;
 	}
 	
-	public function getTechniques(){
+	public function getPiegesEtTechniques() {
+		$piegeEtTechniques = array_merge($this->pieges, $this->techniques);
+		if(count($piegeEtTechniques) == 0) {
+			return array(DefinitionPiege::defaultValue());
+		}
+		return $piegeEtTechniques;
+	}
+	
+	private function getTechniques(){
 		if(count($this->techniques) == 0) {
 			return array(DefinitionTechnique::defaultValue());
 		}
 		return $this->techniques;
 	}
 	
-	public function getBreuvages(){
+	private function getBreuvages(){
 		if(count($this->breuvages) == 0) {
 			return array(DefinitionBreuvage::defaultValue());
 		}
 		return $this->breuvages;
+	}
+	
+	public function getBreuvagesEtInvocations() {
+		$breuvagesEtInvocations = array_merge($this->breuvages, $this->invocations);
+		if(count($breuvagesEtInvocations) == 0) {
+			return array(DefinitionBreuvage::defaultValue());
+		}
+		return $breuvagesEtInvocations;
 	}
 	
 	public function getPouvoirsMagiques(){
@@ -481,7 +497,7 @@ class SyntheseCompetences {
 		return $this->pouvoirs_magiques;
 	}
 	
-	public function getInvocations(){
+	private function getInvocations(){
 		if(count($this->invocations) == 0) {
 			return array(DefinitionInvocation::defaultValue());
 		}
