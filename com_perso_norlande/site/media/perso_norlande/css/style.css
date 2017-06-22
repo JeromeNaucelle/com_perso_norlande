@@ -140,4 +140,11 @@ label
 	display:block;
 }
 	
+#nomPerso {
+	display: inline-block;
+	margin: 0px 20px 0px 0px;
+}
 
+#lignee {
+	margin: 0px 0px 20px 0px;
+}

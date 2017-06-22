@@ -1,6 +1,8 @@
 <br>
-<h3>Personnage : <?php echo htmlentities($this->perso->getNom().' ('.$this->perso->getLignee().')'); ?></h3>
+<h3 id="nomPerso">Personnage : <?php echo htmlentities($this->perso->getNom()); ?></h3>
+<input style="display: inline-block;" type="button" value="Valider le personnage" onclick="javascript:validationPersoUser();" <?php echo $user_validation_display; ?>/>
 
+<h3 id="lignee"><?php echo '('.$this->perso->getLignee().')'; ?></h3>
 
 <?php if( $this->edit_orga ){ 
 
@@ -124,9 +126,6 @@ if( $this->edit_orga ) {
 		<input type="button" value="Télécharger la fiche" onclick="javascript:download_fiche();" id="buttonFiche"/>
 	</div>
 
-<form>
-	<input type="button" value="Valider le personnage" onclick="javascript:validationPersoUser();" <?php echo $user_validation_display; ?>/>
-</form>
 </fieldset>
 
 
