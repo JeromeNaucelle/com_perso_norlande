@@ -124,8 +124,8 @@ if( $this->edit_orga ) {
 		<input type="button" value="Télécharger la fiche" onclick="javascript:download_fiche();" id="buttonFiche"/>
 	</div>
 
-<form action="index.php?view=detailsperso&option=com_perso_norlande&task=validationUser" method="post">
-	<input type="submit" value="Valider le personnage" <?php echo $user_validation_display; ?>/>
+<form>
+	<input type="button" value="Valider le personnage" onclick="javascript:validationPersoUser();" <?php echo $user_validation_display; ?>/>
 </form>
 </fieldset>
 

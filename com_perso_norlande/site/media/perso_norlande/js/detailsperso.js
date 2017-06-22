@@ -149,6 +149,36 @@ function deleteEntrainement(competence_id){
 }); 
 
 
+function validationPersoUser(){
+	$("#question_msg").text("Attention : après validation seul un orga pourra modifier votre fiche ! Voulez-vous vraiment valider ?");
+	var tmp = $('#question_ok').attr('value');	
+		
+	$('#question_ok').attr('value',"Oui");	
+	$('#question_cancel').click(function() { 
+			$.unblockUI();
+			$('#question_ok').attr('value',tmp);
+				
+			});
+	$('#question_ok').click(function() { 
+			document.location.href = "index.php?option=com_perso_norlande&task=validationUser";
+			$('#question_ok').attr('value',tmp);
+			
+			});
+	$.blockUI({ message: $('#question'), css: { width: '275px' } }); 
+	
+}
+
+
+ $(document).ready(function() {
+ 
+  $('#alert_ok').click(function() { 
+      $.unblockUI(); 
+      return false; 
+  }); 
+ 
+}); 
+
+
 function open_infos()
 {
 	window.open('index.php?option=com_perso_norlande&view=voirfiche&tmpl=component','Fiche Perso','menubar=no, scrollbars=yes, top=100, left=100, width=800, height=600');
