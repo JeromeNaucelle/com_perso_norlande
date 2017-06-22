@@ -835,7 +835,15 @@ class Perso_NorlandeController extends JControllerLegacy
 		}
 		
 		if($data["error"] == 0) {
+			$perso = $this->getCurrentPerso();
+			$lignee = $perso->getLignee();
 			PersoHelper::validationUser($persoId);
+			$mailOrga = Lignees::getOrgaMail();
+			
+			$subject = "Validation d'un personnage de votre lignée";
+			$nomPerso = $perso->getNom();
+			$msg = "Le personnage \"$nomPerso\" de la lignée \"$lignee\" a été validé.";
+			$this->sendEmail($mailOrga, $subject, $msg);
 		}
 		
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
@@ -1005,4 +1013,23 @@ class Perso_NorlandeController extends JControllerLegacy
 
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}	
+	
+	
+	private function sendEmail($dest, $subject, $msg) {
+		$mailer = JFactory::getMailer();
+		$config = JFactory::getConfig();
+		$sender = array(
+			$config->get('mailfrom'),
+			$config->get('fromname')
+		);
+		
+		$mailer->setSender($sender);
+		$mailer->addRecipient($dest);
+		$mailer->setBody($msg);
+		$mailer->setSubject($subject);
+		$send = $mailer->Send();
+		if($sent !== true) {
+			error_log("Error when sending email to ".$dest);
+		}
+	}
 }
