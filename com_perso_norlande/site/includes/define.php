@@ -1,6 +1,6 @@
 <?php
 
-include(JPATH_COMPONENT . '/includes/config.php';);
+include(JPATH_COMPONENT . '/includes/config.php');
 
 defined('_JEXEC') or die;
 
@@ -68,6 +68,7 @@ class Lignees {
 				break;
 				
 		return $mail;
+		}
 	}
 	
 }
