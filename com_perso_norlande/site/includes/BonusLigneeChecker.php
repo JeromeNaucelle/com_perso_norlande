@@ -12,16 +12,16 @@ class BonusLigneeChecker {
 	public function __construct()
 	{
 		$this->bonusOccultisme = array("Loups Noirs", "Corbeaux de Tempête",
-			"Ours du Couchant","Dragons de l'Onde");
+			"Ours du Couchant","Dragons de l'Onde", "Ecclesia");
 			
 		$this->bonusIntrigue = array("Loups Noirs", "Corbeaux de Tempête",
-			"Serpents de Sinople","Junte de Sankta", "Lionnes d'Airin");
+			"Serpents de Sinople","Junte de Sankta", "Lionnes d'Airin", "Terres Boriennes");
 			
 		$this->bonusSociete = array("Chiens du Lac","Serpents de Sinople",
-			"Junte de Sankta","Capitannerie de Boulonnie");
+			"Junte de Sankta","Capitannerie de Boulonnie", "Ecclesia");
 		
 		$this->bonusBelligerance = array("Chiens du Lac", "Capitannerie de Boulonnie",
-			"Ours du Couchant", "Lionnes d'Airin", "Dragons de l'Onde");
+			"Ours du Couchant", "Lionnes d'Airin", "Dragons de l'Onde", "Terres Boriennes");
 		
 	}
 	
