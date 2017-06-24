@@ -34,7 +34,12 @@ class Competence {
    	$competence->parent_id = (int)$query_result['parent_id'];
    	$competence->niveau = (int)$query_result['niveau'];
    	$competence->entraineur = $query_result['entraineur'];
-   	$competence->valide = $query_result['valide'];
+   	
+   	// le champs "valide" n'existe que lorsqu'une compétence
+   	// est associé à un personnage. (il vien de la table `perso_user`
+   	if( isset($query_result['valide']) ) {
+   		$competence->valide = $query_result['valide'];
+   	}
    	return $competence;
    }
 

@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors',1);
+error_reporting(E_ALL);
+
 /**
  * @package     Joomla.Administrator
  * @subpackage  com_helloworld
@@ -68,32 +71,40 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 
 	public function getArbreMaitrise($competence_id)
 	{
+		//error_log("getArbreMaitrise 1");
 		$return = array();
 		
-		$db = JFactory::getDbo();
- 
-		// Create a new query object.
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('a.competence_id','a.competence_nom', 'a.parent_id')));
-		$query->from($db->quoteName('competences', 'a'));
-		$query->join('INNER', $db->quoteName('competences', 'b') . ' ON (' . $db->quoteName('a.maitrise') . ' = ' . $db->quoteName('b.competence_nom') . ')');
-		$query->where($db->quoteName('b.competence_id') . ' = ' . $competence_id);
-		JLog::add(JText::_($query), JLog::WARNING, 'jerror');
-		 
-		// Reset the query using our newly populated query object.
-		$db->setQuery($query);
-		$results = $db->loadAssocList();
-		
-		
-		for($i=0; $i<count($results); $i++)
-		{
-			$parent = '';
-			$maitrise = $results[$i];
-			if($maitrise['parent_id'] != 0){
-				$parent = $maitrise['parent_id'];
+		try {
+			$db = JFactory::getDbo();
+	 
+			// Create a new query object.
+			$query = $db->getQuery(true);
+			$query->select($db->quoteName(array('a.competence_id','a.competence_nom', 'a.parent_id')));
+			$query->from($db->quoteName('competences', 'a'));
+			$query->join('INNER', $db->quoteName('competences', 'b') . ' ON (' . $db->quoteName('a.maitrise') . ' = ' . $db->quoteName('b.competence_nom') . ')');
+			$query->where($db->quoteName('b.competence_id') . ' = ' . $competence_id);
+			
+			//error_log("getArbreMaitrise 3 : $query");
+			 
+			// Reset the query using our newly populated query object.
+			$db->setQuery($query);
+			$results = $db->loadAssocList();
+			//error_log("getArbreMaitrise 4");
+			
+			
+			for($i=0; $i<count($results); $i++)
+			{
+				$parent = '';
+				$maitrise = $results[$i];
+				if($maitrise['parent_id'] != 0){
+					$parent = $maitrise['parent_id'];
+				}
+				$return[] = array(array('v' => $maitrise['competence_id'],'f'=>'<h1>'.htmlentities($maitrise['competence_nom']).'</h1>'), $parent);
 			}
-			$return[] = array(array('v' => $maitrise['competence_id'],'f'=>'<h1>'.htmlentities($maitrise['competence_nom']).'</h1>'), $parent);
+		} catch(Exception $e) {
+			error_log("getArbreMaitrise exception : $e");
 		}
+		error_log("getArbreMaitrise 5 : ok");
 		
 		return $return;
 	}
@@ -102,20 +113,40 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 	public function getArbreMaitrisePhp($competence_id)
 	{
 		$return = array();
+		$arbre = null;
 		
 		$db = JFactory::getDbo();
+		
+		// Hack Mysql 5.6 pour récupérer toutes 
+		// les colonne de la table compétence
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('COLUMN_NAME'));
+		$query->from($db->quoteName('INFORMATION_SCHEMA').'.'.$db->quoteName('COLUMNS'));
+		$query->where($db->quoteName('TABLE_NAME') . ' = ' . $db->quote('competences'));
+		
+		$db->setQuery($query);
+		$columns_competences = $db->loadColumn();
+		for($i = 0; $i < count($columns_competences); $i+=1) {
+			$column = $columns_competences[$i];
+			$columns_competences[$i] = $db->quoteName('a').'.'.$db->quoteName($column);
+		}
  
 		// Create a new query object.
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName('a.*'));
+		$query->select($columns_competences);
 		$query->from($db->quoteName('competences', 'a'));
 		$query->join('INNER', $db->quoteName('competences', 'b') . ' ON (' . $db->quoteName('a.maitrise') . ' = ' . $db->quoteName('b.maitrise') . ')');
 		$query->where($db->quoteName('b.competence_id') . ' = ' . $competence_id);
 		 
 		// Reset the query using our newly populated query object.
+		
+		try {
 		$db->setQuery($query);
 		$results = $db->loadAssocList();
 		$arbre = new ArbreMaitrise($results);
+		} catch(Exception $e) {
+			error_log("getArbreMaitrisePhp catch $e");
+		}
 		
 		return $arbre;
 	}

@@ -223,11 +223,11 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		if($error === 0)
 		{
-			error_log("test1");
+			// error_log("userSelect 1");
 			$perso = $this->getCurrentPerso();
 			if($perso == NULL)
 			{
-				error_log("test2");
+				error_log("userSelect : Personnage non trouvé dans la session");
 				$data["result"] = -1;
 				$data["msg"] = "Personnage non trouvé dans la session";
 				$error = 1;
@@ -236,18 +236,20 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		$model = null;
 		$result = null;
+		// error_log("userSelect 2");
 		if($error === 0)
 		{
 			$model = $this->getModel('creationperso');
 			
 			// TODO check l'existance de competence_id
+			// error_log("userSelect 3");
 			$arbre = $model->getArbreMaitrisePhp($competence_id);
 			$competence = $arbre->getCompetence($competence_id);
-			
+			error_log("userSelect 4");
 			// TODO voir si la vérification de orga/joueur ne pourrait pas se faire
 			// dans le controleur pour une meilleur homogénéité du code
 			$result = $perso->canLearn($competence_id, $arbre, $edit_orga);
-			
+			// error_log("userSelect 5");
 			if($result["result"] === 1)
 			{
 				$data["result"] = 2;
@@ -255,6 +257,7 @@ class Perso_NorlandeController extends JControllerLegacy
 				
 				if( $this->enoughXp($xpForCompetence, $competence->getNiveau()) 
 						|| $edit_orga) {
+							error_log("userSelect 6");
 					$data["xp"] = $xpForCompetence;
 					$data["niveauCompetence"] = $competence->getNiveau();
 					
@@ -271,6 +274,8 @@ class Perso_NorlandeController extends JControllerLegacy
 				$data["result"] = -1;
 				$data["msg"] = "Il est nécessaire d'acquérir les compétences précédentes dans cette branche";
 			} else if($result["result"] === 3) {
+				error_log("userSelect : La compétence est déjà acquise");
+				
 				// compétence déjà acquise, on la désapprend
 				$data["result"] = -1;
 				$data["msg"] = "La compétence est déjà acquise";
@@ -281,6 +286,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			}
 		}
 
+		//error_log("userSelect fin");
 		echo QuestionDepenseHelper::getQuestionDepenseXp($data);
 		$mainframe->close();
 	}
