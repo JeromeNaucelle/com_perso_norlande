@@ -221,6 +221,17 @@ class PersoHelper {
 		$db->execute();
 	}
 	
+	public static function updateReliquat($persoId, $reliquat) {
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$field = $db->quoteName('reliquat') . ' = ' . $db->quote($reliquat);
+		
+		$conditions = $db->quoteName('id') . ' =  ' . $persoId;
+		$query->update($db->quoteName('persos'))->set($field)->where($conditions);
+		$db->setQuery($query);
+		$db->execute();
+	}
+	
 	private static function updatePointsCreation($persoId, $newPcVal) {
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);

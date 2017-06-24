@@ -818,6 +818,41 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}
 	
+	public function updateReliquat() {
+		$data = array("error"=>0, "msg"=>"");
+		$mainframe = JFactory::getApplication();
+		$session = JFactory::getSession();
+		$user = JFactory::getUser();
+		$jinput = $mainframe->input;
+		
+		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
+		
+		if(!$edit_orga)
+		{
+			$data["error"] = 1;
+			$data["msg"] = "Vous n'avez pas les droits nécessaire pour modifier cette donnée.";
+		}
+		
+		
+		if($data["error"] == 0) {
+			$persoId = $session->get( 'perso_id', -1 );
+			
+			if($persoId == -1) {
+				$data["msg"] = "Personnage non trouvé dans la session";
+				$data["error"] = 1;
+			}
+		}
+		
+		if($data["error"] == 0) {
+			$reliquat = $jinput->get('reliquat', '', 'STR');
+			PersoHelper::updateReliquat($persoId, $reliquat);
+		} else {
+			error_log($data["msg"]);
+		}
+		
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+	}
+	
 	public function validationUser() {
 		$data = array("error"=>0, "msg"=>"");
 		$mainframe = JFactory::getApplication();

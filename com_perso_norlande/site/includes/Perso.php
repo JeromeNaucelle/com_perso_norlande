@@ -17,6 +17,7 @@ class Perso {
 	private $monnaie;
 	private $anciennete;
 	private $histoire;
+	private $reliquat;
 	
 	//
 	private $xp;
@@ -29,6 +30,8 @@ class Perso {
     	$this->monnaie = new Monnaie();
     	$this->xp = new ClasseXP();
     	$this->validation_user = false;
+    	$this->histoire = "";
+    	$this->reliquat = "";
     }
     
     private function checkCompetencesRequises($arbre, $competence_id)
@@ -198,6 +201,7 @@ class Perso {
 		
 		$perso->armure = $query_result['armure'];
 		$perso->histoire = $query_result['histoire'];
+		$perso->reliquat = $query_result['reliquat'];
 		$perso->monnaie->piecesOr = $query_result['pieces_or'];
 		$perso->monnaie->piecesArgent = $query_result['pieces_argent'];
 		$perso->monnaie->piecesCuivre = $query_result['pieces_cuivre'];
@@ -224,6 +228,10 @@ class Perso {
   
   public function getHistoire(){
 		return $this->histoire;
+  }
+  
+	public function getReliquat(){
+		return $this->reliquat;
   }
   
   public function getCompetences()

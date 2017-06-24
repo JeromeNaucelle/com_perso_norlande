@@ -106,11 +106,24 @@ if( $this->edit_orga ) {
   <legend align="left">Background</legend>
 <p><b>Histoire :</b></p>
 <textarea class="long_text" id="histoire" name="histoire" <?php echo $user_validation_disabled; ?>>
-<?php echo $this->perso->getHistoire(); ?>
+<?php echo htmlentities($this->perso->getHistoire()); ?>
 </textarea>
 <br>
 
 <input type="submit" name="button_submit" value="Valider" <?php $user_validation_disabled; ?>/>
+</fieldset>
+</form>
+
+<form action="index.php?view=detailsperso&option=com_perso_norlande&task=updateReliquat" method="post">
+<fieldset>
+  <legend align="left">Reliquat des années précédentes</legend>
+
+<textarea class="long_text" id="reliquat" name="reliquat" <?php echo $disabled; ?>>
+<?php echo htmlentities($this->perso->getReliquat()); ?>
+</textarea>
+<br>
+
+<input type="submit" name="button_submit" value="Valider"  <?php echo $display;?>/>
 </fieldset>
 </form>
 
