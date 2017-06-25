@@ -4,6 +4,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 require_once JPATH_COMPONENT . '/includes/Perso.php';
+require_once JPATH_COMPONENT . '/helpers/CommonHelper.php';
 
 
 class PersoHelper {
@@ -161,25 +162,13 @@ class PersoHelper {
 		$results = $db->loadAssoc();
 		//print_r("function getPerso() : ".var_dump($results));
 		
-		// Hack Mysql 5.6 pour récupérer toutes 
-		// les colonne de la table compétence
-		$query_col = $db->getQuery(true);
-		$query_col->select($db->quoteName('COLUMN_NAME'));
-		$query_col->from($db->quoteName('INFORMATION_SCHEMA').'.'.$db->quoteName('COLUMNS'));
-		$query_col->where($db->quoteName('TABLE_NAME') . ' = ' . $db->quote('competences'));
-		
-		$db->setQuery($query_col);
-		$columns_competences = $db->loadColumn();
-		for($i = 0; $i < count($columns_competences); $i+=1) {
-			$column = $columns_competences[$i];
-			$columns_competences[$i] = $db->quoteName('a').'.'.$db->quoteName($column);
-		}
-		$columns_competences[] = $db->quoteName('b').'.'.$db->quoteName('valide');
-		
+		// Ici on a besoin de savoir si l'utilisateur a validé cette compétence
+		// on ajoute donc la colonne provenant de la table `persos_competences`
+		// b.valide
 		
 		$query_competences = $db->getQuery(true);
 		$query_competences
-			->select($columns_competences)
+			->select('a.*, b.valide')
 			->from($db->quoteName('competences', 'a'))
 			->join('INNER', $db->quoteName('persos_competences', 'b') . ' ON (' . $db->quoteName('a.competence_id') . ' = ' . $db->quoteName('b.competence_id') . ')')
 			->where($db->quoteName('b.id_perso') . ' = ' . $results['id']);

@@ -202,7 +202,7 @@ class SyntheseCompetences {
 	"bonus_mana" => "Bonus de mana",
 	"globes_sortilege" => "Globes de sortilège",
 	"bonus_coups" => "Bonus coups",
-	"bonus_coups_etoffe" => "Bonus coups (étoffe)",
+	"bonus_coup_etoffe" => "Bonus coups (étoffe)",
 	"esquive_etoffe" => "Esquive (étoffe)",
 	"resiste_etoffe" => "Résiste (étoffe)",
 	"esquive_cuir" => "Esquive (cuir)",
@@ -346,7 +346,18 @@ class SyntheseCompetences {
 		$db->setQuery($query_competences);
 		$result_competences = $db->loadAssocList();
 		
+		//SyntheseLieuxPouvoir::deleteUnusedColumns($result_competences);
+		$unused = array("competence_id" => 0, "famille" => 0, "maitrise" =>0, 
+		"competence_nom"=>0,	"niveau"=>0, "parent_id"=>0, "entraineur"=>0);
+		
 		foreach($result_competences as $array) {
+			
+			$array = array_diff_key($array, $unused);
+			/*
+	   	foreach($unused as $key) {
+	   		unset($array[$key]);	
+	   	}*/
+   	
 			foreach($array as $key => $value) {
 				if($value == "") {
 					continue;

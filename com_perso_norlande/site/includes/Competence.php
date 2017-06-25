@@ -109,7 +109,7 @@ class CompetenceFamille {
 	}
 	
 	public function getNiveauMax() {
-		for($i = 5; $i >= 0; $i -= 1) {
+		for($i = 5; $i > 0; $i -= 1) {
 			if(count($this->compByLevel[$i]) > 0) {
 				return $i;
 			}

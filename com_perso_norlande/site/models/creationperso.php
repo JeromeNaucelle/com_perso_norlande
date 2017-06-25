@@ -1,14 +1,4 @@
 <?php
-ini_set('display_errors',1);
-error_reporting(E_ALL);
-
-/**
- * @package     Joomla.Administrator
- * @subpackage  com_helloworld
- *
- * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
- */
  
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -116,24 +106,10 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 		$arbre = null;
 		
 		$db = JFactory::getDbo();
-		
-		// Hack Mysql 5.6 pour récupérer toutes 
-		// les colonne de la table compétence
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('COLUMN_NAME'));
-		$query->from($db->quoteName('INFORMATION_SCHEMA').'.'.$db->quoteName('COLUMNS'));
-		$query->where($db->quoteName('TABLE_NAME') . ' = ' . $db->quote('competences'));
-		
-		$db->setQuery($query);
-		$columns_competences = $db->loadColumn();
-		for($i = 0; $i < count($columns_competences); $i+=1) {
-			$column = $columns_competences[$i];
-			$columns_competences[$i] = $db->quoteName('a').'.'.$db->quoteName($column);
-		}
  
 		// Create a new query object.
 		$query = $db->getQuery(true);
-		$query->select($columns_competences);
+		$query->select('a.*');
 		$query->from($db->quoteName('competences', 'a'));
 		$query->join('INNER', $db->quoteName('competences', 'b') . ' ON (' . $db->quoteName('a.maitrise') . ' = ' . $db->quoteName('b.maitrise') . ')');
 		$query->where($db->quoteName('b.competence_id') . ' = ' . $competence_id);
