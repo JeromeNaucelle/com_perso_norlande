@@ -15,22 +15,202 @@ include('components/com_perso_norlande/helpers/template.php');
 defined('_JEXEC') or die('Restricted access');
 
 $doc = JFactory::getDocument();
+$encoding = "UTF-8";
 
 //$doc->addStyleSheet("components/com_perso_norlande/media/perso_norlande/css/fiche_perso.css",'text/css',"screen");
 
 require_once 'odtphp/vendor/autoload.php';
 
-$odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/odtphp/tests/tutoriel1.odt");
+$odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fiche_perso.odt");
 
-$odf->setVars('titre', 'PHP: Hypertext PreprocessorPHP: Hypertext Preprocessor');
+	$armure = $this->perso->getArmure();
+	$monnaie = $this->perso->getMonnaie();
+	$monnaie->add($this->synthese->getMonnaie());
+  		
+  	$odf->setVars('lignee', $this->perso->getLignee());
+	$odf->setVars('nom_perso', htmlentities($this->perso->getNom()));
+	$odf->setVars('mana', $this->synthese->getMana());
+	$odf->setVars('coups', $this->synthese->getCoups($armure));
+	$odf->setVars('force_physique', $this->synthese->getForcePhysique());
+	$odf->setVars('niveau_langue', $this->synthese->getNiveauLangue());
+	//$odf->setVars('aide_jeu', $this->synthese->getAideJeu());
+	//$odf->setVars('lieux_pouvoir', $this->synthese->getLieuxPouvoir());
+	$odf->setVars('esquive', $this->synthese->getEsquive($armure));
+	$odf->setVars('resiste', $this->synthese->getResiste($armure));
+	$odf->setVars('immunite', $this->synthese->getImmunite($armure));
+	$odf->setVars('armure', $armure);
+	$odf->setVars('monnaie', $monnaie->getFormatedText());
+	$odf->setVars('histoire', htmlentities($this->perso->getHistoire()));
+	
+	
+	$segPiegesEtTechniques = $odf->setSegment('technique');
+	$piegeEtTechniques = $this->synthese->getPiegesEtTechniques();
+  	foreach($piegeEtTechniques as $piege) {
+		$segPiegesEtTechniques->nom($piege->nom);
+		$segPiegesEtTechniques->cout($piege->cout);
+		$segPiegesEtTechniques->effet($piege->effet);
+		$segPiegesEtTechniques->merge();
+	}
+	$odf->mergeSegment($segPiegesEtTechniques);
+	
+	$segManiements = $odf->setSegment('maniement');
+	$maniements = $this->synthese->getManiements();
+  	foreach($maniements as $maniement) {
+		$segManiements->nom($maniement->nom);
+		$segManiements->merge();
+	}
+	$odf->mergeSegment($segManiements);
+	
+	
+	$segMetamorphoses = $odf->setSegment('metamorphose');
+	$metamorphoses = $this->synthese->getMetamorphoses();
+  	foreach($metamorphoses as $metamorphose) {
+  		$segMetamorphoses->cout($metamorphose->cout);
+  		$segMetamorphoses->effet($metamorphose->effet);
+		$segMetamorphoses->merge();
+  	}
+  	$odf->mergeSegment($segMetamorphoses);
+  	
+  	
+  	$segConnaissances = $odf->setSegment('connaissance');
+	$connaissances = $this->synthese->getConnaissances();
+  	foreach($connaissances as $connaissance) {
+  		$segConnaissances->nom($connaissance->nom);
+		$segConnaissances->merge();
+  	}
+  	$odf->mergeSegment($segConnaissances);
+  	
+  	
+  	$segSortileges = $odf->setSegment('sortilege');
+	$sortileges = $this->synthese->getSortileges();
+  	foreach($sortileges as $sortilege) {
+		$formule = $this->edit_orga ? $sortilege->formule : "« ??? »";
+  		
+  		$segSortileges->nom($sortilege->nom);
+  		$segSortileges->formule($formule);
+  		$segSortileges->effet($sortilege->effet);
+		$segSortileges->merge();
+  	}
+  	$odf->mergeSegment($segSortileges);
+  	
+  	
+  	$segSortsMasse = $odf->setSegment('sort_masse');
+	$sortsMasse = $this->synthese->getSortsMasse();
+  	foreach($sortsMasse as $sortMasse) {
+		$formule = $this->edit_orga ? $sortMasse->formule : "« ??? »";
+  		
+  		$segSortsMasse->nom($sortMasse->nom);
+  		$segSortsMasse->formule($formule);
+  		$segSortsMasse->effet($sortMasse->effet);
+		$segSortsMasse->merge();
+  	}
+  	$odf->mergeSegment($segSortsMasse);
+  	
+  	
+  	$segPossessions = $odf->setSegment('possession');
+	$possessions = $this->synthese->getPossessionsDepart();
+  	foreach($possessions as $possession) {  		
+  		$segPossessions->nom($possession);
+		$segPossessions->merge();
+  	}
+  	$odf->mergeSegment($segPossessions);
+  	
+  	
+  	$segCapaOccultes = $odf->setSegment('capa_occulte');
+	$breuvagesEtInvocations = $this->synthese->getBreuvagesEtInvocations();
+  	foreach($breuvagesEtInvocations as $breuvage) {
+  		$segCapaOccultes->nom($breuvage->nom);
+  		$segCapaOccultes->cout($breuvage->cout);
+  		$segCapaOccultes->effet($breuvage->effet);
+		$segCapaOccultes->merge();
+  	}
+  	$odf->mergeSegment($segCapaOccultes);
+  	
+  	
+  	$segPouvoirs = $odf->setSegment('pouvoir');
+	$pouvoirs = $this->synthese->getPouvoirsMagiques();
+  	foreach($pouvoirs as $pouvoir) {
+		$formule = $this->edit_orga ? $pouvoir->formule : "« ??? »";
+  		
+  		$segPouvoirs->nom($pouvoir->nom);
+  		$segPouvoirs->formule($formule);
+  		$segPouvoirs->effet($pouvoir->effet);
+		$segPouvoirs->merge();
+  	}
+  	$odf->mergeSegment($segPouvoirs);
+  	
+  	
+  	$segAmeliorations = $odf->setSegment('amelioration');
+	$ameliorations = $this->synthese->getAmeliorations();
+  	foreach($ameliorations as $amelioration) {
+  		$segAmeliorations->nom($amelioration);
+		$segAmeliorations->merge();
+  	}
+  	$odf->mergeSegment($segAmeliorations);
+  	
+  	
+  	$segCapacites = $odf->setSegment('capacite');
+	$capacites = $this->synthese->getCapacites();
+  	foreach($capacites as $capacite) {
+  		$segCapacites->effet($capacite->effet);
+  		$segCapacites->frequence($capacite->frequence);
+		$segCapacites->merge();
+  	}
+  	$odf->mergeSegment($segCapacites);
+  	
+  	
+  	$segObjetsAPrevoir = $odf->setSegment('a_prevoir');
+	$objsAPrevoir = $this->synthese->getObjetsAPrevoir();
+  	foreach($objsAPrevoir as $obj) {
+  		$segObjetsAPrevoir->nom($obj);
+		$segObjetsAPrevoir->merge();
+  	}
+  	$odf->mergeSegment($segObjetsAPrevoir);
+	/*
+	$odf->setVars('message', $message, false, $encoding);
 
-$message = "PHP (sigle de PHP: Hypertext Preprocessor), est un langage de scripts libre 
-principalement utilisé pour produire des pages Web dynamiques via un serveur HTTP, mais 
-pouvant également fonctionner comme n'importe quel langage interprété de façon locale, 
-en exécutant les programmes en ligne de commande.";
 
-$odf->setVars('message', $message);
-
+	foreach($this->competencesClassees as $classement) {
+		$template->assign_vars(array(
+    'comp_'.$classement->getFamille().'_lvl1' => $classement->getFromLevel(1),
+    'comp_'.$classement->getFamille().'_lvl2' => $classement->getFromLevel(2),
+	 'comp_'.$classement->getFamille().'_lvl3' => $classement->getFromLevel(3),
+	 'comp_'.$classement->getFamille().'_lvl4' => $classement->getFromLevel(4)
+  		));
+	}
+	*/
+	
+  		/*
+  	
+  	$parcelles = $this->synthese->getParcelles();
+  	foreach($parcelles as $parcelle) {
+  		
+	  	$template->assign_block_vars('parcelle', array(
+	    'nom' => $parcelle
+	  		));
+  	}
+  	
+  	$langues = $this->synthese->getSyntheseLangue();
+  	foreach($langues as $langue) {
+  		
+	  	$template->assign_block_vars('langue', array(
+	    'nom' => $langue
+	  		));
+  	}
+  	
+  	$attaques_spe = $this->synthese->getAttaquesSpe();
+  	$typesAttaques = $attaques_spe->getTypes();
+  	foreach($typesAttaques as $type => $labelType) {
+  		$attaques = $attaques_spe->getAttaques($type);
+  		
+		foreach($attaques as $attaque) {
+		  	$template->assign_block_vars('attaque_spe', array(
+		  		'type' => $labelType,
+		   	'nom' => $attaque
+		  		));
+		}
+  	}
+*/
 // We export the file
 $odf->exportAsAttachedFile();
 
