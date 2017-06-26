@@ -66,9 +66,8 @@ class Lignees {
 			case "Terres Boriennes":
 				$mail = MAIL_TERRES_BORIENNES;
 				break;
-				
-		return $mail;
 		}
+		return $mail;
 	}
 	
 }

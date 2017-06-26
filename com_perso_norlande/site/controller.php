@@ -1068,7 +1068,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mailer->addRecipient($dest);
 		$mailer->setBody($msg);
 		$mailer->setSubject($subject);
-		$send = $mailer->Send();
+		$sent = $mailer->Send();
 		if($sent !== true) {
 			error_log("Error when sending email to ".$dest);
 		}
