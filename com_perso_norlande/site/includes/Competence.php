@@ -104,8 +104,8 @@ class CompetenceFamille {
 		array_push($this->compByLevel[$niveau], $competence);
 	}
 	
-	public function getFromLevel($niveau) {
-		return join('<br>', $this->compByLevel[$niveau]);
+	public function getFromLevel($niveau, $separator="<br>") {
+		return join($separator, $this->compByLevel[$niveau]);
 	}
 	
 	public function getNiveauMax() {

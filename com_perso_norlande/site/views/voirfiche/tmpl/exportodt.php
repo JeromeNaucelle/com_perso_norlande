@@ -34,13 +34,20 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	$odf->setVars('force_physique', $this->synthese->getForcePhysique());
 	$odf->setVars('niveau_langue', $this->synthese->getNiveauLangue());
 	//$odf->setVars('aide_jeu', $this->synthese->getAideJeu());
-	//$odf->setVars('lieux_pouvoir', $this->synthese->getLieuxPouvoir());
+	$odf->setVars('lieux_pouvoir', $this->synthese->getLieuxPouvoir("\n"));
 	$odf->setVars('esquive', $this->synthese->getEsquive($armure));
 	$odf->setVars('resiste', $this->synthese->getResiste($armure));
-	$odf->setVars('immunite', $this->synthese->getImmunite($armure));
+	$odf->setVars('immunite', $this->synthese->getImmunite($armure, "\n"));
 	$odf->setVars('armure', $armure);
 	$odf->setVars('monnaie', $monnaie->getFormatedText());
 	$odf->setVars('histoire', htmlentities($this->perso->getHistoire()));
+	
+	foreach($this->competencesClassees as $classement) {
+		for($i=1; $i<5; $i++) {
+			$odf->setVars('comp_'.$classement->getFamille().'_lvl'.$i, 
+				$classement->getFromLevel($i, "\n"));
+		}
+	}
 	
 	
 	$segPiegesEtTechniques = $odf->setSegment('technique');
@@ -75,7 +82,7 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
   	$segConnaissances = $odf->setSegment('connaissance');
 	$connaissances = $this->synthese->getConnaissances();
   	foreach($connaissances as $connaissance) {
-  		$segConnaissances->nom($connaissance->nom);
+  		$segConnaissances->nom($connaissance);
 		$segConnaissances->merge();
   	}
   	$odf->mergeSegment($segConnaissances);
@@ -166,6 +173,41 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 		$segObjetsAPrevoir->merge();
   	}
   	$odf->mergeSegment($segObjetsAPrevoir);
+  	
+  	
+  	$segParcelles = $odf->setSegment('parcelle');
+	$parcelles = $this->synthese->getParcelles();
+  	foreach($parcelles as $parcelle) {
+  		$segParcelles->nom($parcelle);
+		$segParcelles->merge();
+  	}
+  	$odf->mergeSegment($segParcelles);
+  	
+  	
+  	$segLangues = $odf->setSegment('langue');
+	$langues = $this->synthese->getSyntheseLangue();
+  	foreach($langues as $langue) {
+  		$segLangues->nom($langue);
+		$segLangues->merge();
+  	}
+  	$odf->mergeSegment($segLangues);
+  	
+  	
+  	$segAttaquesSpe = $odf->setSegment('attaque_spe');
+  	$attaques_spe = $this->synthese->getAttaquesSpe();
+	$typesAttaques = $attaques_spe->getTypes();
+  	foreach($typesAttaques as $type => $labelType) {
+  		
+  		$attaques = $attaques_spe->getAttaques($type);
+  		
+		foreach($attaques as $attaque) {
+			$segAttaquesSpe->type($labelType);
+			$segAttaquesSpe->effet($attaque);
+			$segAttaquesSpe->merge();
+		}  		
+  		
+  	}
+  	$odf->mergeSegment($segAttaquesSpe);
 	/*
 	$odf->setVars('message', $message, false, $encoding);
 
@@ -181,22 +223,6 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	*/
 	
   		/*
-  	
-  	$parcelles = $this->synthese->getParcelles();
-  	foreach($parcelles as $parcelle) {
-  		
-	  	$template->assign_block_vars('parcelle', array(
-	    'nom' => $parcelle
-	  		));
-  	}
-  	
-  	$langues = $this->synthese->getSyntheseLangue();
-  	foreach($langues as $langue) {
-  		
-	  	$template->assign_block_vars('langue', array(
-	    'nom' => $langue
-	  		));
-  	}
   	
   	$attaques_spe = $this->synthese->getAttaquesSpe();
   	$typesAttaques = $attaques_spe->getTypes();

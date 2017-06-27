@@ -608,12 +608,12 @@ class SyntheseCompetences {
 		return $this->$key;
 	}
 	
-	public function getImmunite($armure){
+	public function getImmunite($armure, $separator='<br>'){
 		$key = "immunite_".strtolower($armure);
 		if(count($this->$key) == 0) {
 			return "-";
 		}
-		return implode("<br>", $this->$key);
+		return implode($separator, $this->$key);
 	}
 	
 	public function getForcePhysique(){
@@ -641,7 +641,7 @@ class SyntheseCompetences {
 		return $this->ameliorations;
 	}
 	
-	public function getLieuxPouvoir(){
+	public function getLieuxPouvoir($separator='<br>'){
 		$ret = array();
 		
 		if($this->lieux_pouvoir->tableGuerre) {
@@ -653,7 +653,7 @@ class SyntheseCompetences {
 		if(count($ret) == 0) {
 			return 'Aucun';
 		}
-		return implode('<br>', $ret);
+		return implode($separator, $ret);
 	}
 	
 	public function getAideJeu(){
