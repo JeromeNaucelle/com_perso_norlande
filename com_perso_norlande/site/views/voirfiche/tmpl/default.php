@@ -46,7 +46,6 @@ $template = new Template('./');
     'coups' => $this->synthese->getCoups($armure),
     'force_physique' => $this->synthese->getForcePhysique(),
     'niveau_langue' => $this->synthese->getNiveauLangue(),
-    'aide_jeu' => $this->synthese->getAideJeu(),
     'lieux_pouvoir' => $this->synthese->getLieuxPouvoir(),
     'esquive' => $this->synthese->getEsquive($armure),
     'resiste' => $this->synthese->getResiste($armure),
@@ -109,6 +108,14 @@ $template = new Template('./');
 	    'nom' => $sortMasse->nom,
 	    'formule' => $this->edit_orga ? $sortMasse->formule : "« ??? »",
 	    'effet' => $sortMasse->effet
+	  		));
+  	}
+  	
+	$aides = $this->synthese->getAideJeu()
+  	foreach($aides as $aide) {
+  		
+	  	$template->assign_block_vars('aide_jeu', array(
+	    'nom' => $aide
 	  		));
   	}
   	

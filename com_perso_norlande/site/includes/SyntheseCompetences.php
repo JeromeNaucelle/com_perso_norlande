@@ -658,9 +658,9 @@ class SyntheseCompetences {
 	
 	public function getAideJeu(){
 		if(count($this->aide_jeu) == 0) {
-			return 'Aucune';
+			return array('Aucune');
 		}
-		return implode('<br>', $this->aide_jeu);
+		return $this->aide_jeu;
 	}
 	
 	public function getObjetsAPrevoir(){

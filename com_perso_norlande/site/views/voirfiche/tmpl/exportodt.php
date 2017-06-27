@@ -33,7 +33,6 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	$odf->setVars('coups', $this->synthese->getCoups($armure));
 	$odf->setVars('force_physique', $this->synthese->getForcePhysique());
 	$odf->setVars('niveau_langue', $this->synthese->getNiveauLangue());
-	//$odf->setVars('aide_jeu', $this->synthese->getAideJeu());
 	$odf->setVars('lieux_pouvoir', $this->synthese->getLieuxPouvoir("\n"));
 	$odf->setVars('esquive', $this->synthese->getEsquive($armure));
 	$odf->setVars('resiste', $this->synthese->getResiste($armure));
@@ -112,6 +111,15 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 		$segSortsMasse->merge();
   	}
   	$odf->mergeSegment($segSortsMasse);
+  	
+  	
+  	$segAidesJeu = $odf->setSegment('aide_jeu');
+	$aides = $this->synthese->getAideJeu();
+  	foreach($aides as $aide) {
+  		$segAidesJeu->nom($aide);
+		$segAidesJeu->merge();
+  	}
+  	$odf->mergeSegment($segAidesJeu);
   	
   	
   	$segPossessions = $odf->setSegment('possession');
@@ -208,35 +216,8 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
   		
   	}
   	$odf->mergeSegment($segAttaquesSpe);
-	/*
-	$odf->setVars('message', $message, false, $encoding);
 
 
-	foreach($this->competencesClassees as $classement) {
-		$template->assign_vars(array(
-    'comp_'.$classement->getFamille().'_lvl1' => $classement->getFromLevel(1),
-    'comp_'.$classement->getFamille().'_lvl2' => $classement->getFromLevel(2),
-	 'comp_'.$classement->getFamille().'_lvl3' => $classement->getFromLevel(3),
-	 'comp_'.$classement->getFamille().'_lvl4' => $classement->getFromLevel(4)
-  		));
-	}
-	*/
-	
-  		/*
-  	
-  	$attaques_spe = $this->synthese->getAttaquesSpe();
-  	$typesAttaques = $attaques_spe->getTypes();
-  	foreach($typesAttaques as $type => $labelType) {
-  		$attaques = $attaques_spe->getAttaques($type);
-  		
-		foreach($attaques as $attaque) {
-		  	$template->assign_block_vars('attaque_spe', array(
-		  		'type' => $labelType,
-		   	'nom' => $attaque
-		  		));
-		}
-  	}
-*/
 // We export the file
 $odf->exportAsAttachedFile();
 
