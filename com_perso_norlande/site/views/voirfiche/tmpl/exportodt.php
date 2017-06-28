@@ -62,7 +62,7 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	$segManiements = $odf->setSegment('maniement');
 	$maniements = $this->synthese->getManiements();
   	foreach($maniements as $maniement) {
-		$segManiements->nom($maniement->nom);
+		$segManiements->nom($maniement);
 		$segManiements->merge();
 	}
 	$odf->mergeSegment($segManiements);
