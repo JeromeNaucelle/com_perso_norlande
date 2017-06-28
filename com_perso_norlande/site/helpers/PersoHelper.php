@@ -385,20 +385,7 @@ class PersoHelper {
 			$result = $db->execute();
 			
 			// ajout de la nouvelle compétence
-			$query = $db->getQuery(true);
-			$date = JFactory::getDate()->format('Y-m-d');
-			$columns = array('id_perso', 'competence_id', 'date_acquisition', 'xp_used');
-			
-			$values = array($perso->getId(), $competenceId, $db->quote($date), $db->quote($xpUsed));
-			 
-			// Prepare the insert query.
-			$query
-			    ->insert($db->quoteName('persos_competences'))
-			    ->columns($db->quoteName($columns))
-			    ->values(implode(',', $values));
-			    
-			$db->setQuery($query);
-			$db->execute();
+			PersoHelper::addCompetenceToPerso($perso, $competenceId, $xpUsed);
 			$db->transactionCommit();
 		}
 		catch (Exception $e)
