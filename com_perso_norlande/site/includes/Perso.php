@@ -78,6 +78,7 @@ class Perso {
     		- compétence déjà acquise (return 3)
     		- le personnage n'est pas nouveau et a déjà acquis une nouvelle
     			compétence cette année (return 5, msg)
+ 			- le personnage a déjà été validé (return 5, msg)
     */
     public function canLearn($competence_id, $arbre, $editOrga)
     {
@@ -92,6 +93,13 @@ class Perso {
     			&& $this->maxNouvelleCompetenceAtteint()) {
     		$result['result'] = 5;
     		$result['msg'] = "Vous avez déjà développé une nouvelle compétence cette année.";
+    		return $result;
+    	}
+    	
+    	if( !$editOrga 
+    			&& $this->validation_user) {
+    		$result['result'] = 5;
+    		$result['msg'] = "Vous avez déjà validé votre personnage, seul un orga peut encore le modifier.";
     		return $result;
     	}
     	
