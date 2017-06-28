@@ -1,10 +1,10 @@
 <br>
 <h3 id="nomPerso">Personnage : <?php echo htmlentities($this->perso->getNom()); ?></h3>
 <?php
-if($user_validation_display == '') {
+if( !$this->perso->userHasValidate() ) {
 	$validation_button_display = 'style="display: inline-block;"';
 } else {
-	$validation_button_display = $user_validation_display;
+	$validation_button_display = 'style="display:none;"';
 }?>
 <input  type="button" value="Valider le personnage" onclick="javascript:validationPersoUser();" <?php echo $validation_button_display; ?>/>
 
@@ -137,8 +137,6 @@ if( $this->edit_orga ) {
 
 <fieldset>
   <legend align="left">Visualisation</legend>
-  
-  <p style="color: red;">(Attention : après validation seul un orga pourra modifier votre fiche !)</p>
   
 	<div class="center_wrapper">
 		<input type="button" value="Voir la fiche" onclick="javascript:open_infos();" id="buttonFiche"/>
