@@ -38,7 +38,7 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	$odf->setVars('resiste', $this->synthese->getResiste($armure));
 	$odf->setVars('immunite', $this->synthese->getImmunite($armure, "\n"));
 	$odf->setVars('armure', $armure);
-	$odf->setVars('monnaie', $monnaie->getFormatedText());
+	$odf->setVars('monnaie', $monnaie->getFormatedText("\n"));
 	$odf->setVars('histoire', htmlentities($this->perso->getHistoire()));
 	
 	foreach($this->competencesClassees as $classement) {

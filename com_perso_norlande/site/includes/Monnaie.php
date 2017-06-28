@@ -12,7 +12,7 @@ class Monnaie {
 		$this->piecesCuivre = 0;
 	}
 	
-	public function getFormatedText() {
+	public function getFormatedText($separator = "<br>") {
 		$ret = array();
 		
 		if($this->piecesOr > 0) {
@@ -29,7 +29,7 @@ class Monnaie {
 			$ret[] = "Néant";
 		}
 		
-		return implode("<br>", $ret);;
+		return implode($separator, $ret);;
 	}
 	
 	public function add($monnaie) {
