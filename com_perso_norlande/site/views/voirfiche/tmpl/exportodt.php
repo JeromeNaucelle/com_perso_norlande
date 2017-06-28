@@ -28,6 +28,7 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	$monnaie->add($this->synthese->getMonnaie());
   		
   	$odf->setVars('lignee', $this->perso->getLignee());
+	$odf->setVars('anciennete', $this->perso->getAnciennete());
 	$odf->setVars('nom_perso', htmlentities($this->perso->getNom()));
 	$odf->setVars('mana', $this->synthese->getMana());
 	$odf->setVars('coups', $this->synthese->getCoups($armure));

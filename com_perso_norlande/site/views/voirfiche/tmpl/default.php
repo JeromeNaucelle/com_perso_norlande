@@ -52,6 +52,7 @@ $template = new Template('./');
     'immunite' => $this->synthese->getImmunite($armure),
     'armure' => $armure,
     'monnaie' => $monnaie->getFormatedText(),
+    'anciennete' => $this->perso->getAnciennete(),
     'histoire' => htmlentities($this->perso->getHistoire())
   		));
   		
@@ -111,7 +112,7 @@ $template = new Template('./');
 	  		));
   	}
   	
-	$aides = $this->synthese->getAideJeu()
+	$aides = $this->synthese->getAideJeu();
   	foreach($aides as $aide) {
   		
 	  	$template->assign_block_vars('aide_jeu', array(
