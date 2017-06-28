@@ -41,6 +41,7 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	$odf->setVars('armure', $armure);
 	$odf->setVars('monnaie', $monnaie->getFormatedText("\n"));
 	$odf->setVars('histoire', htmlentities($this->perso->getHistoire()));
+	$odf->setVars('reliquat', $this->perso->getReliquat());
 	
 	foreach($this->competencesClassees as $classement) {
 		for($i=1; $i<5; $i++) {

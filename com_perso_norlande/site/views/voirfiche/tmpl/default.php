@@ -39,6 +39,7 @@ $template = new Template('./');
 	$armure = $this->perso->getArmure();
 	$monnaie = $this->perso->getMonnaie();
 	$monnaie->add($this->synthese->getMonnaie());
+	$reliquat = str_replace("\n", '<br>', $this->perso->getReliquat());
 	$template->assign_vars(array(
 	 'lignee' => $this->perso->getLignee(),
 	 'nom_perso' => htmlentities($this->perso->getNom()),
@@ -53,6 +54,7 @@ $template = new Template('./');
     'armure' => $armure,
     'monnaie' => $monnaie->getFormatedText(),
     'anciennete' => $this->perso->getAnciennete(),
+    'reliquat' => $reliquat,
     'histoire' => htmlentities($this->perso->getHistoire())
   		));
   		
