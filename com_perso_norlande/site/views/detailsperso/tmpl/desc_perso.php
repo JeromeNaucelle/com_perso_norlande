@@ -1,6 +1,12 @@
 <br>
 <h3 id="nomPerso">Personnage : <?php echo htmlentities($this->perso->getNom()); ?></h3>
-<input style="display: inline-block;" type="button" value="Valider le personnage" onclick="javascript:validationPersoUser();" <?php echo $user_validation_display; ?>/>
+<?php
+if($user_validation_display == '') {
+	$validation_button_display = 'style="display: inline-block;"';
+} else {
+	$validation_button_display = $user_validation_display;
+}?>
+<input  type="button" value="Valider le personnage" onclick="javascript:validationPersoUser();" <?php echo $validation_button_display; ?>/>
 
 <h3 id="lignee"><?php echo '('.$this->perso->getLignee().')'; ?></h3>
 
