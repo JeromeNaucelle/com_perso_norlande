@@ -169,6 +169,25 @@ function validationPersoUser(){
 }
 
 
+function delete_perso(){
+	$("#question_msg").text("Attention : Ce personnage sera définitivement supprimer ! Voulez-vous vraiment valider ?");
+	var tmp = $('#question_ok').attr('value');	
+		
+	$('#question_ok').attr('value',"Oui");	
+	$('#question_cancel').click(function() { 
+			$.unblockUI();
+			$('#question_ok').attr('value',tmp);
+				
+			});
+			
+	$('#question_ok').click(function() { 
+			document.location.href = "index.php?option=com_perso_norlande&task=deletePerso";
+			});
+	$.blockUI({ message: $('#question'), css: { width: '275px' } }); 
+	
+}
+
+
  $(document).ready(function() {
  
   $('#alert_ok').click(function() { 

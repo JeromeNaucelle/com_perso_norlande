@@ -134,10 +134,10 @@ label
 	text-align: center;
 }
 
-#buttonFiche {
-	width: 50%;
-	margin:auto;
-	display:block;
+.buttonFiche {
+	width: 50% !important;;
+	margin:auto !important;;
+	display:block !important;;
 }
 	
 #nomPerso {

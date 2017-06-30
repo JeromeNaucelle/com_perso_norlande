@@ -103,6 +103,36 @@ class Perso_NorlandeController extends JControllerLegacy
 	}
 	
 	
+	public function deletePerso() {
+		$data = array("error"=>0, "msg"=>"Personnage supprimé");
+		$mainframe = JFactory::getApplication();
+		$session = JFactory::getSession();
+		
+		$persoId = $session->get( 'perso_id', -1 );
+			
+		if($persoId == -1) {
+			$data["msg"] = "Personnage non trouvé dans la session. Veuillez contacter un administrateur.";
+			$data["error"] = 1;
+		}
+		
+		if($data["error"] == 0) {
+			$data = PersoHelper::deletePerso($persoId);
+		}
+		
+		if($data["error"] == 0) {
+			$session->clear('perso_id');
+			$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+		} else {
+			error_log($data["msg"]);
+			//JError::raiseError( 500, $data["msg"] );
+			$mainframe->enqueueMessage($data["msg"], 'error');
+			//echo json_encode($data);
+			//$mainframe->close();
+		}
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+	}
+	
+	
 	public function updateArmure() {
 		$data = array("error"=>0, "msg"=>"Données mises à jour");
 		$formResult = array();
@@ -112,8 +142,6 @@ class Perso_NorlandeController extends JControllerLegacy
 		$jinput = $mainframe->input;
 		$armure = '';
 		
-		
-		//ToDO : vérifier si l'utilisateur a encore le droit de modifier sa fiche
 		$edit_orga = $user->authorise('core.edit_orga', 'com_perso_norlande');
 		
 		if($data["error"] === 0

@@ -139,8 +139,17 @@ if( $this->edit_orga ) {
   <legend align="left">Visualisation</legend>
   
 	<div class="center_wrapper">
-		<input type="button" value="Voir la fiche" onclick="javascript:open_infos();" id="buttonFiche"/>
-		<input type="button" value="Télécharger la fiche" onclick="javascript:download_fiche();" id="buttonFiche"/>
+		<input type="button" class="buttonFiche" value="Voir la fiche" onclick="javascript:open_infos();"/>
+		<input type="button" class="buttonFiche" value="Télécharger la fiche" onclick="javascript:download_fiche();"/>
+	</div>
+
+</fieldset>
+
+<fieldset>
+  <legend align="left">Suppression</legend>
+  
+	<div class="center_wrapper">
+		<input type="button" class="buttonFiche" value="Supprimer le personnage" onclick="javascript:delete_perso();"/>
 	</div>
 
 </fieldset>

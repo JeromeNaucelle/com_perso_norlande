@@ -363,6 +363,68 @@ class PersoHelper {
 		return array("error" => $error, "msg" => $msg);
 	}
 	
+	
+	/*
+	Pour annuler l'action de suppression d'un perso où $persoId = 11 :
+	INSERT INTO `persos` SELECT * FROM `bak_persos` WHERE `id`=11;
+	INSERT INTO `persos_competences` SELECT * FROM `bak_persos_competences` WHERE `id_perso`=11;
+	DELETE FROM `bak_persos_competences` WHERE `id_perso`=11;
+	DELETE FROM `bak_persos` WHERE `id`=11;
+	INSERT INTO `persos_users`(`user_id`, `perso_id`) VALUES (843,11);
+	*/
+	public static function deletePerso($persoId) {
+		$data = array("error" => 0, "msg"=>"");
+		$db = JFactory::getDbo();
+		
+		try
+		{
+			$db->transactionStart();
+			
+			// Creation du backup du perso
+			$query = "INSERT INTO `bak_persos` SELECT * FROM `persos` WHERE `id`=".$persoId;
+			$db->setQuery($query);
+			$result = $db->execute();
+			$affectedRows = $db->getAffectedRows();
+			
+			if($result === false
+					|| $affectedRows != 1) {
+				$data['error'] = 1;
+				$data['msg'] = "Erreur durant le backup du personnage. Veuillez contacter un administrateur.";
+			}
+			
+			
+			// Creation des backups des compétences associées au perso
+			if($data['error'] == 0){
+				$query = "INSERT INTO `bak_persos_competences` SELECT * FROM `persos_competences` WHERE `id_perso`=".$persoId;
+				$db->setQuery($query);
+				$result = $db->execute();
+				
+				if($result === false) {
+					$data['error'] = 1;
+					$data['msg'] = "Erreur durant le backup des compétences du personnage. Veuillez contacter un administrateur.";
+				}
+			}
+			
+			// Suppression du personnage et de ses compétences
+			$query = $db->getQuery(true);
+			
+			$conditions = $db->quoteName('id') . ' =  ' . $persoId;
+			$query->delete($db->quoteName('persos'))->where($conditions);
+			$db->setQuery($query);
+			$result = $db->execute();
+			
+			$db->transactionCommit();
+		}
+		catch (Exception $e)
+		{
+		   // catch any database errors.
+		   $db->transactionRollback();
+		   $data['error'] = 1;
+			$data['msg'] = "Erreur lors des changements en base de données lors de la suppression du personnage. Veuillez contacter un administrateur.";
+		}
+		return $data;
+	}
+	
 	public static function usePointsCreation($pcUsed, $competenceId, $perso) {
 		$error = 0;
 		$msg = "";
