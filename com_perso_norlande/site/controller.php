@@ -907,7 +907,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			$perso = $this->getCurrentPerso();
 			$lignee = $perso->getLignee();
 			PersoHelper::validationUser($persoId);
-			$mailOrga = Lignees::getOrgaMail();
+			$mailOrga = Lignees::getOrgaMail($lignee);
 			
 			$subject = "Validation d'un personnage de votre lignée";
 			$nomPerso = $perso->getNom();
