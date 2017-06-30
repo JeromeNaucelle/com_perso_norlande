@@ -44,7 +44,7 @@ foreach(ClasseXP::getTypesCristaux() as $famille) {
 	echo '<input type="text" id="cristaux_'.$famille.'" name="cristaux_'.$famille.'" class="shortNb" value="'.$val.'" '.$disabled.'/><br>';
 }
 ?>
-<input type="submit" name="button_submit" value="Valider" <?php echo $display;?>/>
+<input type="submit" name="button_submit" value="Valider" <?= $display ?>/>
 </fieldset>
 </form>
 
@@ -85,9 +85,9 @@ if( $this->edit_orga ) {
                 
                 <?php $field->disabled = !$this->edit_orga; ?>
                 	
-                <?php echo $field->input.'<br>'; ?>
+                <?= $field->input.'<br>' ?>
             <?php endforeach; ?>
-            <input type="button" name="button_submit" value="Enregistrer" onclick="updateMonnaie()" <?php echo $display;?>/>
+            <input type="button" name="button_submit" value="Enregistrer" onclick="updateMonnaie()" <?= $display ?>/>
         </fieldset>
     </form>
 </div>
@@ -96,7 +96,7 @@ if( $this->edit_orga ) {
 <fieldset>
   <legend align="left">Armure</legend>
   <label for="armure">Choix de l'armure :</label>
-<select id="armure" name="armure" onchange="updateArmure()" <?php echo $user_validation_disabled; ?> >
+<select id="armure" name="armure" onchange="updateArmure()" <?= $user_validation_disabled ?> >
 <?php foreach ($this->enumArmure as $field): ?> 
 	<?php $armureSelected = ($this->perso->getArmure() == $field ? ' selected': ''); ?> 
 	<?php echo "<option value=\"$field\"$armureSelected> $field</option>"; ?>
@@ -111,12 +111,12 @@ if( $this->edit_orga ) {
 <fieldset>
   <legend align="left">Background</legend>
 <p><b>Histoire :</b></p>
-<textarea class="long_text" id="histoire" name="histoire" <?php echo $user_validation_disabled; ?>>
+<textarea class="long_text" id="histoire" name="histoire" <?= $user_validation_disabled ?>>
 <?php echo htmlentities($this->perso->getHistoire()); ?>
 </textarea>
 <br>
 
-<input type="submit" name="button_submit" value="Valider" <?php $user_validation_disabled; ?>/>
+<input type="submit" name="button_submit" value="Valider" <?= $user_validation_disabled ?>/>
 </fieldset>
 </form>
 
@@ -124,12 +124,12 @@ if( $this->edit_orga ) {
 <fieldset>
   <legend align="left">Reliquat des années précédentes</legend>
 
-<textarea class="long_text" id="reliquat" name="reliquat" <?php echo $disabled; ?>>
+<textarea class="long_text" id="reliquat" name="reliquat" <?= $disabled ?>>
 <?php echo htmlentities($this->perso->getReliquat()); ?>
 </textarea>
 <br>
 
-<input type="submit" name="button_submit" value="Valider"  <?php echo $display;?>/>
+<input type="submit" name="button_submit" value="Valider"  <?= $display ?>/>
 </fieldset>
 </form>
 
