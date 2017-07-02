@@ -944,7 +944,11 @@ class Perso_NorlandeController extends JControllerLegacy
 		}
 		
 		if($data['error'] == 0 ) {
+			$user = JFactory::getUser($userId); 
 			$data['msg'] = 'Association effectuée';
+			$subject = "Votre personnage Norlande vous attends";
+			$msg = "Bonjour, vous pouvez à présent vous connecter à http://www.norlande.com pour finir la création de votre personnage.";
+			$this->sendEmail($user->email, $subject, $msg);
 		}
 		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
 	}
