@@ -1031,6 +1031,58 @@ class Perso_NorlandeController extends JControllerLegacy
 		$mainframe->close();
 	}	
 	
+	public function askForPersoAssociation() {
+		$data = array("error"=>0, "msg"=>"Message envoyé.");
+		$mainframe = JFactory::getApplication();		
+		$user = JFactory::getUser();
+		$jinput = $mainframe->input;
+		
+		$lignee_id = $jinput->get('lignee_partie_precedente', -1, 'INT');
+		if(array_key_exists($lignee_id, Lignees::$lignees)) {
+			$lignee = Lignees::$lignees[$lignee_id];
+		} else {
+			$data["error"] = -1;
+			$data["msg"] = "Lignée inconnue";
+		}
+		
+		if($data["error"] == 0) {
+			$msg = $jinput->get('demande_assoc_user_perso','', 'STR');
+			if($msg == '') {
+				$data["error"] = -1;
+				$data["msg"] = "Le message envoyé ne doit pas être vide";
+			}
+		}
+		
+		if($data["error"] == 0) {
+			if($msg == '') {
+				$data["error"] = -1;
+				$data["msg"] = "Lignée inconnue";
+			}
+		}
+		
+		if($data["error"] == 0) {
+			if (strpos($msg, 'NOM_PERSONNAGE') !== false) {
+			   $data["error"] = -1;
+				$data["msg"] = "Vous devez indiquer le nom de votre personnage";
+			}
+			if (strpos($msg, 'LIGNEE_PRECEDENTE') !== false) {
+				$data["error"] = -1;
+				$data["msg"] = "Vous devez indiquer la lignée dans laquelle était votre personnage";
+			}
+			$username = $user->name;
+			$msg = $msg . "\nLe personnage devra être associé à '$username'.";
+		}
+		
+		if($data["error"] == 0) {
+			$mailOrga = Lignees::getOrgaMail($lignee);
+			$subject = "Demande d'association personnage/utilisateur";
+			
+			$this->sendEmail($mailOrga, $subject, $msg);
+		}
+		echo json_encode($data);
+		$mainframe->close();
+	}	
+	
 	public function createPerso() {
 		$error = 0;
 		$msg_error = "";

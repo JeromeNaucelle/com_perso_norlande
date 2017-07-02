@@ -187,6 +187,29 @@ function delete_perso(){
 	
 }
 
+function askForPersoAssociation() {
+	var url = 'index.php?format=raw&option=com_perso_norlande&task=askForPersoAssociation';
+	$.ajax(
+ 	{
+     // Post select to url.
+     type : 'post',
+     url : url,
+     data: $('#form_ask_perso_association').serialize(),
+    // contentType: "application/json",
+     dataType : 'json', // expected returned data format.
+     error : function(xhr, ajaxOptions, thrownError)
+     {
+      	alert(xhr.responseJSON.Message);
+     },
+     success : function(data)
+     {
+      	// Affichage d'un message d'info
+      	$( "#alert_msg" ).text( data['msg'] );
+      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+     }
+ });
+}
+
 
  $(document).ready(function() {
  

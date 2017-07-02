@@ -156,14 +156,3 @@ if( $this->edit_orga ) {
 
 
 
-<div id="alert" style="display:none; cursor: default"> 
-  <p id="alert_msg">Would you like to contine?.</p>
-  <input type="button" id="alert_ok" value="OK" />
-</div> 
-
-<div id="question" style="display:none; cursor: default"> 
-     <p id="question_msg"></p>
-     <div id="question_options"></div>
-     <input type="button" id="question_ok" value="Supprimer" />
-     <input type="button" id="question_cancel" value="Annuler" />
-</div> 

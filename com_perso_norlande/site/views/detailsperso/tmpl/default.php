@@ -22,14 +22,30 @@ $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/detailspe
 
 include(JPATH_COMPONENT . '/includes/menu.php'); 
 require_once(JPATH_COMPONENT . '/includes/define.php'); 
+?>
 
+<div id="alert" style="display:none; cursor: default"> 
+  <p id="alert_msg">Would you like to contine?.</p>
+  <input type="button" id="alert_ok" value="OK" />
+</div> 
+
+<div id="question" style="display:none; cursor: default"> 
+     <p id="question_msg"></p>
+     <div id="question_options"></div>
+     <input type="button" id="question_ok" value="Supprimer" />
+     <input type="button" id="question_cancel" value="Annuler" />
+</div> 
+
+
+<?php
 if($this->perso == null
-	|| $this->edit_orga) {
+	&& !$this->edit_orga) {
 		
 	include 'form_creation_perso.php';
 }
 
 if($this->edit_orga) { 
+	include 'orga_creation_perso.php';
 	include 'form_selection_perso.php';
 
 } 
