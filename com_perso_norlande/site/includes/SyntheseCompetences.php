@@ -578,7 +578,15 @@ class SyntheseCompetences {
 	}
 	
 	public function getNiveauLangue() {
-		return $this->synthese_langue->niveauLangue;
+		$bonusFamille = 0;
+		$lignee = $this->lignee_perso;
+		$bonusFamilleChecker = $this->bonus_famille_checker;
+		
+		if( $bonusFamilleChecker->hasBonusSociete($lignee) ) {
+			$competencesClasses = $this->competences_classees[SOCIETE];
+			$bonusFamille = $competencesClasses->getNiveauMax();
+		}	
+		return $this->synthese_langue->niveauLangue + $bonusFamille;
 	}
 	
 	public function getCoups($armure){
