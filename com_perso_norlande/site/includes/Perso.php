@@ -61,7 +61,7 @@ class Perso {
     	
     	$ret = false;
     	foreach($this->competences as $competence) {
-    		if( $competence->isAlredayValidated() ) {
+    		if( !$competence->isAlredayValidated() ) {
     			$ret = true;
     			break;
     		}
