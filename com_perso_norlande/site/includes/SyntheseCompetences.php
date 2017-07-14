@@ -279,7 +279,7 @@ class SyntheseCompetences {
    	$this->bonus_famille_checker = new BonusLigneeChecker();
    	$this->lignee_perso = "";
    	$this->parent_id = 0;
-   	$this->lecture_ecriture = 0;
+   	$this->lecture_ecriture = false;
 		$this->rumeurs = 0;
 		$this->actions_guerre = 0;
 		$this->coup_force = 0;
@@ -395,8 +395,7 @@ class SyntheseCompetences {
 				} else if($key === "sortilege") {
 					array_push($synthese->sortileges, new DefinitionSortilege($value));
 					
-				} else if(SyntheseCompetences::$corres_label[$key] === "Piège"
-					&& $value != "") {
+				} else if(SyntheseCompetences::$corres_label[$key] === "Piège") {
 					
 					$tmp = new DefinitionPiege($value);
 					array_push($synthese->pieges, $tmp);
@@ -404,8 +403,7 @@ class SyntheseCompetences {
 					
 					$tmp = new DefinitionTechnique($value);
 					array_push($synthese->techniques, $tmp);
-				} else if(SyntheseCompetences::$corres_label[$key] === "Breuvage"
-					&& $value != "") {
+				} else if(SyntheseCompetences::$corres_label[$key] === "Breuvage") {
 					
 					$tmp = new DefinitionBreuvage($value);
 					array_push($synthese->breuvages, $tmp);
@@ -445,6 +443,11 @@ class SyntheseCompetences {
 					
 					$synthese->lieux_pouvoir->checkValue($value);
 				} 
+				else if($key === "lecture_ecriture") {
+					if( $value == 1) {
+						$synthese->lecture_ecriture = true;
+					}
+				} 
 				
 				else if(is_numeric($value)) {
 					#error_log("key : ".$key);
@@ -454,6 +457,10 @@ class SyntheseCompetences {
 			}
 		}
 		return $synthese;
+   }
+   
+   public function getLectureEcriture() {
+   	return $this->lecture_ecriture;
    }
 	
 	public function getActionsGuerre(){

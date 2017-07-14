@@ -40,6 +40,8 @@ $template = new Template('./');
 	$monnaie = $this->perso->getMonnaie();
 	$monnaie->add($this->synthese->getMonnaie());
 	$reliquat = str_replace("\n", '<br>', $this->perso->getReliquat());
+	$lecture_ecriture = $this->synthese->getLectureEcriture() == true ? "Vous savez lire et écrire" : "Parlées";
+	
 	$template->assign_vars(array(
 	 'lignee' => $this->perso->getLignee(),
 	 'nom_perso' => htmlentities($this->perso->getNom()),
@@ -55,6 +57,7 @@ $template = new Template('./');
     'monnaie' => $monnaie->getFormatedText(),
     'anciennete' => $this->perso->getAnciennete(),
     'reliquat' => $reliquat,
+    'lecture_ecriture' => $lecture_ecriture,
     'histoire' => htmlentities($this->perso->getHistoire())
   		));
   		
