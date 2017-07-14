@@ -581,7 +581,12 @@ class SyntheseCompetences {
 		}
 		
 		$niveauLangue = $bonusFamille + $this->synthese_langue->niveauLangue;
-		return array_pad($ret, count($ret)+$niveauLangue, "A REMPLIR PAR UN ORGA");
+		
+		$ret = array_pad($ret, count($ret)+$niveauLangue, "A REMPLIR PAR UN ORGA");
+		if($this->lecture_ecriture) {
+			$ret[] = "GLYPHE PERSONNELLE";
+		}
+		return $ret;
 	}
 	
 	public function getNiveauLangue() {
