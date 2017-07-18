@@ -348,7 +348,7 @@ class SyntheseCompetences {
 		
 		//SyntheseLieuxPouvoir::deleteUnusedColumns($result_competences);
 		$unused = array("competence_id" => 0, "famille" => 0, "maitrise" =>0, 
-		"competence_nom"=>0,	"niveau"=>0, "parent_id"=>0, "entraineur"=>0);
+		"niveau"=>0, "parent_id"=>0, "entraineur"=>0);
 		
 		foreach($result_competences as $array) {
 			
@@ -428,8 +428,8 @@ class SyntheseCompetences {
 					$tmp = new DefinitionCapacite($value);
 					array_push($synthese->capacites, $tmp);
 				} else if($key === "parcelles") {
-					
-					array_push($synthese->parcelles, $value);
+					$parcelle = $value." (compétence : $array[competence_nom])";
+					array_push($synthese->parcelles, $parcelle);
 				} else if($key === "connaissances") {
 					
 					array_push($synthese->connaissances, $value);
