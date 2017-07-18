@@ -67,8 +67,7 @@ class Perso_NorlandeViewVoirFiche extends JViewLegacy
 			$this->competencesClassees[$famille] = $classement;
 		}
 		
-		$this->synthese = SyntheseCompetences::create($this->perso->getId(), 
-			$this->perso->getLignee(),
+		$this->synthese = SyntheseCompetences::create($this->perso,
 			$this->competencesClassees);
 		
 

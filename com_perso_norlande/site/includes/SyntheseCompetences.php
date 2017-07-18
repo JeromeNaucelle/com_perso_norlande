@@ -173,8 +173,6 @@ class SyntheseAttaquesSpe{
 }
 
 class SyntheseCompetences {
-
-	private $persoId;
 	private $nom;
 	private $competences;
 	
@@ -275,9 +273,11 @@ class SyntheseCompetences {
 	
 	
 
-   function __construct() {
+   private function __construct($perso) {
+   	$this->lignee_perso = $perso->getLignee();
+   	$this->anciennete_perso = $perso->getAnciennete();
+   	
    	$this->bonus_famille_checker = new BonusLigneeChecker();
-   	$this->lignee_perso = "";
    	$this->parent_id = 0;
    	$this->lecture_ecriture = false;
 		$this->rumeurs = 0;
@@ -327,10 +327,9 @@ class SyntheseCompetences {
 		$this->metamorphoses = array();
    }
    
-   public static function create($persoId, $lignee, $competencesClassees)
+   public static function create($perso, $competencesClassees)
    { 	
-   	$synthese = new SyntheseCompetences();
-   	$synthese->lignee_perso = $lignee;
+   	$synthese = new SyntheseCompetences($perso);
    	$synthese->competences_classees = $competencesClassees;
    	
    	$db = JFactory::getDbo();
@@ -341,7 +340,7 @@ class SyntheseCompetences {
 			->select('a.*')
 			->from($db->quoteName('competences', 'a'))
 			->join('INNER', $db->quoteName('persos_competences', 'b') . ' ON (' . $db->quoteName('a.competence_id') . ' = ' . $db->quoteName('b.competence_id') . ')')
-			->where($db->quoteName('b.id_perso') . ' = ' . $persoId);
+			->where($db->quoteName('b.id_perso') . ' = ' . $perso->getId());
 			
 		$db->setQuery($query_competences);
 		$result_competences = $db->loadAssocList();
