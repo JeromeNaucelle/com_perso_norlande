@@ -1,13 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.4
+-- version 4.7.2
 -- https://www.phpmyadmin.net/
 --
--- Client :  db
--- Généré le :  Dim 18 Juin 2017 à 16:04
--- Version du serveur :  5.7.14
--- Version de PHP :  5.6.25
+-- Hôte : db
+-- Généré le :  mar. 18 juil. 2017 à 17:49
+-- Version du serveur :  5.7.18
+-- Version de PHP :  7.0.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
@@ -19,6 +21,49 @@ SET time_zone = "+00:00";
 --
 -- Base de données :  `Norlande`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `bak_persos`
+--
+
+CREATE TABLE `bak_persos` (
+  `id` int(11) NOT NULL,
+  `nom` text NOT NULL,
+  `lignee` text NOT NULL,
+  `pieces_or` int(11) NOT NULL DEFAULT '0',
+  `pieces_argent` int(11) NOT NULL DEFAULT '0',
+  `pieces_cuivre` int(11) NOT NULL DEFAULT '0',
+  `points_creation` int(11) NOT NULL DEFAULT '0',
+  `cristaux_incolores` int(11) NOT NULL,
+  `cristaux_occultisme` int(11) NOT NULL,
+  `cristaux_societe` int(11) NOT NULL,
+  `cristaux_belligerance` int(11) NOT NULL,
+  `cristaux_intrigue` int(11) NOT NULL,
+  `entrainements` text,
+  `histoire` text NOT NULL,
+  `armure` enum('Etoffe','Cuir','Maille','Plaque') NOT NULL DEFAULT 'Etoffe',
+  `derniere_session` int(11) DEFAULT NULL,
+  `anciennete` int(11) NOT NULL DEFAULT '0',
+  `validation_user` int(11) NOT NULL DEFAULT '0',
+  `reliquat` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `bak_persos_competences`
+--
+
+CREATE TABLE `bak_persos_competences` (
+  `id` int(11) NOT NULL,
+  `id_perso` int(11) NOT NULL,
+  `competence_id` int(11) NOT NULL,
+  `date_acquisition` date NOT NULL,
+  `valide` int(11) NOT NULL DEFAULT '0',
+  `xp_used` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -122,7 +167,8 @@ CREATE TABLE `persos` (
   `armure` enum('Etoffe','Cuir','Maille','Plaque') NOT NULL DEFAULT 'Etoffe',
   `derniere_session` int(11) DEFAULT NULL,
   `anciennete` int(11) NOT NULL DEFAULT '0',
-  `validation_user` int(11) NOT NULL DEFAULT '0'
+  `validation_user` int(11) NOT NULL DEFAULT '0',
+  `reliquat` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -152,8 +198,22 @@ CREATE TABLE `persos_users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Index pour les tables exportées
+-- Index pour les tables déchargées
 --
+
+--
+-- Index pour la table `bak_persos`
+--
+ALTER TABLE `bak_persos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Index pour la table `bak_persos_competences`
+--
+ALTER TABLE `bak_persos_competences`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_perso` (`id_perso`),
+  ADD KEY `competence_id` (`competence_id`);
 
 --
 -- Index pour la table `competences`
@@ -187,21 +247,31 @@ ALTER TABLE `persos_users`
   ADD KEY `perso_id` (`perso_id`);
 
 --
--- AUTO_INCREMENT pour les tables exportées
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
+--
+-- AUTO_INCREMENT pour la table `bak_persos`
+--
+ALTER TABLE `bak_persos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+--
+-- AUTO_INCREMENT pour la table `bak_persos_competences`
+--
+ALTER TABLE `bak_persos_competences`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=361;
 --
 -- AUTO_INCREMENT pour la table `persos`
 --
 ALTER TABLE `persos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
 --
 -- AUTO_INCREMENT pour la table `persos_competences`
 --
 ALTER TABLE `persos_competences`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=363;
 --
--- Contraintes pour les tables exportées
+-- Contraintes pour les tables déchargées
 --
 
 --
@@ -214,8 +284,9 @@ ALTER TABLE `persos_competences`
 -- Contraintes pour la table `persos_users`
 --
 ALTER TABLE `persos_users`
-  ADD CONSTRAINT `persos_users_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `zd15e_users` (`id`),
-  ADD CONSTRAINT `persos_users_ibfk_2` FOREIGN KEY (`perso_id`) REFERENCES `persos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `persos_users_ibfk_1` FOREIGN KEY (`perso_id`) REFERENCES `persos` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `persos_users_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `mod539_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
