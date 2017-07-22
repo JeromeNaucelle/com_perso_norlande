@@ -45,7 +45,8 @@ function launch_ajax(){
 								heigth:'40em', 
 								width:'300px', 
 								overflow: 'auto!important' }
-				}); 
+				});
+			location.hash = "#question_dep_xp";
 	      
      },
      complete : function(data)
@@ -70,6 +71,7 @@ function forgetCompetence(competence_id){
      {
      		$( "#alert_msg" ).text( data['msg'] );
 	      $('#content').block({ message: $('#alert'), css: { width: '275px' } }); 
+	      location.hash = "#alert";
 	      if(data['error'] != 0) {
 	      	selectCompetencesAcquises(competences_acquises);
 	      } else {
@@ -143,7 +145,7 @@ function drawChart(arbre_maitrise_json) {
 											$('#content').unblock(); 
 											});
 	      $('#content').block({ message: $('#question'), css: { width: '275px' } }); 
-			
+			location.hash = "#question";
 		}
 	}
 }

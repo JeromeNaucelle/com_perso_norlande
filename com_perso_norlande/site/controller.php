@@ -121,7 +121,7 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		if($data["error"] == 0) {
 			$session->clear('perso_id');
-			$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+			$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso#content');
 		} else {
 			error_log($data["msg"]);
 			//JError::raiseError( 500, $data["msg"] );
@@ -129,7 +129,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			//echo json_encode($data);
 			//$mainframe->close();
 		}
-		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso#content');
 	}
 	
 	
@@ -692,7 +692,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			$model->setCristaux($cristaux, $perso);
 		}
 		
-		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso#content');
 	}
 	
 	/* Retourne le nom de la compétence en enlevant
@@ -849,7 +849,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			PersoHelper::updateHistoire($persoId, $histoire);
 		}
 		
-		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso#content');
 	}
 	
 	public function updateReliquat() {
@@ -884,7 +884,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			error_log($data["msg"]);
 		}
 		
-		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso#content');
 	}
 	
 	public function validationUser() {
@@ -915,7 +915,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			$this->sendEmail($mailOrga, $subject, $msg);
 		}
 		
-		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso#content');
 	}
 	
 	public function associatePersoUser() {
@@ -950,7 +950,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			$msg = "Bonjour, vous pouvez à présent vous connecter à http://www.norlande.com pour finir la création de votre personnage.";
 			$this->sendEmail($user->email, $subject, $msg);
 		}
-		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso#content');
 	}
 	
 	private function setCurrentPerso($perso_id) {
@@ -989,7 +989,7 @@ class Perso_NorlandeController extends JControllerLegacy
 	 		$this->setCurrentPerso($perso_id);
 	 	}
 		
-		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso#content');
 	}
 	
 	public function addEntrainement() {
@@ -1136,7 +1136,7 @@ class Perso_NorlandeController extends JControllerLegacy
 			}
 		}
 
-		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso');
+		$mainframe->redirect('index.php?option=com_perso_norlande&view=detailsperso#content');
 	}	
 	
 	

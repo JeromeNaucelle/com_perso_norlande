@@ -35,6 +35,7 @@ function updatePointsCreationPerso() {
       	$( "#alert_msg" ).text( data['msg'] );
       	$('#pointsCreation').val(data['pointsCreation']);
       	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
+      	location.hash = "#alert";
 	      
      }
  });
@@ -56,7 +57,7 @@ function updateAnciennete() {
       	$( "#alert_msg" ).text( data['msg'] );
       	$('#anciennete').val(data['anciennete']);
       	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
-	      
+	      location.hash = "#alert";
      }
  });
 }
@@ -76,7 +77,7 @@ function updateMonnaie() {
       	// Affichage d'un message d'info
       	$( "#alert_msg" ).text( data['msg'] );
       	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
-	      
+	      location.hash = "#alert";
      }
  });
 }
@@ -97,7 +98,7 @@ function updateArmure() {
       	// Affichage d'un message d'info
       	$( "#alert_msg" ).text( data['msg'] );
       	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
-	      
+	      location.hash = "#alert";
      }
  });
 }
@@ -135,7 +136,7 @@ function deleteEntrainement(competence_id){
 			postDeleteEntrainement(competence_id);
 			});
 	$('#content').block({ message: $('#question'), css: { width: '275px' } }); 
-	
+	location.hash = "#question";
 }
 
 
@@ -165,7 +166,7 @@ function validationPersoUser(){
 			
 			});
 	$('#content').block({ message: $('#question'), css: { width: '275px' } }); 
-	
+	location.hash = "#question";
 }
 
 
@@ -184,6 +185,7 @@ function delete_perso(){
 			document.location.href = "index.php?option=com_perso_norlande&task=deletePerso";
 			});
 	$('#content').block({ message: $('#question'), css: { width: '275px' } }); 
+	location.hash = "#question";
 	
 }
 
@@ -206,6 +208,7 @@ function askForPersoAssociation() {
       	// Affichage d'un message d'info
       	$( "#alert_msg" ).text( data['msg'] );
       	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
+      	location.hash = "#alert";
      }
  });
 }

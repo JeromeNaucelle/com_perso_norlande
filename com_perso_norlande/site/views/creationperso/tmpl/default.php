@@ -38,7 +38,7 @@ echo "<input type='hidden' id='ajax_url' value='index.php?format=raw&option=com_
 $menu_list = $this->list_maitrise;
 for($i=0; $i < count($menu_list); $i++) 
 {
-	echo '<li><a href="index.php?option=com_perso_norlande&view=creationperso&famille='.$this->famille.'&competence='.$menu_list[$i]['competence_id'].'">'.htmlentities($menu_list[$i]['competence_nom']).'</a>';
+	echo '<li><a href="index.php?option=com_perso_norlande&view=creationperso&famille='.$this->famille.'&competence='.$menu_list[$i]['competence_id'].'#content">'.htmlentities($menu_list[$i]['competence_nom']).'</a>';
 	echo "</li>";
 }
 ?>	  		
