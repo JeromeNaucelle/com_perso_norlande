@@ -38,7 +38,7 @@ function launch_ajax(){
      {
      		$('#question_dep_xp').empty();
 			$('#question_dep_xp').append(data);
-			$.blockUI({ 
+			$('#content').block({ 
 	      		message: $('#question_dep_xp'),
 					css: { position: 'absolute', 
 								textAlign: 'left', 
@@ -69,7 +69,7 @@ function forgetCompetence(competence_id){
      success : function(data)
      {
      		$( "#alert_msg" ).text( data['msg'] );
-	      $.blockUI({ message: $('#alert'), css: { width: '275px' } }); 
+	      $('#content').block({ message: $('#alert'), css: { width: '275px' } }); 
 	      if(data['error'] != 0) {
 	      	selectCompetencesAcquises(competences_acquises);
 	      } else {
@@ -140,9 +140,9 @@ function drawChart(arbre_maitrise_json) {
 										
 			$("#question_cancel").click(function(){ 
 											selectCompetencesAcquises(competences_acquises);
-											$.unblockUI(); 
+											$('#content').unblock(); 
 											});
-	      $.blockUI({ message: $('#question'), css: { width: '275px' } }); 
+	      $('#content').block({ message: $('#question'), css: { width: '275px' } }); 
 			
 		}
 	}
@@ -215,21 +215,21 @@ function postChoixDepenseXP(form) {
      complete : function(data)
      {
          // do something, not critical.
-         $.unblockUI();
+         $('#content').unblock();
      }
  });
 }
 
 function cancelDepenseCristaux() {
 	selectCompetencesAcquises(competences_acquises);
-	$.unblockUI(); 
+	$('#content').unblock(); 
 	return false; 
 }
 
    
 $(document).ready(function() {
 	$('#alert_ok').click(function() { 
-		$.unblockUI(); 
+		$('#content').unblock(); 
 		return false; 
 	}); 
  

@@ -34,7 +34,7 @@ function updatePointsCreationPerso() {
       	// Affichage d'un message d'info
       	$( "#alert_msg" ).text( data['msg'] );
       	$('#pointsCreation').val(data['pointsCreation']);
-      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+      	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
 	      
      }
  });
@@ -55,7 +55,7 @@ function updateAnciennete() {
       	// Affichage d'un message d'info
       	$( "#alert_msg" ).text( data['msg'] );
       	$('#anciennete').val(data['anciennete']);
-      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+      	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
 	      
      }
  });
@@ -75,7 +75,7 @@ function updateMonnaie() {
      {
       	// Affichage d'un message d'info
       	$( "#alert_msg" ).text( data['msg'] );
-      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+      	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
 	      
      }
  });
@@ -96,7 +96,7 @@ function updateArmure() {
      {
       	// Affichage d'un message d'info
       	$( "#alert_msg" ).text( data['msg'] );
-      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+      	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
 	      
      }
  });
@@ -120,7 +120,7 @@ function postDeleteEntrainement(competence_id) {
         },
         complete : function(data)
         {
-            $.unblockUI(); 
+            $('#content').unblock(); 
         }
     });
 }
@@ -129,12 +129,12 @@ function deleteEntrainement(competence_id){
 	var nom_entrainement = $( "#row_entrainement_"+competence_id).text();
 	$("#question_msg").text("Voulez-vous supprimer l'entrainement du "+nom_entrainement +" ?");
 	$('#question_cancel').click(function() { 
-			$.unblockUI();
+			$('#content').unblock();
 			});
 	$('#question_ok').click(function() { 
 			postDeleteEntrainement(competence_id);
 			});
-	$.blockUI({ message: $('#question'), css: { width: '275px' } }); 
+	$('#content').block({ message: $('#question'), css: { width: '275px' } }); 
 	
 }
 
@@ -142,7 +142,7 @@ function deleteEntrainement(competence_id){
  $(document).ready(function() {
  
   $('#alert_ok').click(function() { 
-      $.unblockUI(); 
+      $('#content').unblock(); 
       return false; 
   }); 
  
@@ -155,7 +155,7 @@ function validationPersoUser(){
 		
 	$('#question_ok').attr('value',"Oui");	
 	$('#question_cancel').click(function() { 
-			$.unblockUI();
+			$('#content').unblock();
 			$('#question_ok').attr('value',tmp);
 				
 			});
@@ -164,7 +164,7 @@ function validationPersoUser(){
 			$('#question_ok').attr('value',tmp);
 			
 			});
-	$.blockUI({ message: $('#question'), css: { width: '275px' } }); 
+	$('#content').block({ message: $('#question'), css: { width: '275px' } }); 
 	
 }
 
@@ -175,7 +175,7 @@ function delete_perso(){
 		
 	$('#question_ok').attr('value',"Oui");	
 	$('#question_cancel').click(function() { 
-			$.unblockUI();
+			$('#content').unblock();
 			$('#question_ok').attr('value',tmp);
 				
 			});
@@ -183,7 +183,7 @@ function delete_perso(){
 	$('#question_ok').click(function() { 
 			document.location.href = "index.php?option=com_perso_norlande&task=deletePerso";
 			});
-	$.blockUI({ message: $('#question'), css: { width: '275px' } }); 
+	$('#content').block({ message: $('#question'), css: { width: '275px' } }); 
 	
 }
 
@@ -205,7 +205,7 @@ function askForPersoAssociation() {
      {
       	// Affichage d'un message d'info
       	$( "#alert_msg" ).text( data['msg'] );
-      	$.blockUI({ message: $('#alert'), css: { width: '275px' } });
+      	$('#content').block({ message: $('#alert'), css: { width: '275px' } });
      }
  });
 }
@@ -214,7 +214,7 @@ function askForPersoAssociation() {
  $(document).ready(function() {
  
   $('#alert_ok').click(function() { 
-      $.unblockUI(); 
+      $('#content').unblock(); 
       return false; 
   }); 
  
