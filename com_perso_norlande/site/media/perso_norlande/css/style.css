@@ -3,126 +3,146 @@
 }
 
 .myNodeClass h1 {
+	color: #000000;
 	font-size: 15px;
+}
+
+#chart_p {
+	padding-right: 15px;
 }
 
 
 #menu-cat-maitrises{
-padding:0;
-margin:0;
-list-style:none;
-text-align:center;
+	padding:0;
+	margin:0;
+	list-style:none;
+	text-align:center;
 }
 #menu-cat-maitrises li{
-display:inline-block;
-position:relative;
-border-radius:8px 8px 0 0;
+	content: none;
+	line-height: 100%;
+	padding: 0px;
+	display:inline-block;
+	position:relative;
+	border-radius:8px 8px 0 0;
+}
+
+/* Override du template qui rajoutait une puce devant les éléments <li> */
+#menu-cat-maitrises li::before{
+	content: none;
 }
 
 #menu-cat-maitrises li:hover ul{
-max-height:15em;
+	max-height:15em;
 }
 /* background des liens menus */
 #menu-cat-maitrises li:first-child{
-background-color: #E0F2F7;
-background-image:-webkit-linear-gradient(top, #E0F2F7 0%, #848484 100%);
-background-image:linear-gradient(to bottom, #E0F2F7 0%, #848484 100%);
+	background-color: #E0F2F7;
+	background-image:-webkit-linear-gradient(top, #E0F2F7 0%, #848484 100%);
+	background-image:linear-gradient(to bottom, #E0F2F7 0%, #848484 100%);
 }	
 	
 #menu-cat-maitrises li:nth-child(2){
-background-color: #65537A;
-background-image:-webkit-linear-gradient(top, #734D9D 0%, #2A2333 100%);
-background-image:linear-gradient(to bottom, #734D9D 0%, #2A2333 100%);
+	background-color: #65537A;
+	background-image:-webkit-linear-gradient(top, #734D9D 0%, #2A2333 100%);
+	background-image:linear-gradient(to bottom, #734D9D 0%, #2A2333 100%);
 }
 #menu-cat-maitrises li:nth-child(3){
-background-color: #729EBF;
-background-image: -webkit-linear-gradient(top, #D81D20 0%, #7F3A40 100%);
-background-image:linear-gradient(to bottom, #D81D20 0%, #7F3A40 100%);
+	background-color: #729EBF;
+	background-image: -webkit-linear-gradient(top, #D81D20 0%, #7F3A40 100%);
+	background-image:linear-gradient(to bottom, #D81D20 0%, #7F3A40 100%);
 }
 #menu-cat-maitrises li:nth-child(4){
-background-color: #F6AD1A;
-background-image: -webkit-linear-gradient(top, #729EBF 0%, #333A40 100%);
-background-image:linear-gradient(to bottom, #729EBF 0%, #333A40 100%);
+	background-color: #F6AD1A;
+	background-image: -webkit-linear-gradient(top, #729EBF 0%, #333A40 100%);
+	background-image:linear-gradient(to bottom, #729EBF 0%, #333A40 100%);
 }
 #menu-cat-maitrises li:last-child{
-background-color: #CFFF6A;
-background-image:-webkit-linear-gradient(top, #55A258 0%, #2F4930 100%);
-background-image:linear-gradient(to bottom, #55A258 0%, #2F4930 100%);
+	background-color: #CFFF6A;
+	background-image:-webkit-linear-gradient(top, #55A258 0%, #2F4930 100%);
+	background-image:linear-gradient(to bottom, #55A258 0%, #2F4930 100%);
 }
+
 /* background des liens sous menus */
 #menu-cat-maitrises li:first-child li{
-background:#2A2333;
+	background:#2A2333;
 }
 #menu-cat-maitrises li:nth-child(2) li{
-background:#333A40;
+	background:#333A40;
 }
 #menu-cat-maitrises li:nth-child(3) li{
-background:#333A40;
+	background:#333A40;
 }
 #menu-cat-maitrises li:last-child li{
-background:#677F35;
+	background:#677F35;
 }
 /* background des liens menus et sous menus au survol */
 #menu-cat-maitrises li:hover, #menu-cat-maitrises li li:hover{
-background:#8A8C8C;
+	background:#8A8C8C;
 }
 
 /* les a href */
 #menu-cat-maitrises a{
-text-decoration:none;
-display:block;
-padding:8px 32px;
-color:#fff;
-font-family:arial;
+	text-decoration:none;
+	display:block;
+	padding:8px 32px;
+	color:#fff;
+	font-family:arial;
 }
 #menu-cat-maitrises ul a{
-padding:8px 0;
+	padding:8px 0;
 }
 #menu-cat-maitrises li:hover li a{
-color:#fff;
-text-transform:inherit;
+	color:#fff;
+	text-transform:inherit;
 }
 #menu-cat-maitrises li:hover a, #menu-cat-maitrises li li:hover a{
-color:#000;
+	color:#000;
 }
 
 
 #submenu{
-padding:0;
-padding-top: 15px;
-margin:0;
-list-style:none;
-text-align:center;
+	padding:0;
+	padding-top: 15px;
+	margin:0;
+	list-style:none;
+	text-align:center;
 }
 #submenu li{
-	 vertical-align: top;
-    height: 4em;
-    width: 23%;
+	padding: 0;
+	vertical-align: top;
+	height: 4em;
+	width: 23%;
 	margin-bottom: 10px;
 	margin-left: 8px;
 	display:inline-block;
 	border-radius:5px 5px 5px 5px;
 }
 
+/* Override du template qui rajoutait une puce devant les éléments <li> */
+#submenu li::before{
+	content: none;
+}
+
 #submenu a{
-text-decoration:none;
-display:block;
-padding:8px 15px;
-color:#fff;
-font-family:arial;
+	text-decoration:none;
+	display:block;
+	padding:8px 15px;
+	color:#fff;
+	font-family:arial;
 }
 
 
 label
 {
-    display: block;
-    width: 150px;
-    float: left;
+	display: block;
+	width: 150px;
+	float: left;
 }
 
-.shortNb
+input.shortNb
 {
-    width: 3em;
+	width: 3em;
 }
 
 .long_text {
@@ -135,9 +155,9 @@ label
 }
 
 .buttonFiche {
-	width: 50% !important;;
-	margin:auto !important;;
-	display:block !important;;
+	width: 50%;
+	margin:auto;
+	display:block;
 }
 	
 #nomPerso {
@@ -147,4 +167,15 @@ label
 
 #lignee {
 	margin: 0px 0px 20px 0px;
+}
+
+legend {
+	display: block;
+	width: 100%;
+	padding: 0;
+	margin-bottom: 18px;
+	font-size: 19.5px;
+	line-height: 36px;
+	border: 0;
+	border-bottom: 1px solid #e5e5e5;
 }
