@@ -264,7 +264,6 @@ class Perso_NorlandeController extends JControllerLegacy
 		
 		$model = null;
 		$result = null;
-		// error_log("userSelect 2");
 		if($error === 0)
 		{
 			$model = $this->getModel('creationperso');
@@ -273,7 +272,6 @@ class Perso_NorlandeController extends JControllerLegacy
 			// error_log("userSelect 3");
 			$arbre = $model->getArbreMaitrisePhp($competence_id);
 			$competence = $arbre->getCompetence($competence_id);
-			error_log("userSelect 4");
 			// TODO voir si la vérification de orga/joueur ne pourrait pas se faire
 			// dans le controleur pour une meilleur homogénéité du code
 			$result = $perso->canLearn($competence_id, $arbre, $edit_orga);
@@ -285,7 +283,6 @@ class Perso_NorlandeController extends JControllerLegacy
 				
 				if( $this->enoughXp($xpForCompetence, $competence->getNiveau()) 
 						|| $edit_orga) {
-							error_log("userSelect 6");
 					$data["xp"] = $xpForCompetence;
 					$data["niveauCompetence"] = $competence->getNiveau();
 					

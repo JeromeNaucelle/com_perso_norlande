@@ -40,7 +40,7 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 		
 		foreach($result_maitrises as $maitrise)
 		{
-			error_log("ajout de l'entraineur ".$maitrise['competence_nom']);
+			//error_log("ajout de l'entraineur ".$maitrise['competence_nom']);
 			// Insert columns.
 			$id_max += 1;
 			$columns = array('competence_id', 'famille', 'maitrise', 'competence_nom', 'niveau','parent_id','entraineur');
@@ -94,7 +94,6 @@ class Perso_NorlandeModelCreationPerso extends JModelItem
 		} catch(Exception $e) {
 			error_log("getArbreMaitrise exception : $e");
 		}
-		error_log("getArbreMaitrise 5 : ok");
 		
 		return $return;
 	}

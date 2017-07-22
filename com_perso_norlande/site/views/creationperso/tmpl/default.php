@@ -44,7 +44,6 @@ for($i=0; $i < count($menu_list); $i++)
 ?>	  		
 		</ul>
 	</div>
-	<div id="affichage_perso"></div>
     <p id="chart_p"></p>
 	</div>
 	
