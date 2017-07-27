@@ -30,7 +30,7 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
   		
   	$odf->setVars('lignee', $this->perso->getLignee());
 	$odf->setVars('anciennete', $this->perso->getAnciennete());
-	$odf->setVars('nom_perso', htmlentities($this->perso->getNom()));
+	$odf->setVars('nom_perso', $this->perso->getNom());
 	$odf->setVars('mana', $this->synthese->getMana());
 	$odf->setVars('coups', $this->synthese->getCoups($armure));
 	$odf->setVars('force_physique', $this->synthese->getForcePhysique());
@@ -41,7 +41,7 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	$odf->setVars('immunite', $this->synthese->getImmunite($armure, "\n"));
 	$odf->setVars('armure', $armure);
 	$odf->setVars('monnaie', $monnaie->getFormatedText("\n"));
-	$odf->setVars('histoire', htmlentities($this->perso->getHistoire()));
+	$odf->setVars('histoire', $this->perso->getHistoire());
 	$odf->setVars('reliquat', $this->perso->getReliquat());
 	$odf->setVars('lecture_ecriture', $lecture_ecriture);
 	
