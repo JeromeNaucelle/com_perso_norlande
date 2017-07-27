@@ -23,7 +23,7 @@ $doc->addScript("components/com_perso_norlande/media/perso_norlande/js/creationp
 echo "<input type='hidden' id='ajax_url' value='index.php?format=raw&option=com_perso_norlande&task=getArbreMaitrise&competence=$this->competence'>"; ?>
 
 
-<h1>Test</h1>
+<h1>Choix des compétences</h1>
 
   
 <?php include(JPATH_COMPONENT . '/includes/menu.php'); ?>
