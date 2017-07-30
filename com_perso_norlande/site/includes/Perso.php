@@ -112,13 +112,6 @@ class Perso {
     			$competenceFromMaitrise[$key] = $competence;
     		}
     	}
-    	if(count($competenceFromMaitrise) == 0)
-    	{
-    		//aucune competence actuellement dans cette maitrise
-    		array_push($result['competences'], $competence_id);
-    		$result['result'] = 1;
-    		return $result;
-    	}
     	
     	// On crée la liste des compétences dont le niveau "Entrainement"
     	// a été atteint
@@ -189,7 +182,6 @@ class Perso {
 		$perso = new Perso();
 		$perso->nom = $query_result['nom'];
 		$perso->lignee = $query_result['lignee'];
-		//$perso->derniere_session = $query_result['derniere_session'];
 		$perso->id = $query_result['id'];
 		$perso->xp->setPointsCreation($query_result['points_creation']);
 		for($i=0; $i<count($competences_result); $i++)
