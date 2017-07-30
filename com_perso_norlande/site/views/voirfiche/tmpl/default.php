@@ -207,6 +207,14 @@ $template = new Template('./');
 		  		));
 		}
   	}
+  	
+  	$entraineur_comps = $this->synthese->getEntraineur();
+  	foreach($entraineur_comps as $entraineur) {
+  		
+	  	$template->assign_block_vars('entraineur', array(
+	    'nom' => $entraineur
+	  		));
+  	}
 	
   // Affichage des données
 

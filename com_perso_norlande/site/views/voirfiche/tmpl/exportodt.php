@@ -213,13 +213,21 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
   		$attaques = $attaques_spe->getAttaques($type);
   		
 		foreach($attaques as $attaque) {
-			$segAttaquesSpe->type($labelType);
 			$segAttaquesSpe->effet($attaque);
 			$segAttaquesSpe->merge();
 		}  		
   		
   	}
   	$odf->mergeSegment($segAttaquesSpe);
+  	
+	$segEntraineur = $odf->setSegment('entraineur');
+  	$entraineur_comps = $this->synthese->getEntraineur();
+  	foreach($entraineur_comps as $entraineur) {
+			$segEntraineur->nom($entraineur);
+			$segEntraineur->merge();		
+  		
+  	}
+  	$odf->mergeSegment($segEntraineur);
 
 
 // We export the file

@@ -271,6 +271,7 @@ class SyntheseCompetences {
 	private $resiste_maille;
 	private $esquive_plaque;
 	private $resiste_plaque;
+	private $entraineur;
 	
 	
 
@@ -326,6 +327,7 @@ class SyntheseCompetences {
 		$this->attaques_spe = new SyntheseAttaquesSpe();
 		$this->maniements = array();
 		$this->metamorphoses = array();
+		$this->entraineur = array();
    }
    
    public static function create($perso, $competencesClassees)
@@ -347,24 +349,26 @@ class SyntheseCompetences {
 		$result_competences = $db->loadAssocList();
 		
 		//SyntheseLieuxPouvoir::deleteUnusedColumns($result_competences);
-		$unused = array("competence_id" => 0, "famille" => 0, "maitrise" =>0, 
-		"niveau"=>0, "parent_id"=>0, "entraineur"=>0);
+		$unused = array("competence_id" => 0, "famille" => 0,  
+		"maitrise" =>0, "niveau"=>0, "parent_id"=>0);
 		
 		foreach($result_competences as $array) {
 			
 			$array = array_diff_key($array, $unused);
-			/*
-	   	foreach($unused as $key) {
-	   		unset($array[$key]);	
-	   	}*/
    	
 			foreach($array as $key => $value) {
 				if($value == "") {
 					continue;
-				}				
+				}	
 				
 				if($key === "actions_guerre") {
 					$synthese->actions_guerre += intval($value);
+					
+				} else if($key	== "entraineur") {
+					if($value == 1) {
+						$comp = substr( $array['competence_nom'], 13);
+						array_push($synthese->entraineur, $comp);
+					}
 					
 				} else if(substr( $key, 0, 9 )	== "immunite_") {
 					array_push($synthese->$key, $value);
@@ -749,6 +753,13 @@ class SyntheseCompetences {
 		
 		$result = array_merge($this->possessions_depart, $possessions);
 		return $result;
+	}
+	
+	public function getEntraineur() {
+		if(count($this->entraineur) == 0) {
+			return array('N∕A');
+		}
+		return $this->entraineur;
 	}
 	
 }
