@@ -103,7 +103,6 @@ class Perso {
     		return $result;
     	}
     	
-    	error_log("canLearn(". $competence_id .")");
     	// On récupère toutes les compétences acquises dans cette maitrise
     	$competenceFromMaitrise = array();
     	foreach($this->competences as $key => $competence) {
@@ -151,7 +150,7 @@ class Perso {
     		if(count($to_learn) === 0)
     		{
     			$result['result'] = 1;
-    			error_log("Tous les prérequis sont remplis");
+    			// error_log("Tous les prérequis sont remplis");
     			array_push($result['competences'], $competence_id);
     		} else {
     			// Il faut également apprendre les pré-requis suivant
@@ -159,7 +158,7 @@ class Perso {
     			$result['competences'] = $to_learn;
     			$result['pre-requis'] = $to_learn;
     			array_push($result['competences'], $competence_id);
-    			error_log("Les competences pre-requises sont : " . json_encode($to_learn));
+    			//error_log("Les competences pre-requises sont : " . json_encode($to_learn));
 			}    	
     	}
     	else {
@@ -167,7 +166,7 @@ class Perso {
     		$msg = $msg . "vous ne pouvez pas apprendre cette compétence";
     		$result['result'] = 4;
     		$result['msg'] = $msg;
-    		error_log($msg);
+    		//error_log($msg);
     	}  	
 		return $result;
     }
