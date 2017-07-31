@@ -231,7 +231,7 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 
 
 // We export the file
-$odf->exportAsAttachedFile();
+$odf->exportAsAttachedFile($this->perso->getNom().".odt");
 
 JFactory::getApplication()->close();
 
