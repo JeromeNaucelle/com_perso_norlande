@@ -213,6 +213,7 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
   		$attaques = $attaques_spe->getAttaques($type);
   		
 		foreach($attaques as $attaque) {
+			$segAttaquesSpe->type($labelType);
 			$segAttaquesSpe->effet($attaque);
 			$segAttaquesSpe->merge();
 		}  		
