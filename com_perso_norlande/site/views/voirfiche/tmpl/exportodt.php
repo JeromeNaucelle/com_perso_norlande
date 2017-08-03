@@ -27,6 +27,8 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	$monnaie = $this->perso->getMonnaie();
 	$monnaie->add($this->synthese->getMonnaie());
 	$lecture_ecriture = $this->synthese->getLectureEcriture() == true ? "Vous savez lire et écrire" : "Parlées";
+	$histoire = str_replace('&', '&amp;', $this->perso->getHistoire());
+	$reliquat = str_replace('&', '&amp;', $this->perso->getReliquat());
   		
   	$odf->setVars('lignee', $this->perso->getLignee());
 	$odf->setVars('anciennete', $this->perso->getAnciennete());
@@ -41,8 +43,8 @@ $odf = new Odf("components/com_perso_norlande/views/voirfiche/tmpl/template_fich
 	$odf->setVars('immunite', $this->synthese->getImmunite($armure, "\n"));
 	$odf->setVars('armure', $armure);
 	$odf->setVars('monnaie', $monnaie->getFormatedText("\n"));
-	$odf->setVars('histoire', $this->perso->getHistoire());
-	$odf->setVars('reliquat', $this->perso->getReliquat());
+	$odf->setVars('histoire', $histoire);
+	$odf->setVars('reliquat', $reliquat);
 	$odf->setVars('lecture_ecriture', $lecture_ecriture);
 	
 	foreach($this->competencesClassees as $classement) {
